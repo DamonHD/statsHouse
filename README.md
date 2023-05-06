@@ -11,6 +11,6 @@ The aim is to have at least three levels of 'production':
 
 Adding samples and supercollider treatment is in scope.
 
-Creating audio samples direct from data values is also in scope.
+Creating audio samples [direct from data values](https://www.earth.org.uk/statscast-202005.html) is also in scope.
 
 See [Earth Notes Sonification](https://www.earth.org.uk/sonification.html).
