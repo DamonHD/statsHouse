@@ -14,3 +14,7 @@ Adding samples and supercollider treatment is in scope.
 Creating audio samples [direct from data values](https://www.earth.org.uk/statscast-202005.html) is also in scope.
 
 See [Earth Notes Sonification](https://www.earth.org.uk/sonification.html).
+
+Contributors may have different implementation language preferences: awk is present!
+
+[MIDICSV](https://www.fourmilab.ch/webtools/midicsv/) allows a useful intermediate lossless ASCII CSV representation.
