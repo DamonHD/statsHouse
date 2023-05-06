@@ -1,4 +1,5 @@
 # statsHouse
+
 Turning home (energy) stats into house music mechanically: sonification
 
 Converting homogeneous and heterogeneous (CSV) data sets into MIDI.
