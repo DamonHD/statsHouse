@@ -1,6 +1,6 @@
 # statsHouse
 
-Turning home (energy) stats into house music mechanically: sonification
+Turning home (energy) stats into house music mechanically: sonification.
 
 Converting homogeneous and heterogeneous (CSV) data sets into MIDI.
 
@@ -12,3 +12,5 @@ The aim is to have at least three levels of 'production':
 Adding samples and supercollider treatment is in scope.
 
 Creating audio samples direct from data values is also in scope.
+
+See [Earth Notes Sonification](https://www.earth.org.uk/sonification.html).
