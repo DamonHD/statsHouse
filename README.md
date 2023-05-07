@@ -18,6 +18,6 @@ Creating audio samples [direct from data values](https://www.earth.org.uk/statsc
 
 See [Earth Notes Sonification](https://www.earth.org.uk/sonification.html).
 
-Contributors may have different implementation language preferences: awk is present!
+Contributors may have different implementation language preferences: (g)awk is present!
 
 [MIDICSV](https://www.fourmilab.ch/webtools/midicsv/) allows a useful intermediate lossless ASCII CSV representation.
