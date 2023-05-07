@@ -4,6 +4,9 @@ Turning home (energy) stats into house music mechanically: sonification.
 
 Converting homogeneous and heterogeneous (CSV) data sets into MIDI.
 
+One driver is entirely automated (but useful, interesting) output
+generated in (slowish) real time as data series are updated.
+
 The aim is to have at least three levels of 'production':
    * none: the data is sonified plainly, for sciencing
    * gentle: some gentle percussion and other musical effects added
