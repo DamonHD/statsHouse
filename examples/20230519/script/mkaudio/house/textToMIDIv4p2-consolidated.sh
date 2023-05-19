@@ -472,8 +472,10 @@ print ti ", "clocks", Note_on_c, "ci", "AVENOTE", "int(vol);
                 AVEcoverage = (coverage + (AVEcount-1)*AVEcoverage) /AVEcount;
                 if("" == data) { continue; } # Missing data point.
                 scaled = int(multScaling * data);
-                #NOTE = scaled + OFFSET;
-                NOTE = OFFSET + offsetArray[1 + scaled];
+                if("" == scale) { NOTE = scaled + OFFSET; } else {
+                    if(scaled < 0) { continue; }
+                    NOTE = OFFSET + offsetArray[1 + scaled];
+                    }
                 if((NOTE < 1) || (NOTE > 126)) { continue; }
                 vol = (((i==MAXNVAL) || isHet)?NOTEVOLUME:ALTVOLUME);
                 # Adjust volume alongside pitch [50%,100].
@@ -481,6 +483,7 @@ print ti ", "clocks", Note_on_c, "ci", "AVENOTE", "int(vol);
                 # Reduce volume further for identically-zero points.
                 if(0 == data) { vol *= 0.25; }
                 # Reduce volume for low/unknown coverage points.
+                if(coverage <= 0) { continue; }
                 if(coverage < 1) { vol *= coverage; }
 print ti ", "clocks", Note_on_c, "ci", "NOTE", "int(vol);
 print ti ", "(clocks+NoteDeltaTime-1)", Note_off_c, "ci", "NOTE", 0";
