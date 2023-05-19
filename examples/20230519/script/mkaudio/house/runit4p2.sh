@@ -11,9 +11,9 @@
 DATETIME="`date -u +%Y%m%dT%H%MZ`"
 echo Run at: $DATETIME
 
-sh script/mkaudio/house/textToMIDIv4-consolidated.sh -intro 0 -perc none data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
-#sh script/mkaudio/house/textToMIDIv4-consolidated.sh -intro 0 -perc gentle data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
-#sh script/mkaudio/house/textToMIDIv4-consolidated.sh -intro 4 -perc house data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
+sh script/mkaudio/house/textToMIDIv4p2-consolidated.sh -intro 0 -perc none data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
+#sh script/mkaudio/house/textToMIDIv4p2-consolidated.sh -intro 0 -perc gentle data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
+#sh script/mkaudio/house/textToMIDIv4p2-consolidated.sh -intro 4 -perc house data/consolidated/energy/std/imp/M/imp-M.csv > $HOME/tmp/run.$DATETIME.mid
 
 ls -al $HOME/tmp/run.$DATETIME.mid
 rm -f $HOME/tmp/latest.mid
