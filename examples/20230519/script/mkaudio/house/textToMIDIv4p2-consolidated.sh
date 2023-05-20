@@ -478,8 +478,8 @@ print ti ", "clocks", Note_on_c, "ci", "AVENOTE", "int(vol);
                     }
                 if((NOTE < 1) || (NOTE > 126)) { continue; }
                 vol = (((i==MAXNVAL) || isHet)?NOTEVOLUME:ALTVOLUME);
-                # Adjust volume alongside pitch [50%,100].
-                vol *= (0.5 + (0.5 * (data / MAXVAL)));
+                # Adjust volume alongside pitch [50%,100] while non-negative.
+                if(data >= 0) { vol *= (0.5 + (0.5 * (data / MAXVAL))); }
                 # Reduce volume further for identically-zero points.
                 if(0 == data) { vol *= 0.25; }
                 # Reduce volume for low/unknown coverage points.
