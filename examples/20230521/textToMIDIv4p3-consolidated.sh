@@ -9,12 +9,14 @@
 # May optionally have (gentle or house-style) percussion track alongside.
 #
 # TODO:
+#    * Swap preferred data channel to (near) centre for homogeneous data,
 #    * When aligning D data, force to calendar-month-per-bar.
 #    * Deal with missing points in general alignment mechanism.
 #
 # NEW IN V4.3:
 #    * Phase length is INTRO bars, or 1 bar if not set.
 #    * When aligning, pad each data track to whole phrase start and end.
+#    * Avoid overflow of highest value; keep *within* RANGE octaves.
 #
 # NEW IN V4.2:
 #    * Daily data is played at 32 notes (~1 month) per bar.
@@ -292,9 +294,9 @@ gawk -F, </dev/null \
          OCTAVES = 2;
          n = parseScale(scale, offsetArray, OCTAVES);
          RANGE = n * OCTAVES; # Note range index on +ve scale.
-         # Basic scaling of input value to note.
+         # Basic scaling of input value to note, to just *within* RANGE octaves.
          multScaling=1;
-         if(MAXVAL > 0) { multScaling=RANGE/MAXVAL; }
+         if(MAXVAL > 0) { multScaling=(RANGE-1)/MAXVAL; }
 
          #ALTNOTE=49; # Fallback when data missing.
          ALTVOLUME=63; # Fallback/secondary note volume.
