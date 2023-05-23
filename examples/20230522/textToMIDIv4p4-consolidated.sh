@@ -14,7 +14,7 @@
 #    * When aligning D data, force to calendar-month-per-bar.
 #    * Deal with missing points in general alignment mechanism.
 #
-# NEW IN V4.x:
+# NEW IN V4.4:
 #    * Tweaking instruments and volumes for "house".
 #
 # NEW IN V4.3:
