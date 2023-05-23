@@ -12,7 +12,7 @@ The aim is to have at least three levels of 'production':
    * gentle: some gentle percussion and other musical effects added
    * house: aiming to sound like a grown-up house track
 
-Adding samples and supercollider treatment is in scope.
+Adding samples and SuperCollider treatment is in scope.
 
 Creating audio samples [direct from data values](https://www.earth.org.uk/statscast-202005.html) is also in scope.
 
