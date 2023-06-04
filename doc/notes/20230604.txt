@@ -43,4 +43,5 @@ in CSV form via a sequence of CSVRawRecord items.
 The result will then be transformed into a Track.
 
 The Track can then be emitted as MIDICSV CSV format,
-or MIDI or audio directly using built-in Java support.
+or MIDI or audio directly using language/library support,
+eg in Java.
