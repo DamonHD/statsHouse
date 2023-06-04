@@ -6,7 +6,7 @@ Class CSVRawRecord contains unmodifiableList of Strings:
   * One String for a comment record matching '^ *#'
   * One String per CSV field for data records.
 
-Class DataRecord contains the data from a non-comment CSVRaw record.
+Class DataPoint contains the data from a non-comment CSVRaw record.
 These are generally managed in sorted order by date field.
 Core fields include:
   * rawDate String as from CSVRaw YYYY[-MM[-DD]]
@@ -15,8 +15,11 @@ Core fields include:
 Derived values include:
   * cadence Y M D as enum
   * least significant date component as String and unsigned int eg "02" or 2 for "2023-02"
+
+It would be good if CSVRawRecord and DataPoint and their users
+can be able to work with variations in data formats in future.
   
-Class Bar contains notes for one bar typically for a single voice.
+Class Bar contains notes (or samples) for one bar typically for a single voice.
 
 Class Phrase contains a sequence of Bar instances,
 typically 1, 4 or 8.
@@ -37,7 +40,7 @@ formulae, etc.
 
 
 Transformations may clean, align, and fill in gaps
-in a sequence of DataRecord items extracted from the data
+in a sequence of DataPoint items extracted from the data
 in CSV form via a sequence of CSVRawRecord items.
 
 Transformations may also include creating subsidiary voices
