@@ -1,0 +1,37 @@
+ Items TO DO in some way, and nice-to-haves
+ ==========================================
+ 
+
+ 
+ 
+ 
+  Copied from a private TODO list at 2023-06-04:
+  
+  * Make mkaudio able to deal with some data gaps (such as at 2023-05-13).
+  * Sonify hourly data (such as import profile) as 24/bar, 7 bars + one pause.
+  * Notes:
+    *** Add 'house' version without intro using V1.0 awk perc lib.
+      * Generate test set of input data and expected outputs, and also listen to.
+      * Consolidation preprocessor (upstream of sonfication) to insert blanks for missing dates, initially obvious ones at points where least significant part of date does not simply increment.
+      * Normalise to kWh/d figure for M data and maybe Y data, maybe allowing for missing data points.
+    *** Do daily boost vs divert Thermino (left vs right, flute vs oboe) over year.
+    *** Add (het) comparisons to energy series, eg ^^^ and imp/exp, etc.
+      * Interleave M and Y data as verse and chorus; repeat chorus fragments as needed until 'verse' material exhausted.
+      * Automatically (gently) ramp up the tempo with the (running, windowed) mean of the main variable?
+      * Play multi-track kWh data as a chord, ie offset.
+      * On D data tracks add 7d rolling average quietly...
+      * On M data tracks add 3m rolling average quietly...
+      * Play moving (eg 24h, 7d) means as bass or organ.
+      * Play cycle-delayed (eg 1d, 1w, 1y) quietly in a different voice.
+      * Insert counterpoint etc eg at 8th note after 1w cycle, days 29-31 on m.
+      * Insert hiss/noise based on autocor/variance (rolling mean / over 4 bars).
+      * Use load profiles (of house, appliances) to drive bass.
+      * Introduce breakdown and mini-breakdown.
+      * Chnage bass instrument on phase boundaries or in breakdown.
+      * DE: adjust filter cut off and resonance.
+      * DE: supercollider audio coding.
+
+      * C: produce in scales (8 per octave).
+      * C: bass off-beat 4 per bar 1 octave below lowest/root.  Sharpish attack.
+      * C: pad with common notes from current 4 bars...
+      * C: ramp the cutoff filter (w/ main channel rolling mean?)
