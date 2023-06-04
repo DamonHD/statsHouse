@@ -40,6 +40,9 @@ Transformations may clean, align, and fill in gaps
 in a sequence of DataRecord items extracted from the data
 in CSV form via a sequence of CSVRawRecord items.
 
+Transformations may also include creating subsidiary voices
+(eg percussion and bass) and derived data melody.
+
 The result will then be transformed into a Track.
 
 The Track can then be emitted as MIDICSV CSV format,
