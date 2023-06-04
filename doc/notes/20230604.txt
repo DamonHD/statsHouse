@@ -3,3 +3,19 @@ Proposed data structures.
 Class CSVRaw contains unmodifiableList of Strings:
   * One String for a comment record matching '^ *#'
   * One String per CSV field.
+  
+Class Bar contains notes for one bar typically for a single voice/channel.
+
+Class Phrase contains a sequence of Bar instances,
+typically 1, 4 or 8.
+
+Class Section contains a sequence of Phrase instances,
+typically an even number, covers one segment of a Channel,
+eg intro, verse, chorus.
+
+Class Channel contains a sequence of Section instances,
+typically for a single voice/channel,
+plus metadata such as MIDI channel or tempo or volume.
+
+Class Track contains a parallel set of Channel instances,
+possibly not starting at the same moment, ie offset.
