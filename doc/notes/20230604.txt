@@ -1,8 +1,18 @@
 Proposed data structures.
 
-Class CSVRaw contains unmodifiableList of Strings:
+Class CSVRawRecord contains unmodifiableList of Strings:
   * One String for a comment record matching '^ *#'
-  * One String per CSV field.
+  * One String per CSV field for data records.
+
+Class DataRecord contains the data from a non-comment CSVRaw record.
+These are generally managed in sorted order by date field.
+Core fields include:
+  * rawDate String as from CSVRaw YYYY[-MM[-DD]]
+  * datumCount int number of Datum records in this row, non-negative.
+  * the Datum records 
+Derived values include:
+  * cadence Y M D as enum
+  * least significant date component as String and unsigned int eg "02" or 2 for "2023-02"
   
 Class Bar contains notes for one bar typically for a single voice/channel.
 
@@ -19,3 +29,13 @@ plus metadata such as MIDI channel or tempo or volume.
 
 Class Track contains a parallel set of Channel instances,
 possibly not starting at the same moment, ie offset.
+
+
+Transformations may clean, align, and fill in gaps
+in a sequence of DataRecord items extracts from the data
+in CSV form via a sequence of CSVRawRecord items.
+
+The result will then be transformed into a Track.
+
+The Track can then be emitted as MIDICSV CSV format,
+or MIDI or audio directly using built-in Java support.
