@@ -24,10 +24,10 @@
       * Play moving (eg 24h, 7d) means as bass or organ.
       * Play cycle-delayed (eg 1d, 1w, 1y) quietly in a different voice.
       * Insert counterpoint etc eg at 8th note after 1w cycle, days 29-31 on m.
-      * Insert hiss/noise based on autocor/variance (rolling mean / over 4 bars).
+      * Insert hiss/noise based on autocorr/variance (rolling mean / over 4 bars).
       * Use load profiles (of house, appliances) to drive bass.
       * Introduce breakdown and mini-breakdown.
-      * Chnage bass instrument on phase boundaries or in breakdown.
+      * Change bass instrument on phase boundaries or in breakdown.
       * DE: adjust filter cut off and resonance.
       * DE: supercollider audio coding.
 
@@ -35,3 +35,4 @@
       * C: bass off-beat 4 per bar 1 octave below lowest/root.  Sharpish attack.
       * C: pad with common notes from current 4 bars...
       * C: ramp the cutoff filter (w/ main channel rolling mean?)
+      * Try MAX: https://cycling74.com/products/max
