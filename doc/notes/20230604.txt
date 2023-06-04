@@ -1,0 +1,5 @@
+Proposed data structures.
+
+Class CSVRaw contains unmodifiableList of Strings:
+  * One String for a comment record matching '^ *#'
+  * One String per CSV field.
