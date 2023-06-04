@@ -16,13 +16,13 @@ Derived values include:
   * cadence Y M D as enum
   * least significant date component as String and unsigned int eg "02" or 2 for "2023-02"
   
-Class Bar contains notes for one bar typically for a single voice/channel.
+Class Bar contains notes for one bar typically for a single voice.
 
 Class Phrase contains a sequence of Bar instances,
 typically 1, 4 or 8.
 
 Class Section contains a sequence of Phrase instances,
-typically an even number, covers one segment of a Channel,
+typically an even number, covers one segment of a Voice,
 eg intro, verse, chorus.
 
 Class Voice contains a sequence of Section instances,
