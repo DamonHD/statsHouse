@@ -1,4 +1,4 @@
-Proposed data structures.
+Proposed data structures: should be largely language agnostic.
 
 Class CSVRawRecord contains unmodifiableList of Strings:
   * One String for a comment record matching '^ *#'
