@@ -2,6 +2,13 @@ Proposed data structures for MIDI-like music.
 
 Should be largely language agnostic.
 
+A "style" input (enum?) which amongst other things indicates
+a level of fidelity to the data at or processing for enjoyability.
+Current values are:
+  * 'none' for high fidelity for data science purposes, and no adornments
+  * 'gentle' for some gentle adjustments and percussion etc
+  * 'house' for house-style percussion and as much processing as required!
+
 Class CSVRawRecord contains unmodifiableList of Strings:
   * One String for a comment record matching '^ *#'
   * One String per CSV field for data records.
