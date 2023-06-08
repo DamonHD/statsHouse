@@ -40,7 +40,9 @@ public final class TestDataCSVRead extends TestCase
         final List<List<String>> result3 = DataUtils.parseEOUDataCSV(new StringReader("#comment\r\n"));
         assertTrue("Comment should be empty", result3.isEmpty());
         
-        
+
+        final List<List<String>> result4 = DataUtils.parseEOUDataCSV(new StringReader("\r\n#comment\r\n#moar comment"));
+        assertTrue("Multi-comment should be empty", result4.isEmpty()); 
 	    }
 
     /**Verify that parse of real-life sample CSV works.
@@ -68,9 +70,10 @@ public final class TestDataCSVRead extends TestCase
         final List<List<String>> result1 = DataUtils.parseEOUDataCSV(new StringReader(sample));
         assertEquals("Sample should have 6 data rows", 6, result1.size());
 
-
-        // TODO
-
-
+        // Sample some fields.
+        assertEquals("meter", result1.get(3).get(4));
+        assertEquals("1", result1.get(2).get(5));
+        assertEquals("", result1.get(4).get(2));
+        assertEquals("2008-07", result1.get(5).get(0));
 	    }
     }
