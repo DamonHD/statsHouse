@@ -71,7 +71,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="cp.opt.basic" value="${cp.common.basic}"/>
 
     <!-- Class path for libs that may run against; includes any external libs. -->
-    <property name="cp.common.rt" value="libs/rtexample1.jar:libs/rtexample2jar"/>
+    <property name="cp.common.rt" value="libs/rtexample1.jar:libs/rtexample2.jar"/>
 
 
     <!--Place where javadoc is built. -->
