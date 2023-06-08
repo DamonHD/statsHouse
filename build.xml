@@ -247,6 +247,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <include name="**/*.java"/>
         </javac>
 
+        <mkdir dir="${build.dir.opt}/testResults"/>
     	<junit printsummary="yes" haltonfailure="yes">
     	    <classpath>
     	        <pathelement path="${test.lib.dir}/${test.junit.jar}"/>
@@ -256,18 +257,17 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
     	    <formatter type="plain"/>
 
+    		<!--
     	    <test name="localtest.TestMisc" haltonfailure="yes" outfile="${build.dir.opt}/junit_result">
     	        <formatter type="plain"/>
     	    </test>
+    	    -->
 
-    		<!--
-    	    <batchtest fork="yes" todir="${reports.tests}">
-    	        <fileset dir="${src.tests}">
-    	            <include name="**/*Test*.java"/>
-    	            <exclude name="**/AllTests.java"/>
+    	    <batchtest fork="yes" todir="${build.dir.opt}/testResults">
+    	        <fileset dir="${build.dir.opt}/${tmp.workdir}/test">
+    	            <include name="localtest/*.class"/>
     	        </fileset>
     	    </batchtest>
-    	    -->
     		
     	</junit>  	
     </target>
