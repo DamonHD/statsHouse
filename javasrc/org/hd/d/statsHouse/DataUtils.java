@@ -85,6 +85,7 @@ public final class DataUtils
         	new BufferedReader(r, 8192);
 
         // Initially-empty result...
+        // As of 2023-06-08, largest non-daily-cadence data CSV is 203 lines.
         final ArrayList<List<String>> result = new ArrayList<List<String>>(256);
 
         String row;
@@ -100,10 +101,9 @@ public final class DataUtils
             if(fields[0].isEmpty())
                 { throw new IOException("unexpected empty date"); }
 
-
             // Memory micro-optimisation.
             // Where possible, share duplicate values from the previous row,
-            // or with a constant "0".
+            // or with a constant "", "0", or "1".
             // Costs maybe ~10% of parse execution time doing this extra work,
             // but may save more than that in avoided GC on small JVM instance.
             if(OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE && !result.isEmpty())
