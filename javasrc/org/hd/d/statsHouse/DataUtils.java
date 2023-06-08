@@ -65,7 +65,8 @@ public final class DataUtils
 	    { public EOUDataCSV { Objects.requireNonNull(data); } }
 
     /**Parse EOU consolidated data CSV file/stream; never null but may be empty.
-     * Parses CSV as List (by row) of List (of fields), omitting empty and comment rows.
+     * Parses CSV as List (by row) of List (of String fields),
+     * omitting empty and comment (starting with '#') rows.
      * <p>
      * This <em>does not</em> validate the content.
      * </p>
