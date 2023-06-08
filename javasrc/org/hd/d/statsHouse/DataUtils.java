@@ -61,6 +61,9 @@ public final class DataUtils
     /**Charset for EOU consolidated data CSV format (ASCII 7-bit). */
     public static final Charset EOUDATACSV_CHARSET = StandardCharsets.US_ASCII;
 
+    /**Wraps the CSV data to make it clear what is is.  */
+    public record EOUDataCSV(List<List<String>> data) { }
+
     /**Parse EOU consolidated data CSV file/stream; never null but may be empty.
      * Parses CSV as List (by row) of List (of fields), omitting empty and comment rows.
      * <p>
@@ -75,7 +78,7 @@ public final class DataUtils
      *    each of which is a non-null but possibly-empty in-order List of fields
      * @throws IOException  if there is an I/O problem or the data is malformed
      */
-    public static List<List<String>> parseEOUDataCSV(final Reader r)
+    public static EOUDataCSV parseEOUDataCSV(final Reader r)
         throws IOException
         {
         if(null == r) { throw new IllegalArgumentException(); }
@@ -132,44 +135,19 @@ public final class DataUtils
             }
 
         result.trimToSize(); // Free resources...
-        return(Collections.unmodifiableList(result)); // Make outer list unmodifiable...
+        return(new EOUDataCSV(Collections.unmodifiableList(result))); // Make outer list unmodifiable...
         }
 
     /**Load from file EOU consolidated data in a form that parseEOUDataCSV() can read; never null but may be empty.
      * 
      * @throws IOException  if file not present or unreadable/unparseable.
      */
-    public static List<List<String>> loadEOUDataCSV(final File longStoreFile)
+    public static EOUDataCSV loadEOUDataCSV(final File longStoreFile)
         throws IOException
         {
     	if(null == longStoreFile) { throw new IllegalArgumentException(); }
     	try(final Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
 		    { return(parseEOUDataCSV(r)); }
-        }
-
-    /**Convert positional encoding of row values to Map form; never null but may be empty.
-     * Returned value is immutable.
-     *
-     * @param template  CSV list of names for each position with empty positions ignored; never null
-     * @param rowData  row data extracted from CSV, possibly by parseBMRCSV(); never null
-     * @return  Map from names to values where name and value are present (non-empty); never null
-     */
-    public static Map<String,String> extractNamedFieldsByPositionFromRow(final String template, final List<String> rowData)
-        {
-        if((null == template) || (null == rowData)) { throw new IllegalArgumentException(); }
-
-        final String[] names = delimCSV.split(template);
-        final int maxResultSize = Math.min(names.length, rowData.size());
-        final Map<String,String> result = new HashMap<String,String>(maxResultSize);
-        for(int i = maxResultSize; --i >= 0; )
-            {
-            final String name = names[i];
-            if(name.isEmpty()) { continue; }
-            final String value = rowData.get(i);
-            if(value.isEmpty()) { continue; }
-            result.put(name, value);
-            }
-        return(Collections.unmodifiableMap(result));
         }
 
 

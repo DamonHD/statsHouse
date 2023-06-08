@@ -21,6 +21,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import org.hd.d.statsHouse.DataUtils;
+import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
 
 import junit.framework.TestCase;
 
@@ -31,18 +32,18 @@ public final class TestDataCSVRead extends TestCase
     /**Verify that read of empty CSV works. */
     public static void testReadEmpty() throws IOException
 	    {
-        final List<List<String>> result1 = DataUtils.parseEOUDataCSV(new StringReader(""));
-        assertTrue("0 bytes should be empty", result1.isEmpty());
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(""));
+        assertTrue("0 bytes should be empty", result1.data().isEmpty());
         
-        final List<List<String>> result2 = DataUtils.parseEOUDataCSV(new StringReader("\r\n"));
-        assertTrue("CRLF should be empty", result2.isEmpty());
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader("\r\n"));
+        assertTrue("CRLF should be empty", result2.data().isEmpty());
 
-        final List<List<String>> result3 = DataUtils.parseEOUDataCSV(new StringReader("#comment\r\n"));
-        assertTrue("Comment should be empty", result3.isEmpty());
+        final EOUDataCSV result3 = DataUtils.parseEOUDataCSV(new StringReader("#comment\r\n"));
+        assertTrue("Comment should be empty", result3.data().isEmpty());
         
 
-        final List<List<String>> result4 = DataUtils.parseEOUDataCSV(new StringReader("\r\n#comment\r\n#moar comment"));
-        assertTrue("Multi-comment should be empty", result4.isEmpty()); 
+        final EOUDataCSV result4 = DataUtils.parseEOUDataCSV(new StringReader("\r\n#comment\r\n#moar comment"));
+        assertTrue("Multi-comment should be empty", result4.data().isEmpty()); 
 	    }
 
     /**Verify that parse of real-life sample CSV works.
@@ -67,13 +68,13 @@ public final class TestDataCSVRead extends TestCase
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
 
-        final List<List<String>> result1 = DataUtils.parseEOUDataCSV(new StringReader(sample));
-        assertEquals("Sample should have 6 data rows", 6, result1.size());
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(sample));
+        assertEquals("Sample should have 6 data rows", 6, result1.data().size());
 
         // Sample some fields.
-        assertEquals("meter", result1.get(3).get(4));
-        assertEquals("1", result1.get(2).get(5));
-        assertEquals("", result1.get(4).get(2));
-        assertEquals("2008-07", result1.get(5).get(0));
+        assertEquals("meter", result1.data().get(3).get(4));
+        assertEquals("1", result1.data().get(2).get(5));
+        assertEquals("", result1.data().get(4).get(2));
+        assertEquals("2008-07", result1.data().get(5).get(0));
 	    }
     }
