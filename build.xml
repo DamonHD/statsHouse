@@ -219,18 +219,22 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 
 	
+	
+	
+	
+	
     <!-- =================================================================== -->
     <!-- Tests the core source code, debug and optimised                     -->
     <!-- =================================================================== -->
-    <!-- DBG -->
-    <target name="core.test.dbg"
-        depends="core.jar.dbg">
+    <!-- OPT -->
+    <target name="core.test.opt"
+        depends="core.jar.opt">
 
     	<junit printsummary="yes" haltonfailure="yes">
     	    <classpath>
     	        <pathelement path="${test.lib.dir}/junit.jar"/>
     	        <pathelement location="${test.src.dir}"/>
-    	        <pathelement path="${build.dir.dbg}/${core.jar}"/>
+    	        <pathelement path="${build.dir.opt}/${dist.jar}"/>
     	    </classpath>
 
     	    <formatter type="plain"/>
@@ -251,8 +255,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
     	</junit>  	
     </target>
 
-
-
+	
+	
+	
+	
 
     <!-- =================================================================== -->
     <!-- Prepares the javadoc snapshot; dbg/opt-independent...               -->
@@ -300,7 +306,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- Builds debug and optimised code from scratch, and tests it.         -->
     <!-- =================================================================== -->
     <target name="all"
-    	depends="clean,core.test.dbg,core.jar.opt,core.jar.edhMainsuperopt"
+    	depends="clean,core.test.opt,core.jar.opt,core.jar.edhMainsuperopt"
         description="cleans, then does optimised/release build and test">
         <echo message="Builds and tests complete."/>
     </target>
