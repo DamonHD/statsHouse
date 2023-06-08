@@ -55,7 +55,7 @@ public final class TestDataCSVRead extends TestCase
      */
     public static void testReadSample() throws IOException
 	    {
-        final String sample = """
+        final String sample_gen_M = """
 #YYYY-MM,device,coverage,gen,device,coverage,gen,device,coverage,gen
 #input,"data/consolidated/energy/std/gen/M/Enphase/gen-M-Enphase.csv"
 #input,"data/consolidated/energy/std/gen/M/meter/gen-M-meter.csv"
@@ -68,7 +68,7 @@ public final class TestDataCSVRead extends TestCase
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
 
-        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(sample));
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_M));
         assertEquals("Sample should have 6 data rows", 6, result1.data().size());
 
         // Sample some fields.
