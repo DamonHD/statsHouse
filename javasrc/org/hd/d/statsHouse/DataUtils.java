@@ -55,11 +55,10 @@ public final class DataUtils
      */
     public static final Pattern delimCSV = Pattern.compile(",");
 
-
-    /**If true, attempt to minimise memory consumption when parsing and loading FUELINST data. */
-    private static final boolean OPTIMISE_MEMORY_IN_FUELINST_PARSE = true;
+    /**If true, attempt to minimise memory consumption when parsing and loading EOUDATACSV data. */
+    private static final boolean OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE = true;
     
-    /**Charset for EOU consolidated data CSV (ASCII 7-bit). */
+    /**Charset for EOU consolidated data CSV format (ASCII 7-bit). */
     public static final Charset EOUDATACSV_CHARSET = StandardCharsets.US_ASCII;
 
     /**Parse EOU consolidated data CSV file/stream; never null but may be empty.
@@ -107,7 +106,7 @@ public final class DataUtils
             // or with a constant "0".
             // Costs maybe ~10% of parse execution time doing this extra work,
             // but may save more than that in avoided GC on small JVM instance.
-            if(OPTIMISE_MEMORY_IN_FUELINST_PARSE && !result.isEmpty())
+            if(OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE && !result.isEmpty())
 	            {
 	            final List<String> prevRow = result.get(result.size() - 1);	
 	            if(fields.length == prevRow.size())
