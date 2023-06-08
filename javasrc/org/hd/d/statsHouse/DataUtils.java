@@ -150,6 +150,35 @@ public final class DataUtils
     	try(final Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
 		    { return(parseEOUDataCSV(r)); }
         }
+ 
+
+    /**Chop data into proto bars with no alignment or padding; never null, may be empty.
+     * The final bar is likely to be incomplete (padded with nulls).
+     * <p>
+     * This does not look at the content of the data at all.
+     */
+    public static List<DataProtoBar> chopDataIntoProtoBars(final int dataNotesPerBar, final EOUDataCSV data)
+	    {
+	    if(dataNotesPerBar < 1) { throw new IllegalArgumentException(); }
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    
+	    int size = data.data.size();
+	    final ArrayList<DataProtoBar> result = new ArrayList<DataProtoBar>(1 + (size/dataNotesPerBar));
+	    
+		for(int i = 0; i < size; i += dataNotesPerBar)
+		    {
+		    final List<List<String>> out = new ArrayList<List<String>>(dataNotesPerBar);
+		    // FIXME: wrap leaf List if not already Unmodifiable.
+		    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
+			    { out.add(data.data().get(j)); }
+		    // Pad the final partial bar if necessary.
+		    while(out.size() < dataNotesPerBar) { out.add(null); }
+		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(out))));
+		    }
+
+		result.trimToSize();
+		return(Collections.unmodifiableList(result));
+	    }
 
 
     /**Prefix used on temporary files, eg while doing atomic replacements.
