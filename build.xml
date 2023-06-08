@@ -136,6 +136,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <javac srcdir="${core.src.dir}"
             destdir="${build.dir.dbg}/${tmp.workdir}/${core}"
             classpath="${cp.dbg.basic}"
+        	includeantruntime="false"
             debug="on"
             deprecation="on"
             optimize="off">
@@ -149,6 +150,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <javac srcdir="${core.src.dir}"
             destdir="${build.dir.opt}/${tmp.workdir}/${core}"
             classpath="${cp.opt.basic}"
+        	includeantruntime="false"
             debug="on"
             deprecation="on"
             optimize="on">
@@ -167,7 +169,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         description="builds the debug core classes JAR shared by all other app components">
         <jar jarfile="${build.dir.dbg}/${core.jar}"
             basedir="${build.dir.dbg}/${tmp.workdir}/${core}">
-            <include name="**/*.class"/>
+            <include name="org/hd/**/*.class"/>
             <manifest>
                 <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
@@ -182,7 +184,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <jar jarfile="${build.dir.opt}/${dist.jar}"
             basedir="${build.dir.opt}/${tmp.workdir}/${core}">
             <!-- <zipgroupfileset dir="libs" includes="*.jar" excludes=""/> -->
-            <include name="**/*.class"/>   
+            <include name="org/hd/**/*.class"/>   
             <manifest>
                 <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
@@ -228,20 +230,34 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- =================================================================== -->
     <!-- OPT -->
     <target name="core.test.opt"
-        depends="core.jar.opt">
+        depends="core.compile.opt">
+    	
+    	<!-- Compile the test cases -->
+        <mkdir dir="${build.dir.opt}/${tmp.workdir}/test"/>
+        <target name="core.compile.opt"
+            depends="core.prepare.opt">
+            <javac srcdir="${test.src.dir}"
+                destdir="${build.dir.opt}/${tmp.workdir}/test"
+                classpath="${cp.opt.basic}"
+                debug="on"
+                deprecation="on"
+                optimize="on">
+                <include name="**/*.java"/>
+            </javac>
+        </target>
 
     	<junit printsummary="yes" haltonfailure="yes">
     	    <classpath>
     	        <pathelement path="${test.lib.dir}/junit.jar"/>
-    	        <pathelement location="${test.src.dir}"/>
-    	        <pathelement path="${build.dir.opt}/${dist.jar}"/>
+    	        <pathelement location="${build.dir.opt}/${tmp.workdir}/core"/>
+    	        <pathelement location="${build.dir.opt}/${tmp.workdir}/test"/>
     	    </classpath>
 
     	    <formatter type="plain"/>
 
     		<!--
-    	    <test name="localTest.TestMisc" haltonfailure="yes" outfile="result">
-    	        <formatter type="xml"/>
+    	    <test name="localTest.TestMisc" haltonfailure="yes" outfile="junit_result">
+    	        <formatter type="plain"/>
     	    </test>
 
     	    <batchtest fork="yes" todir="${reports.tests}">
