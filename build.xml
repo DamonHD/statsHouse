@@ -51,6 +51,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- The base dir of the Java source. -->
     <property name="jsrc.base.dir" value="javasrc"/>
     <property name="core.src.dir" value="${jsrc.base.dir}"/>
+	<!-- The base dir of the Java unit tests. -->
+    <property name="test.src.dir" value="test/localtest"/>
+
 
     <property name="dirsuffix.dbg" value="_D"/>
     <property name="dirsuffix.opt" value="_O"/>
@@ -64,14 +67,17 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="tmp.workdir" value="work.tmp"/>
 
     <!-- Basic class path we compile against; includes any external libs. -->
-    <property name="cp.common.basic" value="libs/example.jar"/>
+    <property name="cp.common.basic" value="lib/example.jar"/>
     <!-- Provided in debug/non-debug versions. -->
     <!-- Expects cp.J2EEAPI to contain a classpath fragment for the J2EE API. -->
     <property name="cp.dbg.basic" value="${cp.common.basic}"/>
     <property name="cp.opt.basic" value="${cp.common.basic}"/>
 
-    <!-- Class path for libs that may run against; includes any external libs. -->
-    <property name="cp.common.rt" value="libs/rtexample1.jar:libs/rtexample2.jar"/>
+    <!-- Class path for libs that may run against; includes any external (non-test) libs. -->
+    <property name="cp.common.rt" value="lib/rtexample1.jar:lib/rtexample2.jar"/>
+	
+	<!-- Test-only library area. -->
+    <property name="test.lib.dir" value="test/lib"/>
 
 
     <!--Place where javadoc is built. -->
@@ -150,8 +156,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
         </javac>
     </target>
 
+
     <!-- =================================================================== -->
-    <!-- JARs the core source code, debug and optimised                   -->
+    <!-- JARs the core source code, debug and optimised                      -->
     <!-- =================================================================== -->
     <!-- DBG -->
     <target name="core.jar.dbg"
@@ -211,6 +218,39 @@ Licensed under the Apache License, Version 2.0 (the "License");
     </target>
 
 
+	
+    <!-- =================================================================== -->
+    <!-- Tests the core source code, debug and optimised                     -->
+    <!-- =================================================================== -->
+    <!-- DBG -->
+    <target name="core.test.dbg"
+        depends="core.jar.dbg">
+
+    	<junit printsummary="yes" haltonfailure="yes">
+    	    <classpath>
+    	        <pathelement path="${test.lib.dir}/junit.jar"/>
+    	        <pathelement location="${test.src.dir}"/>
+    	        <pathelement path="${build.dir.dbg}/${core.jar}"/>
+    	    </classpath>
+
+    	    <formatter type="plain"/>
+
+    		<!--
+    	    <test name="localTest.TestMisc" haltonfailure="yes" outfile="result">
+    	        <formatter type="xml"/>
+    	    </test>
+
+    	    <batchtest fork="yes" todir="${reports.tests}">
+    	        <fileset dir="${src.tests}">
+    	            <include name="**/*Test*.java"/>
+    	            <exclude name="**/AllTests.java"/>
+    	        </fileset>
+    	    </batchtest>
+    	    -->
+    		
+    	</junit>  	
+    </target>
+
 
 
 
@@ -260,7 +300,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- Builds debug and optimised code from scratch, and tests it.         -->
     <!-- =================================================================== -->
     <target name="all"
-    	depends="clean,core.jar.opt,core.jar.edhMainsuperopt"
+    	depends="clean,core.test.dbg,core.jar.opt,core.jar.edhMainsuperopt"
         description="cleans, then does optimised/release build and test">
         <echo message="Builds and tests complete."/>
     </target>
