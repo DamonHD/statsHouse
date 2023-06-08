@@ -48,7 +48,7 @@ public final class TestDataCSVRead extends TestCase
         assertTrue("Multi-comment should be empty", result4.data().isEmpty()); 
 	    }
 
-    /**First 10 lines of monthly-candence PV generation data CSV, with comment rows.
+    /**First 10 lines of monthly-cadence PV generation data CSV, including comment rows.
      * Sample from:
      * <pre>
 % head data/consolidated/energy/std/gen/M/gen-M.csv
@@ -80,7 +80,7 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("", result1.data().get(4).get(2));
         assertEquals("2008-07", result1.data().get(5).get(0));
 	    }
-    
+
     /**Check simple splitting into DataProtoBar.
      * @throws IOException
      */
