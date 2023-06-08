@@ -239,7 +239,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <mkdir dir="${build.dir.opt}/${tmp.workdir}/test"/>
         <javac srcdir="${test.src.dir}"
             destdir="${build.dir.opt}/${tmp.workdir}/test"
-            classpath="${cp.opt.basic};${test.lib.dir}/${test.junit.jar}"
+            classpath="${build.dir.opt}/${tmp.workdir}/core;${cp.opt.basic};${test.lib.dir}/${test.junit.jar}"
         	includeantruntime="false"
             debug="on"
             deprecation="on"
