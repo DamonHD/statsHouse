@@ -6,9 +6,6 @@ package org.hd.d.statsHouse;
  * <p>
  * High ordinal values such as for Danceable have most transformations applied,
  * and should be most useful for entertainment.
- * <p>
- * The 'level' field provides an int representation
- * that may be used for sorting, etc.
  */
 public enum ProductionLevel {
     None,
