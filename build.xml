@@ -64,14 +64,14 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="tmp.workdir" value="work.tmp"/>
 
     <!-- Basic class path we compile against; includes any external libs. -->
-    <property name="cp.common.basic" value="libs/jtwitter.jar"/>
+    <property name="cp.common.basic" value="libs/example.jar"/>
     <!-- Provided in debug/non-debug versions. -->
     <!-- Expects cp.J2EEAPI to contain a classpath fragment for the J2EE API. -->
     <property name="cp.dbg.basic" value="${cp.common.basic}"/>
     <property name="cp.opt.basic" value="${cp.common.basic}"/>
 
     <!-- Class path for libs that may run against; includes any external libs. -->
-    <property name="cp.common.rt" value="libs/commons-codec.jar:libs/signpost-core.jar:libs/signpost-commonshttp4.jar"/>
+    <property name="cp.common.rt" value="libs/rtexample1.jar:libs/rtexample2jar"/>
 
 
     <!--Place where javadoc is built. -->
@@ -90,7 +90,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 
     <!-- =================================================================== -->
-    <!-- Prepares the core build directories, debug and optimised         -->
+    <!-- Prepares the core build directories, debug and optimised            -->
     <!-- =================================================================== -->
     <!-- DBG -->
     <target name="core.prepare.dbg.testuptodate">
@@ -98,8 +98,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
         <uptodate property="core.jar.dbg.uptodate"
             targetfile="${build.dir.dbg}/${core.jar}">
             <srcfiles dir="${core.src.dir}" includes="**/*.java"/>
-            <srcfiles dir="${ai.src.dir}" includes="**/*.java"/>
-            <srcfiles dir="${tp.src.dir}" includes="**/*.java"/>
+            <!-- <srcfiles dir="${ai.src.dir}" includes="**/*.java"/> -->
+            <!-- <srcfiles dir="${tp.src.dir}" includes="**/*.java"/> -->
         </uptodate>
     </target>
     <target name="core.prepare.dbg"
@@ -121,7 +121,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles the core source code, debug and optimised               -->
+    <!-- Compiles the core source code, debug and optimised                  -->
     <!-- =================================================================== -->
     <!-- DBG -->
     <target name="core.compile.dbg"
@@ -179,7 +179,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <manifest>
                 <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
-            </manifest>   
+            </manifest>
         </jar>
      <echo message="Release JAR now at ${build.dir.opt}/${dist.jar} ..." />   
     </target>
@@ -236,7 +236,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             classpath="${cp.opt.basic}"
             access="private"
             verbose="false"
-            windowtitle="EDH V${app.version} Javadoc"
+            windowtitle="statsHouse V${app.version} Javadoc"
             overview="${jsrc.base.dir}/javadoc-overview.html"
             linksource="true"
             >
@@ -246,7 +246,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 <a href="http://d.hd.org/" target="_top">statsHouse</a> V${app.version}<br />
                             ]]></header>
             <footer>statsHouse V${app.version}</footer>
-            <bottom>Copyright (c) 2009-2023, Damon Hart-Davis and others.</bottom>
+            <bottom>Copyright (c) 2023, Damon Hart-Davis and others.</bottom>
         </javadoc>
     </target>
 
