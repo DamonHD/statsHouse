@@ -53,7 +53,7 @@ public final class TestDataCSVRead extends TestCase
      * </pre>
      * @throws IOException
      */
-    public static void testReadSampple() throws IOException
+    public static void testReadSample() throws IOException
 	    {
         final String sample = """
 #YYYY-MM,device,coverage,gen,device,coverage,gen,device,coverage,gen
