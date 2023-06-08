@@ -64,9 +64,9 @@ public final class DataUtils
 
     /**Parse EOU consolidated data CSV file/stream; never null but may be empty.
      * Parses CSV as List (by row) of List (of fields), omitting empty and comment rows.
-     *
-     * @param headerCheck  if non-null, the first/header row's second field is verified to have exactly this heading
-     *
+     * <p>
+     * This <em>does not</em> validate the content.
+     * </p>
      * The outer and inner Lists implement RandomAccess.
      * <p>
      * This buffers its input for efficiency if not already a BufferedReader.
