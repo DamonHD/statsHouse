@@ -67,14 +67,16 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="tmp.workdir" value="work.tmp"/>
 
     <!-- Basic class path we compile against; includes any external libs. -->
-    <property name="cp.common.basic" value="lib/example.jar"/>
+    <!-- <property name="cp.common.basic" value="lib/example.jar"/> -->
+    <property name="cp.common.basic" value=""/>
     <!-- Provided in debug/non-debug versions. -->
     <!-- Expects cp.J2EEAPI to contain a classpath fragment for the J2EE API. -->
     <property name="cp.dbg.basic" value="${cp.common.basic}"/>
     <property name="cp.opt.basic" value="${cp.common.basic}"/>
 
     <!-- Class path for libs that may run against; includes any external (non-test) libs. -->
-    <property name="cp.common.rt" value="lib/rtexample1.jar:lib/rtexample2.jar"/>
+    <!-- <property name="cp.common.rt" value="lib/rtexample1.jar:lib/rtexample2.jar"/> -->
+    <property name="cp.common.rt" value=""/>
 	
 	<!-- Test-only library area. -->
     <property name="test.lib.dir" value="test/lib"/>
@@ -207,8 +209,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 		    -outjars     ${build.dir.opt}/statsHouseMain.${dist.jar}
 		    -libraryjars ${java.home}/jmods/java.base.jmod(!**.jar;!module-info.class)
 		    -libraryjars ${java.home}/jmods/java.desktop.jmod(!**.jar;!module-info.class)
+    		<!--
     		-libraryjars ${cp.opt.basic}
 			-libraryjars ${cp.common.rt}
+			-->
   		    -keep public class org.hd.d.statsHouse.Main {
   		        public *;
       	    }

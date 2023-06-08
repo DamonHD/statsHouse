@@ -143,7 +143,7 @@ public final class DataUtils
         throws IOException
         {
     	if(null == longStoreFile) { throw new IllegalArgumentException(); }
-    	try(Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
+    	try(final Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
 		    { return(parseEOUDataCSV(r)); }
         }
 
