@@ -43,7 +43,7 @@ public final class TestDataCSVRead extends TestCase
         
 	    }
 
-    /**Verify that read of sample CSV works.
+    /**Verify that parse of real-life sample CSV works.
      * Sample from:
      * <pre>
 % head data/consolidated/energy/std/gen/M/gen-M.csv
