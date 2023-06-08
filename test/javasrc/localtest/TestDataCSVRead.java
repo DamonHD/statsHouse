@@ -20,12 +20,14 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
+import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
 
 import junit.framework.TestCase;
 
 /**Test reading of EOU consolidated data CSVs.
+ * Also some limited subsequent processing of raw data CSVs.
  */
 public final class TestDataCSVRead extends TestCase
     {
@@ -46,16 +48,13 @@ public final class TestDataCSVRead extends TestCase
         assertTrue("Multi-comment should be empty", result4.data().isEmpty()); 
 	    }
 
-    /**Verify that parse of real-life sample CSV works.
+    /**First 10 lines of monthly-candence PV generation data CSV, with comment rows.
      * Sample from:
      * <pre>
 % head data/consolidated/energy/std/gen/M/gen-M.csv
      * </pre>
-     * @throws IOException
      */
-    public static void testReadSample() throws IOException
-	    {
-        final String sample_gen_M = """
+	public static final String sample_gen_M = """
 #YYYY-MM,device,coverage,gen,device,coverage,gen,device,coverage,gen
 #input,"data/consolidated/energy/std/gen/M/Enphase/gen-M-Enphase.csv"
 #input,"data/consolidated/energy/std/gen/M/meter/gen-M-meter.csv"
@@ -68,6 +67,10 @@ public final class TestDataCSVRead extends TestCase
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
 
+    /**Verify that parse of real-life sample CSV works. */
+    public static void testReadSample() throws IOException
+	    {
+
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_M));
         assertEquals("Sample should have 6 data rows", 6, result1.data().size());
 
@@ -76,5 +79,26 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("1", result1.data().get(2).get(5));
         assertEquals("", result1.data().get(4).get(2));
         assertEquals("2008-07", result1.data().get(5).get(0));
+	    }
+    
+    /**Check simple splitting into DataProtoBar.
+     * @throws IOException
+     */
+    public static void testChopDataIntoProtoBars() throws IOException
+	    {
+        final EOUDataCSV edc1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_M));
+        final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBars(4, edc1);
+        assertNotNull(result1);
+        assertEquals(2, result1.size());
+        assertEquals(4, result1.get(0).dataNotesPerBar());
+        assertEquals(4, result1.get(0).dataRows().data().size());
+        assertEquals("2008-02", result1.get(0).dataRows().data().get(0).get(0));
+        assertEquals("2008-05", result1.get(0).dataRows().data().get(3).get(0));
+        assertEquals(4, result1.get(1).dataNotesPerBar());
+        assertEquals(4, result1.get(1).dataRows().data().size());
+        assertEquals("2008-06", result1.get(1).dataRows().data().get(0).get(0));
+        assertEquals("2008-07", result1.get(1).dataRows().data().get(1).get(0));
+        assertNull(result1.get(1).dataRows().data().get(2));
+        assertNull(result1.get(1).dataRows().data().get(3));
 	    }
     }
