@@ -1,5 +1,7 @@
 # statsHouse
 
+[![Java CI](https://github.com/DamonHD/statsHouse/actions/workflows/ant.yml/badge.svg)](https://github.com/DamonHD/statsHouse/actions/workflows/ant.yml)
+
 Turning home (energy) stats into house music mechanically: sonification.
 
 Converting homogeneous and heterogeneous (CSV) data sets into MIDI.
