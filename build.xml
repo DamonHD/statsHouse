@@ -74,11 +74,6 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="cp.common.rt" value="libs/commons-codec.jar:libs/signpost-core.jar:libs/signpost-commonshttp4.jar"/>
 
 
-    <!--Place where source snapshot is built. -->
-    <property name="src.snapshot.dir" value="${build.dir.cmn}/snapshot"/>
-    <!--Name of raw source snapshot archive to include in generated WAR file. -->
-    <property name="src.snapshot.tar.bz2" value="src.snapshot.tar.bz2"/>
-
     <!--Place where javadoc is built. -->
     <property name="javadoc.dir" value="${build.dir.cmn}/javadoc"/>
 	
@@ -128,7 +123,6 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- =================================================================== -->
     <!-- Compiles the core source code, debug and optimised               -->
     <!-- =================================================================== -->
-    <!-- FOR NOW, the core will include the AI code. -->   
     <!-- DBG -->
     <target name="core.compile.dbg"
         depends="core.prepare.dbg"
@@ -168,7 +162,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             basedir="${build.dir.dbg}/${tmp.workdir}/${core}">
             <include name="**/*.class"/>
             <manifest>
-                <attribute name="Main-Class" value="org.hd.d.edh.Main"/>
+                <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
             </manifest>   
         </jar>
@@ -183,31 +177,27 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <!-- <zipgroupfileset dir="libs" includes="*.jar" excludes=""/> -->
             <include name="**/*.class"/>   
             <manifest>
-                <attribute name="Main-Class" value="org.hd.d.edh.Main"/>
+                <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
             </manifest>   
         </jar>
      <echo message="Release JAR now at ${build.dir.opt}/${dist.jar} ..." />   
     </target>
 
-    <!-- Super-optimised and shrunk org.hd.d.edh.Main JAR -->
+    <!-- Super-optimised and shrunk org.hd.d.statsHouse.Main JAR -->
     <target name="core.jar.edhMainsuperopt"
         depends="core.jar.opt"
-        description="builds the shrunk optimised/release org.hd.d.edh.Main JAR">
+        description="builds the shrunk optimised/release org.hd.d.statsHouse.Main JAR">
     	<proguard
     		verbose="true">
 		    <!-- -printconfiguration -->
 		    -injars      ${build.dir.opt}/${dist.jar}
-		    -outjars     ${build.dir.opt}/edhMain.${dist.jar}
+		    -outjars     ${build.dir.opt}/statsHouseMain.${dist.jar}
 		    -libraryjars ${java.home}/jmods/java.base.jmod(!**.jar;!module-info.class)
 		    -libraryjars ${java.home}/jmods/java.desktop.jmod(!**.jar;!module-info.class)
     		-libraryjars ${cp.opt.basic}
 			-libraryjars ${cp.common.rt}
-  		    -keep public class org.hd.d.edh.Main {
-  		        public *;
-      	    }
-    		<!-- Makes the enum handling a little simpler! -->
-  		    -keep public class org.hd.d.edh.TrafficLight {
+  		    -keep public class org.hd.d.statsHouse.Main {
   		        public *;
       	    }
     		<!-- Build a few times, run many: thus worth extra optimisation effort here... -->
@@ -217,44 +207,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
     		<!-- -dontobfuscate - leave all class/method names etc for easiest debugging -->
             -keepattributes SourceFile,LineNumberTable <!-- Keep minimum for exception debugging. -->
     	</proguard>
-     <echo message="Release org.hd.d.edh.Main JAR now at ${build.dir.opt}/edhMain.${dist.jar} ..." />   
+        <echo message="Release org.hd.d.statsHouse.Main JAR now at ${build.dir.opt}/statsHouseMain.${dist.jar} ..." />   
     </target>
 
-
-
-
-
-    <!-- =================================================================== -->
-    <!-- Prepares the raw source snapshot; dbg/opt-independent...            -->
-    <!-- Packages ALL local source files for (usually opt-only) WAR.         -->
-    <!-- =================================================================== -->
-    <!--Few source suffixes to be excluded, including IDE files and big test data files. -->
-    <property name="src.snapshot.suffixes.exclude" value="**/*.tmp,*.ipr,*.iws,**/~*,**/*.dat,**.dll,**.so,**/*.ldb,**/*.mdb,**/*.jpg,java.hprof.*,**/_3rdParty**/*"/>
-    <target name="src.snapshot.testuptodate">
-        <!-- Claim that the JAR target is up-to-date if its source files/JARs are. -->
-        <uptodate property="src.snapshot.uptodate"
-            targetfile="${src.snapshot.dir}/${src.snapshot.tar.bz2}">
-            <srcfiles dir="." excludes="${src.snapshot.suffixes.exclude}"/>
-        </uptodate>
-    </target>
-    <!-- Makes BZIP2ed tar file for space efficiency,
-         in own directory for ease of packaging into WAR file.
-
-         Files not to be redistributed must be excluded by path and/or suffix.
-         -->
-    <target name="src.snapshot"
-        description="Prepares raw source snapshot to export with the WAR"
-        depends="src.snapshot.testuptodate"
-        unless="src.snapshot.uptodate">
-        <delete dir="${src.snapshot.dir}"/>
-        <mkdir dir="${src.snapshot.dir}"/>
-        <tar destfile="${src.snapshot.dir}/${src.snapshot.tar.bz2}"
-            basedir="."
-            excludes="${src.snapshot.suffixes.exclude}"
-            compression="bzip2"
-            longfile="gnu">
-        </tar>
-    </target>
 
 
 
@@ -288,10 +243,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <fileset dir="${core.src.dir}"/>
 
             <header><![CDATA[
-<a href="http://d.hd.org/" target="_top">EDH</a> V${app.version}<br />
+<a href="http://d.hd.org/" target="_top">statsHouse</a> V${app.version}<br />
                             ]]></header>
-            <footer>EDH V${app.version}</footer>
-            <bottom>Copyright (c) 2009-2023, Damon Hart-Davis. All rights reserved.</bottom>
+            <footer>statsHouse V${app.version}</footer>
+            <bottom>Copyright (c) 2009-2023, Damon Hart-Davis and others.</bottom>
         </javadoc>
     </target>
 
@@ -305,7 +260,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- Builds debug and optimised code from scratch, and tests it.         -->
     <!-- =================================================================== -->
     <target name="all"
-    	depends="clean,core.jar.opt,core.jar.edhMainsuperopt,src.snapshot"
+    	depends="clean,core.jar.opt,core.jar.edhMainsuperopt"
         description="cleans, then does optimised/release build and test">
         <echo message="Builds and tests complete."/>
     </target>
