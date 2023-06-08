@@ -52,7 +52,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="jsrc.base.dir" value="javasrc"/>
     <property name="core.src.dir" value="${jsrc.base.dir}"/>
 	<!-- The base dir of the Java unit tests. -->
-    <property name="test.src.dir" value="test/localtest"/>
+    <property name="test.src.dir" value="test/javasrc/localtest"/>
 
 
     <property name="dirsuffix.dbg" value="_D"/>
@@ -78,6 +78,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
 	
 	<!-- Test-only library area. -->
     <property name="test.lib.dir" value="test/lib"/>
+	<!-- JUnit JAR name -->
+    <property name="test.junit.jar" value="junit-4.13.2.jar"/>
+
 
 
     <!--Place where javadoc is built. -->
@@ -234,32 +237,30 @@ Licensed under the Apache License, Version 2.0 (the "License");
     	
     	<!-- Compile the test cases -->
         <mkdir dir="${build.dir.opt}/${tmp.workdir}/test"/>
-        <target name="core.compile.opt"
-            depends="core.prepare.opt">
-            <javac srcdir="${test.src.dir}"
-                destdir="${build.dir.opt}/${tmp.workdir}/test"
-                classpath="${cp.opt.basic}"
-                debug="on"
-                deprecation="on"
-                optimize="on">
-                <include name="**/*.java"/>
-            </javac>
-        </target>
+        <javac srcdir="${test.src.dir}"
+            destdir="${build.dir.opt}/${tmp.workdir}/test"
+            classpath="${cp.opt.basic};${test.lib.dir}/${test.junit.jar}"
+        	includeantruntime="false"
+            debug="on"
+            deprecation="on"
+            optimize="on">
+            <include name="**/*.java"/>
+        </javac>
 
     	<junit printsummary="yes" haltonfailure="yes">
     	    <classpath>
-    	        <pathelement path="${test.lib.dir}/junit.jar"/>
+    	        <pathelement path="${test.lib.dir}/${test.junit.jar}"/>
     	        <pathelement location="${build.dir.opt}/${tmp.workdir}/core"/>
     	        <pathelement location="${build.dir.opt}/${tmp.workdir}/test"/>
     	    </classpath>
 
     	    <formatter type="plain"/>
 
-    		<!--
-    	    <test name="localTest.TestMisc" haltonfailure="yes" outfile="junit_result">
+    	    <test name="localtest.TestMisc" haltonfailure="yes" outfile="${build.dir.opt}/junit_result">
     	        <formatter type="plain"/>
     	    </test>
 
+    		<!--
     	    <batchtest fork="yes" todir="${reports.tests}">
     	        <fileset dir="${src.tests}">
     	            <include name="**/*Test*.java"/>
