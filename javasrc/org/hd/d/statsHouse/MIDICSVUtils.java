@@ -16,6 +16,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -43,15 +44,32 @@ public final class MIDICSVUtils
     /**MIDI format 1 default tempo track number. */
     public static final int DEFAULT_TEMPO_TRACK_NUMBER = 1;
 
-    /**Append (near) minimal (first, MIDI format 1) tempo track to supplied Writer.
+    /**Format template for MIDICSV file header row: track count, clocks per qtr note. */
+    public static final String TEMPLATE_FILE_HEADER = "0, 0, Header, 1, %d, %d\n";
+ 
+    /**Append MIDI format 1 header to supplied Writer.
+     * @throws IOException 
      */
-    public static void writeMinimalTempoTrack(final Writer w,
-    		final int totalTrackCount, final int tempo, final int clksPQtr)
+    public static void writeF1Header(final Writer w,
+    		final int totalTrackCount, final int clksPQtr)
+		throws IOException
 	    {
 	    if(null == w) { throw new IllegalArgumentException(); }
 	    if(totalTrackCount < 1) { throw new IllegalArgumentException(); }
+	    if(clksPQtr < 1) { throw new IllegalArgumentException(); }
+
+	    // "0, 0, Header, 1, "TRACKS",", CLKSPQTR;
+	    w.append(String.format(TEMPLATE_FILE_HEADER, totalTrackCount, clksPQtr));
+	    }
+
+    /**Append (near) minimal (first, MIDI format 1, 4/4, C Maj) tempo track to supplied Writer.
+     */
+    public static void writeF1MinimalTempoTrack(final Writer w,
+    		final int tempo, final int clksPQtr)
+	    {
+	    if(null == w) { throw new IllegalArgumentException(); }
 	    if(tempo < 1) { throw new IllegalArgumentException(); }
 	    if(clksPQtr < 1) { throw new IllegalArgumentException(); }
-	    
+
 	    }
     }
