@@ -194,7 +194,7 @@ public final class DataUtils
      * If there is no data then this will return 0.
      * <p>
      * If multiple streams have the same number of non-empty values,
-     * the lowest-numbered index of them is returned.
+     * then the lowest-numbered index amongst them is returned.
      * <p>
      * The first stream is 1.
      *
