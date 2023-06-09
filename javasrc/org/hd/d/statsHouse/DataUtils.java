@@ -140,7 +140,6 @@ public final class DataUtils
         }
 
     /**Load from file EOU consolidated data in a form that parseEOUDataCSV() can read; never null but may be empty.
-     * 
      * @throws IOException  if file not present or unreadable/unparseable.
      */
     public static EOUDataCSV loadEOUDataCSV(final File longStoreFile)
@@ -150,6 +149,18 @@ public final class DataUtils
     	try(final Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
 		    { return(parseEOUDataCSV(r)); }
         }
+
+    /**Counts the number of data streams using a quick method.
+     * This just looks at the first row.
+     * @param data  full data set; never null
+     * @return count of data streams; non-negative
+     */
+    public static int countDataStreamsQuick(final EOUDataCSV data)
+	    {
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    if(data.data().isEmpty()) { return(0); }
+	    return((data.data().get(0).size() - 1) / 3);
+	    }
  
 
     /**Chop data into proto bars with no alignment or padding; never null, may be empty.

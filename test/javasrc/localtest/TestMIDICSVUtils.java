@@ -51,7 +51,6 @@ public final class TestMIDICSVUtils extends TestCase
         assertEquals(expected1, sw1.toString());
 	    }
 
-
     /**Test MIDICSV file minimal tempo track generation.. */
     public static void testWriteF1MinimalTempoTrack()
         throws IOException
@@ -66,5 +65,4 @@ public final class TestMIDICSVUtils extends TestCase
         		""";
         assertEquals(expected1, sw1.toString());
 	    }
-
     }
