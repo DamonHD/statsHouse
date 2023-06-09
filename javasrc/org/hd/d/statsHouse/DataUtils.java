@@ -150,9 +150,9 @@ public final class DataUtils
 		    { return(parseEOUDataCSV(r)); }
         }
 
-    /**Counts the number of data streams using a quick method.
+    /**Counts the number of data streams in data set using a quick method.
      * This just looks at the first row.
-     * @param data  full data set; never null
+     * @param data  data set; never null
      * @return count of data streams; non-negative
      */
     public static int countDataStreamsQuick(final EOUDataCSV data)
@@ -161,6 +161,33 @@ public final class DataUtils
 	    if(data.data().isEmpty()) { return(0); }
 	    return((data.data().get(0).size() - 1) / 3);
 	    }
+    
+    /**Extract maximum data (positive) value from entire data set.
+     * This examines the data value for all streams in each row.
+     * If there is no data, or all data-values are non-positive,
+     * then this will return 0.
+     * @param data  data set; never null
+     * @return return highest positive data value; non-negative
+     */
+    public static float maxVal(final EOUDataCSV data)
+	    {
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    float result = 0;
+	    for(final List<String> row : data.data())
+		    {
+		    // 2008-02,,,,meter,1,4,SunnyBeam,0.142857,3.54
+	    	for(int j = 3; j < row.size(); j += 3)
+		    	{
+		    	try {
+		    		final float v = Float.parseFloat(row.get(j));
+		    		if(v > result) { result = v; }
+		    		}
+		    	catch(NumberFormatException e) { /* Ignore */ }
+		    	}
+		    }
+	    return(result);
+	    }
+
  
 
     /**Chop data into proto bars with no alignment or padding; never null, may be empty.

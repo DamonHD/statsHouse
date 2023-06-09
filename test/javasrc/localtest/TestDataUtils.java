@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  */
 public final class TestDataUtils extends TestCase
     {
-    /**Test MIDICSV file header generation.. 
+    /**Test data stream counting. 
      * @throws IOException
      */
     public static void testCountDataStreamsQuick()
@@ -36,5 +36,15 @@ public final class TestDataUtils extends TestCase
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(3, DataUtils.countDataStreamsQuick(result1));
+	    }
+    
+    /**Test maximum data value extraction. 
+     * @throws IOException
+     */
+    public static void testMaxVal()
+		throws IOException
+    	{
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        assertEquals(161f, DataUtils.maxVal(result1), 0.1f);
 	    }
     }

@@ -27,7 +27,7 @@ import junit.framework.TestCase;
  */
 public final class TestMIDICSVUtils extends TestCase
     {
-    /**Test MIDICSV file header generation.. */
+    /**Test MIDICSV file header generation. */
     public static void testWriteF1Header()
         throws IOException
 	    {
@@ -39,7 +39,7 @@ public final class TestMIDICSVUtils extends TestCase
         assertEquals(expected1, sw1.toString());
 	    }
 
-    /**Test MIDICSV file footer generation.. */
+    /**Test MIDICSV file footer generation. */
     public static void testWriteF1Footer()
         throws IOException
 	    {
@@ -51,7 +51,7 @@ public final class TestMIDICSVUtils extends TestCase
         assertEquals(expected1, sw1.toString());
 	    }
 
-    /**Test MIDICSV file minimal tempo track generation.. */
+    /**Test MIDICSV file minimal tempo track generation. */
     public static void testWriteF1MinimalTempoTrack()
         throws IOException
 	    {
