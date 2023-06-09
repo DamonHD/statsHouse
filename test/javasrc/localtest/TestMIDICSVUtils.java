@@ -31,11 +31,11 @@ public final class TestMIDICSVUtils extends TestCase
     public static void testWriteF1Header()
         throws IOException
 	    {
-        final StringWriter sw = new StringWriter();
-        MIDICSVUtils.writeF1Header(sw, 2, 480);
+        final StringWriter sw1 = new StringWriter();
+        MIDICSVUtils.writeF1Header(sw1, 2, 480);
         final String expected1 = """
-0, 0, Header, 1, 2, 480  		
+0, 0, Header, 1, 2, 480
         		""";
-        assertEquals(expected1, sw.toString());
+        assertEquals(expected1, sw1.toString());
 	    }
     }
