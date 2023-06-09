@@ -166,8 +166,14 @@ public final class DataUtils
     
     /**Extract maximum data (positive) value from entire data set.
      * This examines the data value for all streams in each row.
+     * <p>
      * If there is no data, or all data-values are non-positive,
      * then this will return 0.
+     * <p>
+     * This ignores coverage levels, etc.
+     * <p>
+     * This ignored data values not parseable as float.
+     *
      * @param data  data set; never null
      * @return return highest positive data value; non-negative
      */
