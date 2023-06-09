@@ -16,6 +16,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -28,8 +29,29 @@ public final class MIDICSVUtils
     /**Prevent creation of an instance. */
     private MIDICSVUtils() { }
 
-    
+
     /**Charset for MIDICSV CSV format (ASCII 7-bit). */
     public static final Charset MIDICSVCSV_CHARSET = StandardCharsets.US_ASCII;
 
+    /**Default 120bpm (500uS per quarter note / beat). */
+    public static final int DEFAULT_TEMPO  = 500000;
+    /**Default clock pulses per quarter note. */
+    public static final int DEFAULT_CLKSPQTR = 480;
+    /**Default beats / quarter notes per bar (4/4 time). */
+    public static final int DEFAULT_BeatsPerBar = 4;
+    
+    /**MIDI format 1 default tempo track number. */
+    public static final int DEFAULT_TEMPO_TRACK_NUMBER = 1;
+
+    /**Append (near) minimal (first, MIDI format 1) tempo track to supplied Writer.
+     */
+    public static void writeMinimalTempoTrack(final Writer w,
+    		final int totalTrackCount, final int tempo, final int clksPQtr)
+	    {
+	    if(null == w) { throw new IllegalArgumentException(); }
+	    if(totalTrackCount < 1) { throw new IllegalArgumentException(); }
+	    if(tempo < 1) { throw new IllegalArgumentException(); }
+	    if(clksPQtr < 1) { throw new IllegalArgumentException(); }
+	    
+	    }
     }
