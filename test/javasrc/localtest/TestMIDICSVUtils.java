@@ -38,4 +38,17 @@ public final class TestMIDICSVUtils extends TestCase
         		""";
         assertEquals(expected1, sw1.toString());
 	    }
+
+    /**Test MIDICSV file footer generation.. */
+    public static void testWriteF1Footer()
+        throws IOException
+	    {
+        final StringWriter sw1 = new StringWriter();
+        MIDICSVUtils.writeF1Footer(sw1);
+        final String expected1 = """
+0, 0, End_of_file
+        		""";
+        assertEquals(expected1, sw1.toString());
+	    }
+
     }

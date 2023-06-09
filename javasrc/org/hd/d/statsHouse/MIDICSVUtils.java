@@ -47,7 +47,7 @@ public final class MIDICSVUtils
     /**Format template for MIDICSV file header row: track count, clocks per qtr note. */
     public static final String TEMPLATE_FILE_HEADER = "0, 0, Header, 1, %d, %d\n";
  
-    /**Append MIDI format 1 header to supplied Writer.
+    /**Append MIDI format 1 file header to supplied Writer.
      * @throws IOException 
      */
     public static void writeF1Header(final Writer w,
@@ -61,6 +61,16 @@ public final class MIDICSVUtils
 	    // "0, 0, Header, 1, "TRACKS",", CLKSPQTR;
 	    w.append(String.format(TEMPLATE_FILE_HEADER, totalTrackCount, clksPQtr));
 	    }
+ 
+    /**Append MIDI format 1 file footer to supplied Writer.
+     * @throws IOException 
+     */
+    public static void writeF1Footer(final Writer w)
+		throws IOException
+	    {
+	    w.append("0, 0, End_of_file\n");
+	    }
+
 
     /**Append (near) minimal (first, MIDI format 1, 4/4, C Maj) tempo track to supplied Writer.
      */
