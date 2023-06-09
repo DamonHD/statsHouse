@@ -196,6 +196,8 @@ public final class DataUtils
      * If multiple streams have the same number of non-empty values,
      * then the lowest-numbered index amongst them is returned.
      * <p>
+     * This ignores coverage levels, etc.
+     * <p>
      * The first stream is 1.
      *
      * @param data  data set; never null
