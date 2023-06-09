@@ -86,6 +86,7 @@ public final class TestDataCSVRead extends TestCase
      */
     public static void testChopDataIntoProtoBars() throws IOException
 	    {
+    	// Expecting 2 bars, the first of 4 notes, the second of 2 notes plus 2 nulls.
         final EOUDataCSV edc1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_M));
         final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBars(4, edc1);
         assertNotNull(result1);
