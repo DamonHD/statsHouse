@@ -68,7 +68,7 @@ public final class TestDataCSVRead extends TestCase
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
 	
-	/**Full yearly-cadence PV generation data CSV to 2023, including comment rows.
+	/**Full yearly-cadence PV generation data CSV to partial 2023, including comment rows.
 	 * Sample from:
 	 * <pre>
 % cat data/consolidated/energy/std/gen/Y/gen-Y.csv
