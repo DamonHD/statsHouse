@@ -19,6 +19,7 @@ package localtest;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.hd.d.statsHouse.DataCadence;
 import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
 
@@ -56,5 +57,15 @@ public final class TestDataUtils extends TestCase
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(2, DataUtils.maxNVal(result1));
+	    }
+
+    /**Test maximum stream data point count extraction. 
+     * @throws IOException
+     */
+    public static void testExtractDataCadenceQuick()
+		throws IOException
+    	{
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        assertEquals(DataCadence.M, DataUtils.extractDataCadenceQuick(result1));
 	    }
     }

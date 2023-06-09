@@ -152,8 +152,8 @@ public final class DataUtils
 		    { return(parseEOUDataCSV(r)); }
         }
 
-    /**Counts the number of data streams in data set using a quick method.
-     * This just looks at the first row.
+    /**Counts the number of data streams in the data set using a quick method.
+     * This only looks at the first row of the data.
      * @param data  data set; never null
      * @return count of data streams; non-negative
      */
@@ -237,6 +237,33 @@ public final class DataUtils
 			    }
 		    }
 	    return(busiestStream);
+	    }
+
+    /**Extracts the cadence of the data set using a quick method.
+     * This only looks at the first row of the data.
+     * <p>
+     * If the date us of the form YYYY then the cadence is yearly;
+     * YYYY-MM is monthly; YYYY-MM-DD is daily; otherwise an error.
+     * <p>
+     * This assumes that dates are correctly formated,
+     * and the same format for all rows.
+     * <p>
+     * If there is no data this returns an arbitrary cadence,
+     * and does not throw an exception.
+     *
+     * @param data  data set; never null
+     * @return cadence of data streams; non-null
+     * @throws IllegalArgumentException  if the cadence cannot be deduced
+     */
+    public static DataCadence extractDataCadenceQuick(final EOUDataCSV data)
+	    {
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    if(data.data().isEmpty()) { return(DataCadence.Y); }
+	    final String firstDate = data.data().get(0).get(0);
+	    if(4 == firstDate.length()) { return(DataCadence.Y); }
+	    if(7 == firstDate.length()) { return(DataCadence.M); }
+	    if(10 == firstDate.length()) { return(DataCadence.D); }
+	    throw new IllegalArgumentException();
 	    }
 
  
