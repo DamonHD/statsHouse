@@ -42,7 +42,6 @@ public final class TestDataCSVRead extends TestCase
 
         final EOUDataCSV result3 = DataUtils.parseEOUDataCSV(new StringReader("#comment\r\n"));
         assertTrue("Comment should be empty", result3.data().isEmpty());
-        
 
         final EOUDataCSV result4 = DataUtils.parseEOUDataCSV(new StringReader("\r\n#comment\r\n#moar comment"));
         assertTrue("Multi-comment should be empty", result4.data().isEmpty()); 
@@ -53,6 +52,8 @@ public final class TestDataCSVRead extends TestCase
      * <pre>
 % head data/consolidated/energy/std/gen/M/gen-M.csv
      * </pre>
+     * <p>
+     * Is public so as to be usable from other test cases.
      */
 	public static final String sample_gen_M = """
 #YYYY-MM,device,coverage,gen,device,coverage,gen,device,coverage,gen
@@ -70,7 +71,6 @@ public final class TestDataCSVRead extends TestCase
     /**Verify that parse of real-life sample CSV works. */
     public static void testReadSample() throws IOException
 	    {
-
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_M));
         assertEquals("Sample should have 6 data rows", 6, result1.data().size());
 
