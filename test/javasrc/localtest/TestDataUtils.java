@@ -37,6 +37,8 @@ public final class TestDataUtils extends TestCase
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(3, DataUtils.countDataStreamsQuick(result1));
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        assertEquals(3, DataUtils.countDataStreamsQuick(result2));
 	    }
     
     /**Test maximum data value extraction. 
@@ -46,7 +48,9 @@ public final class TestDataUtils extends TestCase
 		throws IOException
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
-        assertEquals(161f, DataUtils.maxVal(result1), 0.01f);
+        assertEquals(161f, DataUtils.maxVal(result1), 0.001f);
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        assertEquals(4084.42f, DataUtils.maxVal(result2), 0.001f);
 	    }
     
     /**Test maximum stream data point count extraction. 
@@ -57,6 +61,8 @@ public final class TestDataUtils extends TestCase
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(2, DataUtils.maxNVal(result1));
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        assertEquals(2, DataUtils.maxNVal(result2));
 	    }
 
     /**Test maximum stream data point count extraction. 
@@ -67,5 +73,7 @@ public final class TestDataUtils extends TestCase
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(DataCadence.M, DataUtils.extractDataCadenceQuick(result1));
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        assertEquals(DataCadence.Y, DataUtils.extractDataCadenceQuick(result2));
 	    }
     }
