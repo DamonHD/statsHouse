@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
@@ -186,6 +188,46 @@ public final class DataUtils
 		    	}
 		    }
 	    return(result);
+	    }
+
+    /**Extract number of the data stream with most non-empty value, 1-based.
+     * If there is no data then this will return 0.
+     * <p>
+     * If multiple streams have the same number of non-empty values,
+     * the lowest-numbered one is selected.
+     * <p>
+     * The first stream is 1.
+     * @param data  data set; never null
+     * @return return stream number with most data points; non-negative
+     */
+    public static int maxNVal(final EOUDataCSV data)
+	    {
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    final SortedMap<Integer,Integer> counts = new TreeMap<Integer,Integer>();
+	    for(final List<String> row : data.data())
+		    {
+		    // 2008-02,,,,meter,1,4,SunnyBeam,0.142857,3.54
+	    	for(int j = 3; j < row.size(); j += 3)
+		    	{
+	    		final boolean isEmpty = row.get(j).isEmpty();
+	    		if(isEmpty) { continue; }
+	    		final int stream = j / 3;
+	    		final Integer old = counts.getOrDefault(stream, Integer.valueOf(0));
+	    		counts.put(stream, old + 1);
+		    	}
+		    }
+	    int highestCount = 0;
+	    int busiestStream = 0;
+	    for(final Integer stream : counts.keySet())
+		    {
+		    final int count = counts.get(stream);
+		    if(count > highestCount)
+			    {
+		    	highestCount = count;
+		    	busiestStream = stream;
+			    }
+		    }
+	    return(busiestStream);
 	    }
 
  

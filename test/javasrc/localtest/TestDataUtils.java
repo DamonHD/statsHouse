@@ -47,4 +47,14 @@ public final class TestDataUtils extends TestCase
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(161f, DataUtils.maxVal(result1), 0.01f);
 	    }
+    
+    /**Test maximum stream data point count extraction. 
+     * @throws IOException
+     */
+    public static void testMaxNVal()
+		throws IOException
+    	{
+        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        assertEquals(2, DataUtils.maxNVal(result1));
+	    }
     }
