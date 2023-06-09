@@ -45,6 +45,6 @@ public final class TestDataUtils extends TestCase
 		throws IOException
     	{
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
-        assertEquals(161f, DataUtils.maxVal(result1), 0.1f);
+        assertEquals(161f, DataUtils.maxVal(result1), 0.01f);
 	    }
     }
