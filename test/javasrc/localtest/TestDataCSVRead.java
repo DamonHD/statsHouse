@@ -67,6 +67,37 @@ public final class TestDataCSVRead extends TestCase
 2008-06,,,,meter,1,160,SunnyBeam,1,158.1
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
+	
+	/**Full yearly-cadence PV generation data CSV to 2023, including comment rows.
+	 * Sample from:
+	 * <pre>
+% cat data/consolidated/energy/std/gen/Y/gen-Y.csv
+     * </pre>
+     * <p>
+     * Is public so as to be usable from other test cases.
+	 */
+	public static final String sample_gen_Y = """
+#YYYY,device,coverage,gen,device,coverage,gen,device,coverage,gen
+#input,"data/consolidated/energy/std/gen/Y/Enphase/gen-Y-Enphase.csv"
+#input,"data/consolidated/energy/std/gen/Y/meter/gen-Y-meter.csv"
+#input,"data/consolidated/energy/std/gen/Y/SunnyBeam/gen-Y-SunnyBeam.csv"
+2008,,,,meter,0.916667,915,SunnyBeam,0.845238,889.93
+2009,,,,meter,1,2956.1,SunnyBeam,1,2907.15
+2010,,,,meter,1,3546.9,SunnyBeam,1,3482.76
+2011,,,,meter,1,3988.1,SunnyBeam,1,3922.27
+2012,,,,meter,1,3777.8,SunnyBeam,1,3712.68
+2013,,,,meter,1,3749.7,SunnyBeam,1,3687.79
+2014,,,,meter,1,3944,SunnyBeam,1,3881.99
+2015,,,,meter,1,3828.6,SunnyBeam,1,3766.9
+2016,,,,meter,1,3703.2,SunnyBeam,1,3676.54
+2017,,,,meter,1,3794.4,SunnyBeam,1,3736.89
+2018,Enphase,0.410714,1069.29,meter,1,3927.8,SunnyBeam,1,3931.44
+2019,Enphase,0.999888,3870.89,meter,1,3855.5,SunnyBeam,1,3800.95
+2020,Enphase,0.999888,4084.42,meter,1,4069.9,SunnyBeam,1,4020.86
+2021,Enphase,0.999888,3514.19,meter,1,3500.8,SunnyBeam,1,3448.6
+2022,Enphase,0.999888,3943.38,meter,1,3925.1,SunnyBeam,1,3865.5
+2023,Enphase,0.416555,1415.92,meter,0.416667,1411,SunnyBeam,0.440476,1554.63			
+			""";
 
     /**Verify that parse of real-life sample CSV works. */
     public static void testReadSample() throws IOException
@@ -79,6 +110,9 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("1", result1.data().get(2).get(5));
         assertEquals("", result1.data().get(4).get(2));
         assertEquals("2008-07", result1.data().get(5).get(0));
+
+        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_Y));
+        assertEquals("Sample should have 16 data rows", 16, result2.data().size());
 	    }
 
     /**Check simple splitting into DataProtoBar.
@@ -101,5 +135,9 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("2008-07", result1.get(1).dataRows().data().get(1).get(0));
         assertNull(result1.get(1).dataRows().data().get(2));
         assertNull(result1.get(1).dataRows().data().get(3));
+        
+        final EOUDataCSV edc2 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_Y));
+        final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBars(4, edc2);
+        assertEquals(4, result2.size());
 	    }
     }
