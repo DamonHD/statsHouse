@@ -44,9 +44,12 @@ public final class MIDICSVUtils
     /**MIDI format 1 default tempo track number. */
     public static final int DEFAULT_TEMPO_TRACK_NUMBER = 1;
 
-    /**Format template for MIDICSV file header row: track count, clocks per qtr note. */
+    /**Format template for MIDICSV file header row: track count, clocks per quarter note. */
     public static final String TEMPLATE_FILE_HEADER = "0, 0, Header, 1, %d, %d\n";
- 
+    
+    /**Format template for MIDICSV tempo row: microseconds per quarter note. */
+    public static final String TEMPLATE_TEMPO = "1, 0, Tempo, %d\n";
+
     /**Append MIDI format 1 file header to supplied Writer.
      * @throws IOException 
      */
@@ -71,15 +74,18 @@ public final class MIDICSVUtils
 	    w.append("0, 0, End_of_file\n");
 	    }
 
-
-    /**Append (near) minimal (first, MIDI format 1, 4/4, C Maj) tempo track to supplied Writer.
+    /**Append (near) minimal (first, MIDI format 1, 4/4, C Major) tempo track to supplied Writer.
+     * Always track 1.
      */
     public static void writeF1MinimalTempoTrack(final Writer w,
-    		final int tempo, final int clksPQtr)
+    		final int tempo)
+		throws IOException
 	    {
 	    if(null == w) { throw new IllegalArgumentException(); }
 	    if(tempo < 1) { throw new IllegalArgumentException(); }
-	    if(clksPQtr < 1) { throw new IllegalArgumentException(); }
-
+        w.append("1, 0, Start_track\n");
+        w.append(String.format(TEMPLATE_TEMPO, tempo));
+	    w.append("1, 0, Time_signature, 4, 2, 24, 8\n");
+	    w.append("1, 0, End_track\n");
 	    }
     }

@@ -51,4 +51,20 @@ public final class TestMIDICSVUtils extends TestCase
         assertEquals(expected1, sw1.toString());
 	    }
 
+
+    /**Test MIDICSV file minimal tempo track generation.. */
+    public static void testWriteF1MinimalTempoTrack()
+        throws IOException
+	    {
+        final StringWriter sw1 = new StringWriter();
+        MIDICSVUtils.writeF1MinimalTempoTrack(sw1, 500000);
+        final String expected1 = """
+1, 0, Start_track
+1, 0, Tempo, 500000
+1, 0, Time_signature, 4, 2, 24, 8
+1, 0, End_track
+        		""";
+        assertEquals(expected1, sw1.toString());
+	    }
+
     }
