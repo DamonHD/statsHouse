@@ -190,13 +190,14 @@ public final class DataUtils
 	    return(result);
 	    }
 
-    /**Extract number of the data stream with most non-empty value, 1-based.
+    /**Return the index of the data stream with the most non-empty values, 1-based.
      * If there is no data then this will return 0.
      * <p>
      * If multiple streams have the same number of non-empty values,
-     * the lowest-numbered one is selected.
+     * the lowest-numbered index of them is returned.
      * <p>
      * The first stream is 1.
+     *
      * @param data  data set; never null
      * @return return stream number with most data points; non-negative
      */
