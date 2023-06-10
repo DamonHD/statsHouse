@@ -86,6 +86,9 @@ public final class TestMIDIGen extends TestCase
 0, 0, End_of_file
         		""";
         assertEquals(expected1, sw1.toString());
-	    }
 
+        // Test the java.midix MIDI.
+        assertEquals(8_000_000, s.getMicrosecondLength(), 10_000);
+        assertEquals(2, s.getTracks().length);
+	    }
     }
