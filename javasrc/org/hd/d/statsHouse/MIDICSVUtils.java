@@ -130,7 +130,7 @@ public final class MIDICSVUtils
 	    { w.append(String.format(TEMPLATE_NOTE_ON, track, clock, channel, note, velocity)); }
 
     /**Format template for MIDICSV note-off row: track, clock, channel, note. */
-    public static final String TEMPLATE_NOTE_OFF = "%d, %d, Note_off_c, %d, %d\n";
+    public static final String TEMPLATE_NOTE_OFF = "%d, %d, Note_off_c, %d, %d, 0\n";
 
     /**Append note-off to supplied Writer.
      * @throws IOException

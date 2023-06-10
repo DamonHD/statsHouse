@@ -82,12 +82,17 @@ public final class MIDIGen
 
 		// Make sweet music...
 		// First iterate over the proto bars...
+		clock -= noteDeltaTime; // Pre-decrement to allow first note to be at zero.
 		for(final DataProtoBar dbp : protoBars)
 			{
 			if(mainDataStream < 1) { break; } // No data!
 			// ... then the data rows inside them.
+
 			for(final var dp : dbp.dataRows().data())
 				{
+				// Allow time for note, played or not.
+				clock += noteDeltaTime;
+
                 // Pick out the raw data field for the main stream.
 				final int field = (mainDataStream * 3);
 				// Skip empty or unparseable fields.
@@ -105,9 +110,6 @@ public final class MIDIGen
 				MIDICSVUtils.writeF1NoteOn(w, melodyTrack, clock, channel, note, noteVelocity);
 				MIDICSVUtils.writeF1NoteOff(w, melodyTrack, clock+noteDeltaTime-1, channel, note);
 				}
-
-			// Allow time for note, played or not.
-			clock += noteDeltaTime;
 			}
 
 		// End melody track.
