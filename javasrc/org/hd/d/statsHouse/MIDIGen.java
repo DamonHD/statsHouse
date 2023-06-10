@@ -58,6 +58,7 @@ public final class MIDIGen
 		final int instrument = 80; // Flute solo (GB).
 		final int noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
+		final int noteDeltaTime = clksPQtr;
 		final int octaves = 2;
 		final int range = 12 * octaves;
 		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
