@@ -32,7 +32,7 @@ public final class MIDIGen
 
     /**Minimal MIDICSV generation from main data source to supplied Writer.
      * Picks the main/busiest data channel and turns that into
-     * a minimal tempo track and a single (flute) data melody track.
+     * a minimal tempo track and a single data melody track.
      * <p>
      * This does no alignment nor filling in of empty notes.
      * <p>
@@ -57,7 +57,7 @@ public final class MIDIGen
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
 		final short melodyTrack = 2;
 		final short channel = 2;
-		final short instrument = 80; // Flute solo (GB).
+		final short instrument = 80; // Lead 1 (square wave).
 		final short noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
@@ -113,6 +113,7 @@ public final class MIDIGen
 			}
 
 		// End melody track.
+		clock += noteDeltaTime;
 		MIDICSVUtils.writeF1TrackEnd(w, melodyTrack, clock);
 
 		// End MIDI file.

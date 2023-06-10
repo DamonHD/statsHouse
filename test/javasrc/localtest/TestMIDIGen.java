@@ -79,7 +79,7 @@ public final class TestMIDIGen extends TestCase
 2, 7199, Note_off_c, 2, 82, 0
 2, 7200, Note_on_c, 2, 67, 63
 2, 7679, Note_off_c, 2, 67, 0
-2, 7200, End_track
+2, 7680, End_track
 0, 0, End_of_file
         		""";
         assertEquals(expected1, sw1.toString());
