@@ -113,7 +113,29 @@ public final class MIDICSVUtils
     /**Append program change (voice/instrument selection) to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1ProgramC(final Writer w, final short track, final int clocks, final short instrument)
+    public static void writeF1ProgramC(final Writer w, final short track, final int clock, final short instrument)
     	throws IOException
-	    { w.append(String.format(TEMPLATE_PROGRAM_C, track, clocks, instrument)); }
+	    { w.append(String.format(TEMPLATE_PROGRAM_C, track, clock, instrument)); }
+
+    /**Format template for MIDICSV note-on row: track, clock, channel, note, velocity. */
+    public static final String TEMPLATE_NOTE_ON = "%d, %d, Note_on_c, %d, %d, %d\n";
+
+    /**Append note-on to supplied Writer.
+     * @throws IOException
+     */
+    public static void writeF1NoteOn(final Writer w, final short track, final int clock,
+    		final short channel, final short note, final short velocity)
+    	throws IOException
+	    { w.append(String.format(TEMPLATE_NOTE_ON, track, clock, channel, note, velocity)); }
+
+    /**Format template for MIDICSV note-off row: track, clock, channel, note. */
+    public static final String TEMPLATE_NOTE_OFF = "%d, %d, Note_off_c, %d, %d\n";
+
+    /**Append note-off to supplied Writer.
+     * @throws IOException
+     */
+    public static void writeF1NoteOff(final Writer w, final short track, final int clock,
+    		final short channel, final short note)
+    	throws IOException
+	    { w.append(String.format(TEMPLATE_NOTE_OFF, track, clock, channel, note)); }
     }
