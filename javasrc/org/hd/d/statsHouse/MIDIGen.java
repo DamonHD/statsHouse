@@ -84,7 +84,9 @@ public final class MIDIGen
         // MIDIX
 		// Create a new tempo Track in the Sequence.
 	    final Track trackTempo = sequence.createTrack();
-	    // TODO: trackTempo
+	    // TODO: trackTempo:
+	    //    http://www.java2s.com/example/java/javax.sound.midi/create-a-set-tempo-meta-event-for-midi.html
+        //    https://spencerpark.github.io/MellowD/build/docs/docco/src/main/java/cas/cs4tb3/mellowd/TimingEnvironment.html
 
 		// MIDI clocks since start.
 		int clock = 0;
