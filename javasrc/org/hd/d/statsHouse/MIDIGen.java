@@ -96,7 +96,7 @@ public final class MIDIGen
 				final float dataValue;
 				try { dataValue = Float.parseFloat(d); } catch(final NumberFormatException e) { continue; }
 				// Skip unusable values.
-				if(!Float.isFinite(offset)) { continue; }
+				if(!Float.isFinite(dataValue)) { continue; }
 				final short scaled = (short)(offset + (dataValue * multScaling));
 				if((scaled < 0) || (scaled > 127)) { continue; }
 
