@@ -65,13 +65,15 @@ public final class MIDIGen
 		final short offset = 60;
 		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
 
+		// Start MIDI file.
 		MIDICSVUtils.writeF1Header(w, (short) 2, clksPQtr);
+		// First track is just tempo.
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
 
-		// TODO: start melody track
+// TODO: start melody track
 
 		// MIDI clocks since start.
-		final int clock = 0;
+		int clock = 0;
 
 		// Select instrument.
 		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, instrument);
@@ -92,17 +94,22 @@ public final class MIDIGen
 				if(d.isEmpty()) { continue; }
 				final float dataValue;
 				try { dataValue = Float.parseFloat(d); } catch(final NumberFormatException e) { continue; }
+				// Skip unusable values.
 				if(!Float.isFinite(offset)) { continue; }
 				final short scaled = (short)(offset + (dataValue * multScaling));
 				if((scaled < 0) || (scaled > 127)) { continue; }
 
-// TODO: play note
+// TODO: play data melody note
 
 				}
+
+			// Allow time for note, played or not.
+			clock += noteDeltaTime;
 			}
 
-		// TODO: end melody track
+// TODO: end melody track
 
+		// End MIDI file.
 		MIDICSVUtils.writeF1Footer(w);
 		}
 
