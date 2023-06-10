@@ -21,7 +21,9 @@ import java.io.Writer;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
+import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 /**MIDI generation.
@@ -123,6 +125,17 @@ public final class MIDIGen
 				// Play data melody note.
 				MIDICSVUtils.writeF1NoteOn(w, melodyTrack, clock, channel, note, noteVelocity);
 				MIDICSVUtils.writeF1NoteOff(w, melodyTrack, clock+noteDeltaTime-1, channel, note);
+
+				// Add a note-on event to the track.
+			    final ShortMessage noteOn = new ShortMessage();
+			    noteOn.setMessage(ShortMessage.NOTE_ON, channel, note, noteVelocity);
+			    final MidiEvent noteOnEvent = new MidiEvent(noteOn, clock);
+			    trackMelody.add(noteOnEvent);
+			    // Add a note-off event to the track.
+			    final ShortMessage noteOff = new ShortMessage();
+			    noteOff.setMessage(ShortMessage.NOTE_OFF, channel, note, 0);
+			    final MidiEvent noteOffEvent = new MidiEvent(noteOff, clock+noteDeltaTime-1);
+			    trackMelody.add(noteOffEvent);
 				}
 			}
 
