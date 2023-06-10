@@ -70,10 +70,11 @@ public final class MIDIGen
 		// First track is just tempo.
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
 
-// TODO: start melody track
-
 		// MIDI clocks since start.
 		int clock = 0;
+
+		// Start melody track.
+		MIDICSVUtils.writeF1TrackStart(w, melodyTrack);
 
 		// Select instrument.
 		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, instrument);
@@ -107,7 +108,8 @@ public final class MIDIGen
 			clock += noteDeltaTime;
 			}
 
-// TODO: end melody track
+		// End melody track.
+		MIDICSVUtils.writeF1TrackEnd(w, melodyTrack, clock);
 
 		// End MIDI file.
 		MIDICSVUtils.writeF1Footer(w);
