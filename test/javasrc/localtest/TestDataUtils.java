@@ -21,7 +21,7 @@ import java.io.StringReader;
 
 import org.hd.d.statsHouse.DataCadence;
 import org.hd.d.statsHouse.DataUtils;
-import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
+import org.hd.d.statsHouse.EOUDataCSV;
 
 import junit.framework.TestCase;
 
@@ -29,7 +29,7 @@ import junit.framework.TestCase;
  */
 public final class TestDataUtils extends TestCase
     {
-    /**Test data stream counting. 
+    /**Test data stream counting.
      * @throws IOException
      */
     public static void testCountDataStreamsQuick()
@@ -41,7 +41,7 @@ public final class TestDataUtils extends TestCase
         assertEquals(3, DataUtils.countDataStreamsQuick(result2));
 	    }
 
-    /**Test maximum data value extraction. 
+    /**Test maximum data value extraction.
      * @throws IOException
      */
     public static void testMaxVal()
@@ -53,7 +53,7 @@ public final class TestDataUtils extends TestCase
         assertEquals(4084.42f, DataUtils.maxVal(result2), 0.001f);
 	    }
 
-    /**Test maximum stream data point count extraction. 
+    /**Test maximum stream data point count extraction.
      * @throws IOException
      */
     public static void testMaxNVal()
@@ -65,7 +65,7 @@ public final class TestDataUtils extends TestCase
         assertEquals(2, DataUtils.maxNVal(result2));
 	    }
 
-    /**Test maximum stream data point count extraction. 
+    /**Test maximum stream data point count extraction.
      * @throws IOException
      */
     public static void testExtractDataCadenceQuick()

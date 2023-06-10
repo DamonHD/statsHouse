@@ -2,8 +2,6 @@ package org.hd.d.statsHouse;
 
 import java.util.Objects;
 
-import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
-
 /**A prototype music bar made from (a subset of) raw EOUDataCSV records; immutable.
  *
  * Entries in dataRows may be null (padding at either end)

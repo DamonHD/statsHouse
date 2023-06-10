@@ -16,14 +16,28 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
+import java.io.Writer;
+
 /**MIDI generation.
  * Initially will generate CSV suitable as input for the MIDICSV utility.
  * May also generate MIDI and/or audio output directly with the javax.midi package.
  */
 public final class MIDIGen
     {
+    /**Prevent creation of an instance. */
+    private MIDIGen() { }
 
 
+    /**Minimal MIDICSV generation from main data source to supplied Writer.
+     * Picks the main/busiest data channel and turns that into
+     * a minimal tempo track and a single flute track.
+     */
+	public static void minMIDISCVGet(final Writer w, final EOUDataCSV data)
+		{
 
+		// TODO
+
+
+		}
 
     }

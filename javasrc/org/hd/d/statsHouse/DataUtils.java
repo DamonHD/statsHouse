@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -58,13 +57,10 @@ public final class DataUtils
 
     /**If true, attempt to minimise memory consumption when parsing and loading EOUDATACSV data. */
     private static final boolean OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE = true;
-    
+
     /**Charset for EOU consolidated data CSV format (ASCII 7-bit). */
     public static final Charset EOUDATACSV_CHARSET = StandardCharsets.US_ASCII;
 
-    /**Wraps the CSV data to make it clear what it is; data cannot be null.  */
-    public record EOUDataCSV(List<List<String>> data)
-	    { public EOUDataCSV { Objects.requireNonNull(data); } }
 
     /**Parse EOU consolidated data CSV file/stream; never null but may be empty.
      * Parses CSV as List (by row) of List (of String fields),
@@ -92,7 +88,7 @@ public final class DataUtils
 
         // Initially-empty result...
         // As of 2023-06-08, largest non-daily-cadence data CSV is 203 lines.
-        final ArrayList<List<String>> result = new ArrayList<List<String>>(256);
+        final ArrayList<List<String>> result = new ArrayList<>(256);
 
         String row;
         while(null != (row = br.readLine()))
@@ -114,7 +110,7 @@ public final class DataUtils
             // but may save more than that in avoided GC on small JVM instance.
             if(OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE && !result.isEmpty())
 	            {
-	            final List<String> prevRow = result.get(result.size() - 1);	
+	            final List<String> prevRow = result.get(result.size() - 1);
 	            if(fields.length == prevRow.size())
 		            {
 		            for(int i = fields.length; --i >= 0; )
@@ -163,7 +159,7 @@ public final class DataUtils
 	    if(data.data().isEmpty()) { return(0); }
 	    return((data.data().get(0).size() - 1) / 3);
 	    }
-    
+
     /**Extract maximum data (positive) value from entire data set.
      * This examines the data value for all streams in each row.
      * <p>
@@ -190,7 +186,7 @@ public final class DataUtils
 		    		final float v = Float.parseFloat(row.get(j));
 		    		if(v > result) { result = v; }
 		    		}
-		    	catch(NumberFormatException e) { /* Ignore */ }
+		    	catch(final NumberFormatException e) { /* Ignore */ }
 		    	}
 		    }
 	    return(result);
@@ -212,7 +208,7 @@ public final class DataUtils
     public static int maxNVal(final EOUDataCSV data)
 	    {
 	    if(null == data) { throw new IllegalArgumentException(); }
-	    final SortedMap<Integer,Integer> counts = new TreeMap<Integer,Integer>();
+	    final SortedMap<Integer,Integer> counts = new TreeMap<>();
 	    for(final List<String> row : data.data())
 		    {
 		    // 2008-02,,,,meter,1,4,SunnyBeam,0.142857,3.54
@@ -221,7 +217,7 @@ public final class DataUtils
 	    		final boolean isEmpty = row.get(j).isEmpty();
 	    		if(isEmpty) { continue; }
 	    		final int stream = j / 3;
-	    		final Integer old = counts.getOrDefault(stream, Integer.valueOf(0));
+	    		final Integer old = counts.getOrDefault(stream, 0);
 	    		counts.put(stream, old + 1);
 		    	}
 		    }
@@ -266,7 +262,7 @@ public final class DataUtils
 	    throw new IllegalArgumentException();
 	    }
 
- 
+
 
     /**Chop data into proto bars with no alignment or padding; never null, may be empty.
      * The final bar is likely to be incomplete (padded with nulls).
@@ -277,13 +273,13 @@ public final class DataUtils
 	    {
 	    if(dataNotesPerBar < 1) { throw new IllegalArgumentException(); }
 	    if(null == data) { throw new IllegalArgumentException(); }
-	    
-	    int size = data.data.size();
-	    final ArrayList<DataProtoBar> result = new ArrayList<DataProtoBar>(1 + (size/dataNotesPerBar));
-	    
+
+	    final int size = data.data().size();
+	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
+
 		for(int i = 0; i < size; i += dataNotesPerBar)
 		    {
-		    final List<List<String>> out = new ArrayList<List<String>>(dataNotesPerBar);
+		    final List<List<String>> out = new ArrayList<>(dataNotesPerBar);
 		    // FIXME: wrap leaf List if not already Unmodifiable.
 		    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
 			    { out.add(data.data().get(j)); }
@@ -398,7 +394,7 @@ public final class DataUtils
                     {
                     final InputStream is = new BufferedInputStream(
                         new FileInputStream(extant));
-                    try
+                    try (is)
                         {
                         final int l = data.length;
                         for(int i = 0; i < l; ++i)
@@ -407,8 +403,6 @@ public final class DataUtils
                                 { overwrite = true; break; }
                             }
                         }
-                    finally
-                        { is.close(); }
                     }
                 catch(final FileNotFoundException e) { overwrite = true; }
                 }

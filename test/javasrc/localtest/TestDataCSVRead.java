@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.DataUtils;
-import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
+import org.hd.d.statsHouse.EOUDataCSV;
 
 import junit.framework.TestCase;
 
@@ -36,7 +36,7 @@ public final class TestDataCSVRead extends TestCase
 	    {
         final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(""));
         assertTrue("0 bytes should be empty", result1.data().isEmpty());
-        
+
         final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader("\r\n"));
         assertTrue("CRLF should be empty", result2.data().isEmpty());
 
@@ -44,7 +44,7 @@ public final class TestDataCSVRead extends TestCase
         assertTrue("Comment should be empty", result3.data().isEmpty());
 
         final EOUDataCSV result4 = DataUtils.parseEOUDataCSV(new StringReader("\r\n#comment\r\n#moar comment"));
-        assertTrue("Multi-comment should be empty", result4.data().isEmpty()); 
+        assertTrue("Multi-comment should be empty", result4.data().isEmpty());
 	    }
 
     /**First 10 lines of monthly-cadence PV generation data CSV, including comment rows.
@@ -67,7 +67,7 @@ public final class TestDataCSVRead extends TestCase
 2008-06,,,,meter,1,160,SunnyBeam,1,158.1
 2008-07,,,,meter,1,161,SunnyBeam,1,146.12
 """;
-	
+
 	/**Full yearly-cadence PV generation data CSV to partial 2023, including comment rows.
 	 * Sample from:
 	 * <pre>
@@ -96,7 +96,7 @@ public final class TestDataCSVRead extends TestCase
 2020,Enphase,0.999888,4084.42,meter,1,4069.9,SunnyBeam,1,4020.86
 2021,Enphase,0.999888,3514.19,meter,1,3500.8,SunnyBeam,1,3448.6
 2022,Enphase,0.999888,3943.38,meter,1,3925.1,SunnyBeam,1,3865.5
-2023,Enphase,0.416555,1415.92,meter,0.416667,1411,SunnyBeam,0.440476,1554.63			
+2023,Enphase,0.416555,1415.92,meter,0.416667,1411,SunnyBeam,0.440476,1554.63
 			""";
 
     /**Verify that parse of real-life sample CSV works. */
@@ -135,7 +135,7 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("2008-07", result1.get(1).dataRows().data().get(1).get(0));
         assertNull(result1.get(1).dataRows().data().get(2));
         assertNull(result1.get(1).dataRows().data().get(3));
-        
+
         final EOUDataCSV edc2 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_Y));
         final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBars(4, edc2);
         assertEquals(4, result2.size());
