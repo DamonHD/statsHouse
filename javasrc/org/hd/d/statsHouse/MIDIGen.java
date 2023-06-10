@@ -48,12 +48,20 @@ public final class MIDIGen
 		// 0 if no data.
 		// 1 if left-most data stream is main one.
 		final int mainDataStream = DataUtils.maxNVal(data);
+		final float maxVal = DataUtils.maxVal(data);
 
 		// Divide data into bars.
 		final int notesPerBar = 4;
 		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
 
-		MIDICSVUtils.writeF1Header(w, 2, MIDICSVUtils.DEFAULT_CLKSPQTR);
+		// Paying homage to textToMIDIv4-consolidated.sh and friends.
+		final int noteVelocity = 63;
+		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
+		final int octaves = 2;
+		final int range = 12 * octaves;
+		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
+
+		MIDICSVUtils.writeF1Header(w, 2, clksPQtr);
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
 
 		// TODO
