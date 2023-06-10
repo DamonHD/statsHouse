@@ -39,7 +39,6 @@ public final class TestMIDIGen extends TestCase
         throws IOException, InvalidMidiDataException
 	    {
         final EOUDataCSV csv1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
-
         final StringWriter sw1 = new StringWriter();
         final Sequence s = MIDIGen.genMinimalMelodyMIDISCV(sw1, csv1);
 //System.err.print(sw1.toString());
