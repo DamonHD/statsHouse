@@ -50,11 +50,15 @@ public final class MIDICSVUtils
     /**Format template for MIDICSV tempo row: microseconds per quarter note. */
     public static final String TEMPLATE_TEMPO = "1, 0, Tempo, %d\n";
 
+    /**Format template for MIDICSV program change row: track, clock, instrument number. */
+    public static final String TEMPLATE_PROGRAM_C = "%d, %d, Program_c, %d\n";
+
+
     /**Append MIDI format 1 file header to supplied Writer.
      * @throws IOException
      */
     public static void writeF1Header(final Writer w,
-    		final int totalTrackCount, final int clksPQtr)
+    		final short totalTrackCount, final int clksPQtr)
 		throws IOException
 	    {
 	    if(null == w) { throw new IllegalArgumentException(); }
@@ -87,5 +91,14 @@ public final class MIDICSVUtils
         w.append(String.format(TEMPLATE_TEMPO, tempo));
 	    w.append("1, 0, Time_signature, 4, 2, 24, 8\n");
 	    w.append("1, 0, End_track\n");
+	    }
+
+    /**Append program change (voice/instrument selection) to supplied Writer.
+     * @throws IOException
+     */
+    public static void writeF1ProgramC(final Writer w, final short track, final int clocks, final short instrument)
+    	throws IOException
+	    {
+	    w.append(String.format(TEMPLATE_PROGRAM_C, track, clocks, instrument));
 	    }
     }

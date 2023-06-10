@@ -55,18 +55,53 @@ public final class MIDIGen
 		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
 
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
-		final int instrument = 80; // Flute solo (GB).
-		final int noteVelocity = 63;
+		final short melodyTrack = 2;
+		final short instrument = 80; // Flute solo (GB).
+		final short noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
 		final int octaves = 2;
-		final int range = 12 * octaves;
+		final short range = 12 * octaves;
+		final short offset = 60;
 		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
 
-		MIDICSVUtils.writeF1Header(w, 2, clksPQtr);
+		MIDICSVUtils.writeF1Header(w, (short) 2, clksPQtr);
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
 
-		// TODO
+		// TODO: start melody track
+
+		// MIDI clocks since start.
+		final int clock = 0;
+
+		// Select instrument.
+		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, instrument);
+
+		// Make sweet music...
+		// First iterate over the proto bars...
+		for(final DataProtoBar dbp : protoBars)
+			{
+			if(mainDataStream < 1) { break; } // No data!
+			// ... then the data rows inside them.
+			for(final var dp : dbp.dataRows().data())
+				{
+                // Pick out the raw data field for the main stream.
+				final int field = (mainDataStream * 3);
+				// Skip empty or unparseable fields.
+				if(field >= dp.size()) { continue; }
+				final String d = dp.get(field);
+				if(d.isEmpty()) { continue; }
+				final float dataValue;
+				try { dataValue = Float.parseFloat(d); } catch(final NumberFormatException e) { continue; }
+				if(!Float.isFinite(offset)) { continue; }
+				final short scaled = (short)(offset + (dataValue * multScaling));
+				if((scaled < 0) || (scaled > 127)) { continue; }
+
+// TODO: play note
+
+				}
+			}
+
+		// TODO: end melody track
 
 		MIDICSVUtils.writeF1Footer(w);
 		}

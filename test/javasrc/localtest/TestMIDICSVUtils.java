@@ -32,7 +32,7 @@ public final class TestMIDICSVUtils extends TestCase
         throws IOException
 	    {
         final StringWriter sw1 = new StringWriter();
-        MIDICSVUtils.writeF1Header(sw1, 2, 480);
+        MIDICSVUtils.writeF1Header(sw1, (short) 2, 480);
         final String expected1 = """
 0, 0, Header, 1, 2, 480
         		""";
