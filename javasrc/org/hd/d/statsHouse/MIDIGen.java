@@ -16,6 +16,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
+import java.io.IOException;
 import java.io.Writer;
 
 /**MIDI generation.
@@ -30,14 +31,20 @@ public final class MIDIGen
 
     /**Minimal MIDICSV generation from main data source to supplied Writer.
      * Picks the main/busiest data channel and turns that into
-     * a minimal tempo track and a single flute track.
+     * a minimal tempo track and a single (flute) data melody track.
+     * @throws IOException
      */
-	public static void minMIDISCVGet(final Writer w, final EOUDataCSV data)
+	public static void minMIDISCVGet(final Writer w, final EOUDataCSV data) throws IOException
 		{
+		if(null == w) { throw new IllegalArgumentException(); }
+		if(null == data) { throw new IllegalArgumentException(); }
+
+		MIDICSVUtils.writeF1Header(w, 2, MIDICSVUtils.DEFAULT_CLKSPQTR);
+		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
 
 		// TODO
 
-
+		MIDICSVUtils.writeF1Footer(w);
 		}
 
     }
