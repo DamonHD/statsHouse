@@ -34,8 +34,8 @@ public final class MIDICSVUtils
     /**Charset for MIDICSV CSV format (ASCII 7-bit). */
     public static final Charset MIDICSVCSV_CHARSET = StandardCharsets.US_ASCII;
 
-    /**Default 120bpm (500uS per quarter note / beat). */
-    public static final int DEFAULT_TEMPO  = 500000;
+    /**Default 120bpm (0.5s per quarter note / beat). */
+    public static final int DEFAULT_TEMPO  = 500_000;
     /**Default clock pulses per quarter note. */
     public static final int DEFAULT_CLKSPQTR = 480;
     /**Default beats / quarter notes per bar (4/4 time). */

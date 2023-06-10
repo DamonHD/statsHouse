@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.Sequence;
+
 import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.MIDIGen;
@@ -30,14 +33,15 @@ import junit.framework.TestCase;
  */
 public final class TestMIDIGen extends TestCase
     {
-    /**Test minimal data MIDICSV generation. */
+    /**Test minimal data MIDICSV and Sequence generation.
+     * @throws InvalidMidiDataException */
     public static void testGenMinimalMelodyMIDISCV()
-        throws IOException
+        throws IOException, InvalidMidiDataException
 	    {
         final EOUDataCSV csv1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
 
         final StringWriter sw1 = new StringWriter();
-        MIDIGen.genMinimalMelodyMIDISCV(sw1, csv1);
+        final Sequence s = MIDIGen.genMinimalMelodyMIDISCV(sw1, csv1);
 //System.err.print(sw1.toString());
         final String expected1 = """
 0, 0, Header, 1, 2, 480
