@@ -18,6 +18,7 @@ package org.hd.d.statsHouse;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 /**MIDI generation.
  * Initially will generate CSV suitable as input for the MIDICSV utility.
@@ -32,12 +33,25 @@ public final class MIDIGen
     /**Minimal MIDICSV generation from main data source to supplied Writer.
      * Picks the main/busiest data channel and turns that into
      * a minimal tempo track and a single (flute) data melody track.
+     * <p>
+     * This does no alignment nor filling in of empty notes.
+     * <p>
+     * This uses 4 notes per bar.
+     *
      * @throws IOException
      */
-	public static void minMIDISCVGet(final Writer w, final EOUDataCSV data) throws IOException
+	public static void genMinimalMelodyMIDISCV(final Writer w, final EOUDataCSV data) throws IOException
 		{
 		if(null == w) { throw new IllegalArgumentException(); }
 		if(null == data) { throw new IllegalArgumentException(); }
+
+		// 0 if no data.
+		// 1 if left-most data stream is main one.
+		final int mainDataStream = DataUtils.maxNVal(data);
+
+		// Divide data into bars.
+		final int notesPerBar = 4;
+		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
 
 		MIDICSVUtils.writeF1Header(w, 2, MIDICSVUtils.DEFAULT_CLKSPQTR);
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
