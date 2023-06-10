@@ -78,23 +78,28 @@ public final class MIDIGen
 
 		// Start MIDI file.
 		MIDICSVUtils.writeF1Header(w, (short) 2, clksPQtr);
+
 		// First track is just tempo.
 		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
+        // MIDIX
 		// Create a new tempo Track in the Sequence.
 	    final Track trackTempo = sequence.createTrack();
-//	    trackTempo. ...
+	    // TODO: trackTempo
 
 		// MIDI clocks since start.
 		int clock = 0;
 
-		// Create a new melody Track in the Sequence.
-	    final Track trackMelody = sequence.createTrack();
-
 		// Start melody track.
 		MIDICSVUtils.writeF1TrackStart(w, melodyTrack);
+        // MIDIX
+	    final Track trackMelody = sequence.createTrack();
 
 		// Select instrument.
 		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, channel, instrument);
+        // MIDIX
+		final ShortMessage pc = new ShortMessage();
+		pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+		trackMelody.add(new MidiEvent(pc, 0));
 
 		// Make sweet music...
 		// First iterate over the proto bars...
@@ -125,7 +130,7 @@ public final class MIDIGen
 				// Play data melody note.
 				MIDICSVUtils.writeF1NoteOn(w, melodyTrack, clock, channel, note, noteVelocity);
 				MIDICSVUtils.writeF1NoteOff(w, melodyTrack, clock+noteDeltaTime-1, channel, note);
-
+                // MIDIX
 				// Add a note-on event to the track.
 			    final ShortMessage noteOn = new ShortMessage();
 			    noteOn.setMessage(ShortMessage.NOTE_ON, channel, note, noteVelocity);
