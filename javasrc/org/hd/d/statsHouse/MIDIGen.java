@@ -55,6 +55,7 @@ public final class MIDIGen
 		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
 
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
+		final int instrument = 80; // Flute solo (GB).
 		final int noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
 		final int octaves = 2;
