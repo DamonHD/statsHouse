@@ -107,15 +107,16 @@ public final class MIDICSVUtils
 	    writeF1TrackEnd(w, DEFAULT_TEMPO_TRACK_NUMBER, 0);
 	    }
 
-    /**Format template for MIDICSV program change row: track, clock, instrument number. */
-    public static final String TEMPLATE_PROGRAM_C = "%d, %d, Program_c, %d\n";
+    /**Format template for MIDICSV program change row: track, clock, channel, instrument number. */
+    public static final String TEMPLATE_PROGRAM_C = "%d, %d, Program_c, %d, %d\n";
 
     /**Append program change (voice/instrument selection) to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1ProgramC(final Writer w, final short track, final int clock, final short instrument)
+    public static void writeF1ProgramC(final Writer w, final short track, final int clock,
+    		final short channel, final short instrument)
     	throws IOException
-	    { w.append(String.format(TEMPLATE_PROGRAM_C, track, clock, instrument)); }
+	    { w.append(String.format(TEMPLATE_PROGRAM_C, track, clock, channel, instrument)); }
 
     /**Format template for MIDICSV note-on row: track, clock, channel, note, velocity. */
     public static final String TEMPLATE_NOTE_ON = "%d, %d, Note_on_c, %d, %d, %d\n";

@@ -56,6 +56,7 @@ public final class MIDIGen
 
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
 		final short melodyTrack = 2;
+		final short channel = 2;
 		final short instrument = 80; // Flute solo (GB).
 		final short noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
@@ -77,7 +78,7 @@ public final class MIDIGen
 		MIDICSVUtils.writeF1TrackStart(w, melodyTrack);
 
 		// Select instrument.
-		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, instrument);
+		MIDICSVUtils.writeF1ProgramC(w, melodyTrack, clock, channel, instrument);
 
 		// Make sweet music...
 		// First iterate over the proto bars...
@@ -97,11 +98,12 @@ public final class MIDIGen
 				try { dataValue = Float.parseFloat(d); } catch(final NumberFormatException e) { continue; }
 				// Skip unusable values.
 				if(!Float.isFinite(dataValue)) { continue; }
-				final short scaled = (short)(offset + (dataValue * multScaling));
-				if((scaled < 0) || (scaled > 127)) { continue; }
+				final short note = (short)(offset + (dataValue * multScaling));
+				if((note < 0) || (note > 127)) { continue; }
 
-// TODO: play data melody note
-
+				// Play data melody note.
+				MIDICSVUtils.writeF1NoteOn(w, melodyTrack, clock, channel, note, noteVelocity);
+				MIDICSVUtils.writeF1NoteOff(w, melodyTrack, clock+noteDeltaTime-1, channel, note);
 				}
 
 			// Allow time for note, played or not.
