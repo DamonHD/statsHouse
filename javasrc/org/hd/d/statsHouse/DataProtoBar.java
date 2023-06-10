@@ -15,7 +15,7 @@ import org.hd.d.statsHouse.DataUtils.EOUDataCSV;
  * For full immutability, this relies on the incoming
  * leaf List values being immutable.  They must also
  * be well-formed, eg non-null, in order, consistent date cadence.
- * 
+ *
  * @param dataNotesPerBar number of data/note slots; strictly positive
  * @param dataRows must be exactly dataNotesPerBar long; never null
  */

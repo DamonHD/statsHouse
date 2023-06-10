@@ -40,18 +40,18 @@ public final class MIDICSVUtils
     public static final int DEFAULT_CLKSPQTR = 480;
     /**Default beats / quarter notes per bar (4/4 time). */
     public static final int DEFAULT_BeatsPerBar = 4;
-    
+
     /**MIDI format 1 default tempo track number. */
     public static final int DEFAULT_TEMPO_TRACK_NUMBER = 1;
 
     /**Format template for MIDICSV file header row: track count, clocks per quarter note. */
     public static final String TEMPLATE_FILE_HEADER = "0, 0, Header, 1, %d, %d\n";
-    
+
     /**Format template for MIDICSV tempo row: microseconds per quarter note. */
     public static final String TEMPLATE_TEMPO = "1, 0, Tempo, %d\n";
 
     /**Append MIDI format 1 file header to supplied Writer.
-     * @throws IOException 
+     * @throws IOException
      */
     public static void writeF1Header(final Writer w,
     		final int totalTrackCount, final int clksPQtr)
@@ -64,9 +64,9 @@ public final class MIDICSVUtils
 	    // "0, 0, Header, 1, "TRACKS",", CLKSPQTR;
 	    w.append(String.format(TEMPLATE_FILE_HEADER, totalTrackCount, clksPQtr));
 	    }
- 
+
     /**Append MIDI format 1 file footer to supplied Writer.
-     * @throws IOException 
+     * @throws IOException
      */
     public static void writeF1Footer(final Writer w)
 		throws IOException
