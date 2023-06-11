@@ -63,15 +63,15 @@ public final class MIDIGen
 		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
 
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
-		final short melodyTrack = 2;
-		final short channel = 2;
-		final short instrument = 80; // Lead 1 (square wave).
-		final short noteVelocity = 63;
+		final byte melodyTrack = 2;
+		final byte channel = 2;
+		final byte instrument = 80; // Lead 1 (square wave).
+		final byte noteVelocity = 63;
 		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
 		final int octaves = 2;
-		final short range = 12 * octaves;
-		final short offset = 60;
+		final byte range = 12 * octaves;
+		final byte offset = 60;
 		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
 
 		final Sequence sequence = new Sequence(Sequence.PPQ, clksPQtr);
@@ -126,7 +126,9 @@ public final class MIDIGen
 				try { dataValue = Float.parseFloat(d); } catch(final NumberFormatException e) { continue; }
 				// Skip unusable values.
 				if(!Float.isFinite(dataValue)) { continue; }
-				final short note = (short)(offset + (dataValue * multScaling));
+				final float fnote = (offset + (dataValue * multScaling));
+				if((fnote < 0) || (fnote > 127)) { continue; }
+				final byte note = (byte)(fnote);
 				if((note < 0) || (note > 127)) { continue; }
 
 				// Play data melody note.

@@ -42,7 +42,7 @@ public final class MIDICSVUtils
     public static final int DEFAULT_BeatsPerBar = 4;
 
     /**MIDI format 1 default tempo track number. */
-    public static final short DEFAULT_TEMPO_TRACK_NUMBER = 1;
+    public static final byte DEFAULT_TEMPO_TRACK_NUMBER = 1;
 
 
     /**Format template for MIDICSV file header row: track count, clocks per quarter note. */
@@ -75,7 +75,7 @@ public final class MIDICSVUtils
     /**Append track start to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1TrackStart(final Writer w, final short track)
+    public static void writeF1TrackStart(final Writer w, final byte track)
     	throws IOException
 	    { w.append(String.format(TEMPLATE_START_TRACK, track)); }
 
@@ -85,7 +85,7 @@ public final class MIDICSVUtils
     /**Append track end to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1TrackEnd(final Writer w, final short track, final int clock)
+    public static void writeF1TrackEnd(final Writer w, final byte track, final int clock)
     	throws IOException
 	    { w.append(String.format(TEMPLATE_END_TRACK, track, clock)); }
 
@@ -113,8 +113,8 @@ public final class MIDICSVUtils
     /**Append program change (voice/instrument selection) to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1ProgramC(final Writer w, final short track, final int clock,
-    		final short channel, final short instrument)
+    public static void writeF1ProgramC(final Writer w, final byte track, final int clock,
+    		final byte channel, final byte instrument)
     	throws IOException
 	    { w.append(String.format(TEMPLATE_PROGRAM_C, track, clock, channel, instrument)); }
 
@@ -124,8 +124,8 @@ public final class MIDICSVUtils
     /**Append note-on to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1NoteOn(final Writer w, final short track, final int clock,
-    		final short channel, final short note, final short velocity)
+    public static void writeF1NoteOn(final Writer w, final byte track, final int clock,
+    		final byte channel, final byte note, final byte velocity)
     	throws IOException
 	    { w.append(String.format(TEMPLATE_NOTE_ON, track, clock, channel, note, velocity)); }
 
@@ -135,8 +135,8 @@ public final class MIDICSVUtils
     /**Append note-off to supplied Writer.
      * @throws IOException
      */
-    public static void writeF1NoteOff(final Writer w, final short track, final int clock,
-    		final short channel, final short note)
+    public static void writeF1NoteOff(final Writer w, final byte track, final int clock,
+    		final byte channel, final byte note)
     	throws IOException
 	    { w.append(String.format(TEMPLATE_NOTE_OFF, track, clock, channel, note)); }
     }
