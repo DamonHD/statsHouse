@@ -12,6 +12,8 @@ package org.hd.d.statsHouse;
  * This does not contain an absolute time or bar number
  * to allow it to be used more than once in the same track,
  * for example in a chorus or loop.
+ * <p>
+ * This may be the output of a chain of transformations.
  */
 public final class MIDIPlayableBar
     {
