@@ -1,5 +1,7 @@
 package org.hd.d.statsHouse;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,5 +32,12 @@ public record MIDIPlayableMonophonicBar(DataProtoBar dpr, int stream, List<NoteA
 	    if(stream < 1) { throw new IllegalArgumentException(); }
 	    Objects.nonNull(notes);
 	    if(dpr.dataNotesPerBar() != notes.size()) { throw new IllegalArgumentException(); }
+	    }
+
+    /**Make an immutable copy/close suitable for safe sharing. */
+    public MIDIPlayableMonophonicBar getImmutableClone()
+	    {
+    	return(new MIDIPlayableMonophonicBar(dpr, stream,
+            Collections.unmodifiableList(new ArrayList<>(notes))));
 	    }
     }
