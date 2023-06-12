@@ -40,4 +40,18 @@ public record MIDIPlayableMonophonicBar(DataProtoBar dpr, int stream, List<NoteA
     	return(new MIDIPlayableMonophonicBar(dpr, stream,
             Collections.unmodifiableList(new ArrayList<>(notes))));
 	    }
+
+    /**Make an immutable copy/clone with one note changed/cleared.
+     *
+     * @param index  index of note to set, zero-based; [0,notes.length-1]
+     * @param note  new note for given index or null for no note
+     * @return  immutable clone of original with the specified change
+     */
+    public MIDIPlayableMonophonicBar cloneAndSet(final int index, final NoteAndVelocity note)
+	    {
+    	final List<NoteAndVelocity> l = new ArrayList<>(notes);
+    	l.set(index, note);
+    	return(new MIDIPlayableMonophonicBar(dpr, stream,
+            Collections.unmodifiableList(new ArrayList<>(l))));
+	    }
     }
