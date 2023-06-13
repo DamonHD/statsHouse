@@ -11,7 +11,7 @@ import java.util.Objects;
  * though the expectation is that the input is a consolidated data CSV
  * and the output is MIDI in some form.
  * <p>
- * For the seed, before in config before creation of this record, values are:
+ * For the seed, before in configuration before creation of this record, values are:
  * -ve for unique each run, 0 for no randomness, 1 for based on data, other +ve use seed as-is.
  * For the -1 and 1 cases the appropriate new seed will be generated
  * before being passed as an argument to this record instance.
