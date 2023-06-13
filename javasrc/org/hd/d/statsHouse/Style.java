@@ -5,7 +5,7 @@ package org.hd.d.statsHouse;
  */
 public enum Style
     {
-    none(ProductionLevel.None),
+    plain(ProductionLevel.None),
     gentle(ProductionLevel.Gentle),
     house(ProductionLevel.Danceable);
 
