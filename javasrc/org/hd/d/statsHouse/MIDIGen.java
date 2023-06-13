@@ -66,12 +66,13 @@ public final class MIDIGen
 	    {
     	if(null == tune) { throw new IllegalArgumentException(); }
 
+		final int barClocks = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
 		final Sequence sequence = new Sequence(Sequence.PPQ, DEFAULT_CLKSPQTR);
 
 		// TODO: tempo track
 		// TODO: percussion (etc) tracks.
 
-		final int barClocks = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
+		// Add data melody tracks.
 		for(final MIDIMelodyTrack mt : tune.dataMelody())
 			{
 			final Track trackMelody = sequence.createTrack();
@@ -83,7 +84,7 @@ public final class MIDIGen
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
 			trackMelody.add(new MidiEvent(pc, 0));
 			// TODO: volume
-			// TODO: pan
+			// TODO: pan (if not default)
 
 			int clock = 0;
 			for(final MIDIPlayableMonophonicBar b : mt.bars())
@@ -93,6 +94,7 @@ public final class MIDIGen
 				int subClock = clock;
 				for(final NoteAndVelocity nv : b.notes())
 					{
+					// Rest for null/missing note.
 					if(null != nv)
 						{
 						// Add a note-on event to the track.
