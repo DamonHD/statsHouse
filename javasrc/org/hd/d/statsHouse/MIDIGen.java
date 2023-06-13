@@ -68,6 +68,28 @@ public final class MIDIGen
 
 		final Sequence sequence = new Sequence(Sequence.PPQ, DEFAULT_CLKSPQTR);
 
+		// TODO: tempo track
+		// TODO: percussion (etc) tracks.
+
+		for(final MIDIMelodyTrack mt : tune.dataMelody())
+			{
+			final Track trackMelody = sequence.createTrack();
+			final MIDITrackSetup ts = mt.setup();
+			final byte channel = ts.channel();
+			final byte instrument = ts.instrument();
+
+			final ShortMessage pc = new ShortMessage();
+			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+			trackMelody.add(new MidiEvent(pc, 0));
+			// TODO: volume
+			// TODO: pan
+
+			for(final MIDIPlayableMonophonicBar b : mt.bars())
+				{
+// TODO
+				}
+			}
+
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
 //		return(sequence);
