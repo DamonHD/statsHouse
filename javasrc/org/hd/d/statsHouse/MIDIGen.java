@@ -100,12 +100,12 @@ public final class MIDIGen
 						// Add a note-on event to the track.
 					    final ShortMessage noteOn = new ShortMessage();
 					    noteOn.setMessage(ShortMessage.NOTE_ON, channel, nv.note(), nv.velocity());
-					    final MidiEvent noteOnEvent = new MidiEvent(noteOn, clock);
+					    final MidiEvent noteOnEvent = new MidiEvent(noteOn, subClock);
 					    trackMelody.add(noteOnEvent);
 					    // Add a note-off event to the track.
 					    final ShortMessage noteOff = new ShortMessage();
 					    noteOff.setMessage(ShortMessage.NOTE_OFF, channel, nv.note(), 0);
-					    final MidiEvent noteOffEvent = new MidiEvent(noteOff, clock+clocksPerNote-1);
+					    final MidiEvent noteOffEvent = new MidiEvent(noteOff, subClock+clocksPerNote-1);
 					    trackMelody.add(noteOffEvent);
 						}
 					subClock += clocksPerNote;
