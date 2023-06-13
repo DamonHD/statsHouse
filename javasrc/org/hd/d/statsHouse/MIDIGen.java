@@ -41,6 +41,8 @@ public final class MIDIGen
 	public static final int DEFAULT_TEMPO  = 500_000;
 	/**Default beats / quarter notes per bar (4/4 time). */
 	public static final int DEFAULT_BEATS_PER_BAR = 4;
+    /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM. */
+    public static final int DEFAULT_SECTION_BARS = 16;
 
 
     /**Framework MIDI generation from data; never null.

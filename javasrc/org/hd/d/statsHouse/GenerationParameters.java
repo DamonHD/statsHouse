@@ -29,11 +29,8 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    if(introBars < 0) { throw new IllegalArgumentException(); }
 	    }
 
-    /**Standard-ish section length for house and related EDM. */
-    public static int DEFAULT_SECTION_BARS = 16;
-
     /**Default sensible defaults for homogeneous data. */
-    public GenerationParameters() { this(0, Style.house, DEFAULT_SECTION_BARS, false); }
+    public GenerationParameters() { this(0, Style.house, 0, false); }
 
     /**True if no randomness should be applied, using only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
