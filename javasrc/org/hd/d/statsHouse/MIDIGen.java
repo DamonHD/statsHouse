@@ -31,8 +31,16 @@ import javax.sound.midi.Track;
  */
 public final class MIDIGen
     {
-    /**Prevent creation of an instance. */
+	/**Prevent creation of an instance. */
     private MIDIGen() { }
+
+
+    /**Default clock pulses per quarter note. */
+	public static final int DEFAULT_CLKSPQTR = 480;
+	/**Default 120bpm (0.5s per quarter note / beat). */
+	public static final int DEFAULT_TEMPO  = 500_000;
+	/**Default beats / quarter notes per bar (4/4 time). */
+	public static final int DEFAULT_BEATS_PER_BAR = 4;
 
 
     /**Framework MIDI generation from data; never null.
@@ -50,11 +58,19 @@ public final class MIDIGen
     	return(new MIDITune(Collections.emptyList())); // FIXME
 	    }
 
-    /**Generate a MIDI Sequence from a tune. */
+    /**Generate a MIDI Sequence from a tune.
+     * @throws InvalidMidiDataException
+     */
     public static Sequence genFromTuneSequence(final MIDITune tune)
+		throws InvalidMidiDataException
 	    {
     	if(null == tune) { throw new IllegalArgumentException(); }
+
+		final Sequence sequence = new Sequence(Sequence.PPQ, DEFAULT_CLKSPQTR);
+
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+
+//		return(sequence);
 	    }
 
     /**Generate a MIDICSV stream from a tune. */
@@ -97,7 +113,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		final byte channel = 2;
 		final byte instrument = 80; // Lead 1 (square wave).
 		final byte noteVelocity = 63;
-		final int clksPQtr = MIDICSVUtils.DEFAULT_CLKSPQTR;
+		final int clksPQtr = MIDIGen.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
 		final int octaves = 2;
 		final byte range = 12 * octaves;
@@ -110,7 +126,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		MIDICSVUtils.writeF1Header(w, (short) 2, clksPQtr);
 
 		// First track is just tempo.
-		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDICSVUtils.DEFAULT_TEMPO);
+		MIDICSVUtils.writeF1MinimalTempoTrack(w, MIDIGen.DEFAULT_TEMPO);
         // MIDIX
 		// Create a new tempo Track in the Sequence.
 	    final Track trackTempo = sequence.createTrack();
