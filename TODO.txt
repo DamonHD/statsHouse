@@ -5,7 +5,8 @@ Items TO DO in some way, and nice-to-haves
 
 2023-06-13 thoughts:
 
-  * Possible processing stages?
+  * Possible processing stages:
+      * Parse/collect generation parameters.
       * Align (ls part of date to position in bar; may involve inserting nulls/padding)
       * Populate with basic notes from data.
       * Extend to full bars, phrases, sections.
@@ -13,7 +14,7 @@ Items TO DO in some way, and nice-to-haves
       * Add decoration notes on data melody tracks.
       * Add dependent aux tracks such as pad notes.
       * Add independent aux tracks (though maybe changes at sections): percussion, bass.
-      * Spit out as .csv/.mid/.wav/etc.
+      * Save as .csv/.mid/.wav/etc to stdout or file, or play.
 
 
 2023-06-04 copied from a private TODO list:
