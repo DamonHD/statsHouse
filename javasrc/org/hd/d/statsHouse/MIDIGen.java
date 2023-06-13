@@ -27,9 +27,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
-/**MIDI generation.
- * Initially will generate CSV suitable as input for the MIDICSV utility.
- * May also generate MIDI and/or audio output directly with the javax.midi package.
+/**MIDI generation in various forms and with varying levels of sophistication.
  */
 public final class MIDIGen
     {
@@ -39,7 +37,7 @@ public final class MIDIGen
 
     /**Framework MIDI generation from data; never null.
      * Does not include creating of GenerationParameters
-     * nor conversion to final MIDI output form.
+     * nor final conversion to final MIDI output form.
      */
     public static MIDITune genMelody(final GenerationParameters params, final EOUDataCSV data)
 	    {
@@ -56,7 +54,7 @@ public final class MIDIGen
     public static Sequence genFromTuneSequence(final MIDITune tune)
 	    {
     	if(null == tune) { throw new IllegalArgumentException(); }
-throw new UnsupportedOperationException(); // FIXME
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
     /**Generate a MIDICSV stream from a tune. */
@@ -64,7 +62,7 @@ throw new UnsupportedOperationException(); // FIXME
 	    {
     	if(null == w) { throw new IllegalArgumentException(); }
     	if(null == tune) { throw new IllegalArgumentException(); }
-throw new UnsupportedOperationException(); // FIXME
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
 
