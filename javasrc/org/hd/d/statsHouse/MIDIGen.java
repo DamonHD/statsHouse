@@ -18,6 +18,7 @@ package org.hd.d.statsHouse;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -34,6 +35,22 @@ public final class MIDIGen
     {
     /**Prevent creation of an instance. */
     private MIDIGen() { }
+
+
+    /**Framework MIDI generation from data; never null.
+     * Does not include creating of GenerationParameters
+     * nor conversion to final MIDI output form.
+     */
+    public static MIDITune genMelody(final GenerationParameters params, final EOUDataCSV data)
+	    {
+    	if(null == params) { throw new IllegalArgumentException(); }
+    	if(null == data) { throw new IllegalArgumentException(); }
+
+    	// Return empty tune if no data points.
+    	if(data.data().isEmpty()) { return(new MIDITune(Collections.emptyList())); }
+
+    	return(new MIDITune(Collections.emptyList())); // FIXME
+	    }
 
 
     /**Minimal MIDICSV generation from main data source to supplied Writer, and generate a matching Sequence.

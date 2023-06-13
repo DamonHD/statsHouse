@@ -19,8 +19,9 @@ import java.util.Objects;
  * @param seed  randomisation seed; 0 for no randomness (use 'best') choices
  * @param style  the style of music to generate; never null
  * @param introLength  intro/outro length in bars, and section length if +ve; non-negative
+ * @param hetero  true if heterogeneous data rather than different sources of the same data
  */
-public record GenerationParameters(int seed, Style style, int introLength)
+public record GenerationParameters(int seed, Style style, int introLength, boolean hetro)
 	{
     public GenerationParameters
 	    {
