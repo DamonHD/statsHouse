@@ -52,6 +52,21 @@ public final class MIDIGen
     	return(new MIDITune(Collections.emptyList())); // FIXME
 	    }
 
+    /**Generate a MIDI Sequence from a tune. */
+    public static Sequence genFromTuneSequence(final MIDITune tune)
+	    {
+    	if(null == tune) { throw new IllegalArgumentException(); }
+throw new UnsupportedOperationException(); // FIXME
+	    }
+
+    /**Generate a MIDICSV stream from a tune. */
+    public static void genFromTuneMIDICSV(final Writer w, final MIDITune tune)
+	    {
+    	if(null == w) { throw new IllegalArgumentException(); }
+    	if(null == tune) { throw new IllegalArgumentException(); }
+throw new UnsupportedOperationException(); // FIXME
+	    }
+
 
     /**Minimal MIDICSV generation from main data source to supplied Writer, and generate a matching Sequence.
      * Picks the main/busiest data channel and turns that into

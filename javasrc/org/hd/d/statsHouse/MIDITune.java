@@ -12,6 +12,6 @@ public record MIDITune(List<MIDIMelodyTrack> dataMelody)
     {
     public MIDITune
 	    {
-	    Objects.nonNull(dataMelody);
+	    Objects.requireNonNull(dataMelody);
 	    }
     }

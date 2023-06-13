@@ -25,7 +25,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	{
     public GenerationParameters
 	    {
-	    Objects.nonNull(style);
+	    Objects.requireNonNull(style);
 	    if(introBars < 0) { throw new IllegalArgumentException(); }
 	    }
 

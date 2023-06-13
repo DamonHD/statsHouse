@@ -28,9 +28,9 @@ public record MIDIPlayableMonophonicBar(DataProtoBar dpr, int stream, List<NoteA
     {
     public MIDIPlayableMonophonicBar
 	    {
-	    Objects.nonNull(dpr);
+	    Objects.requireNonNull(dpr);
 	    if(stream < 1) { throw new IllegalArgumentException(); }
-	    Objects.nonNull(notes);
+	    Objects.requireNonNull(notes);
 	    if(dpr.dataNotesPerBar() != notes.size()) { throw new IllegalArgumentException(); }
 	    }
 

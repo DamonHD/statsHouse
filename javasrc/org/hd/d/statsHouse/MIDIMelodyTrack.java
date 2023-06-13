@@ -16,7 +16,7 @@ public record MIDIMelodyTrack(MIDITrackSetup setup, List<MIDIPlayableMonophonicB
 	{
     public MIDIMelodyTrack
 	    {
-	    Objects.nonNull(setup);
-	    Objects.nonNull(bars);
+	    Objects.requireNonNull(setup);
+	    Objects.requireNonNull(bars);
 	    }
 	}
