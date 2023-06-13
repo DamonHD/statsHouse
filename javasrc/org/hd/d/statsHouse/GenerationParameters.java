@@ -5,14 +5,17 @@ import java.util.Objects;
 /**Parameters for music generation from data.
  * May be extracted from a command-line or elsewhere.
  * <p>
- * Independent of input or output source,
+ * Immutable as all its constituents should be.
+ * <p>
+ * Independent of particular input or output source,
  * though the expectation is that the input is a consolidated data CSV
  * and the output is MIDI in some form.
  *
- * @param style  the style of music to generate
+ * @param seed  randomisation seed; -ve for unique each run, 0 for no randomness, 1 for based on data, other +ve use seed as-is
+ * @param style  the style of music to generate; never null
  * @param introLength  intro/outro length in bars, and section length if +ve; non-negative
  */
-public record GenerationParameters(Style style, int introLength)
+public record GenerationParameters(int seed, Style style, int introLength)
 	{
     public GenerationParameters
 	    {
