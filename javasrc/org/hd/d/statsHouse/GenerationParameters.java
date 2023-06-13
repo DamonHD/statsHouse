@@ -18,16 +18,23 @@ import java.util.Objects;
  *
  * @param seed  randomisation seed; 0 for no randomness (use 'best') choices
  * @param style  the style of music to generate; never null
- * @param introLength  intro/outro length in bars, and section length if +ve; non-negative
+ * @param introBars  intro/outro length in bars, and section length if +ve; non-negative
  * @param hetero  true if heterogeneous data rather than different sources of the same data
  */
-public record GenerationParameters(int seed, Style style, int introLength, boolean hetro)
+public record GenerationParameters(int seed, Style style, int introBars, boolean hetro)
 	{
     public GenerationParameters
 	    {
 	    Objects.nonNull(style);
-	    if(introLength < 0) { throw new IllegalArgumentException(); }
+	    if(introBars < 0) { throw new IllegalArgumentException(); }
 	    }
 
+    /**Standard-ish section length for house and related EDM. */
+    public static int DEFAULT_SECTION_BARS = 16;
+
+    /**Default sensible defaults for homogeneous data. */
+    public GenerationParameters() { this(0, Style.house, DEFAULT_SECTION_BARS, false); }
+
+    /**True if no randomness should be applied, using only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
 	}

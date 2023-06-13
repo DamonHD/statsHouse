@@ -19,13 +19,16 @@ package localtest;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Collections;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
 import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.MIDIGen;
+import org.hd.d.statsHouse.MIDITune;
 
 import junit.framework.TestCase;
 
@@ -90,5 +93,13 @@ public final class TestMIDIGen extends TestCase
         // Test the java.midix MIDI.
         assertEquals(8_000_000, s.getMicrosecondLength(), 10_000);
         assertEquals(2, s.getTracks().length);
+	    }
+
+    /**Test zero-data generation of empty tune.
+     * @throws InvalidMidiDataException */
+    public static void testGenMelody()
+	    {
+    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.EMPTY_LIST));
+	    assertTrue(result1.dataMelody().isEmpty());
 	    }
     }
