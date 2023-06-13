@@ -71,6 +71,7 @@ public final class MIDIGen
 		// TODO: tempo track
 		// TODO: percussion (etc) tracks.
 
+		final int barClocks = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
 		for(final MIDIMelodyTrack mt : tune.dataMelody())
 			{
 			final Track trackMelody = sequence.createTrack();
@@ -84,15 +85,33 @@ public final class MIDIGen
 			// TODO: volume
 			// TODO: pan
 
+			int clock = 0;
 			for(final MIDIPlayableMonophonicBar b : mt.bars())
 				{
-// TODO
+				final int noteCount = b.notes().size();
+				final int clocksPerNote = barClocks / noteCount;
+				int subClock = clock;
+				for(final NoteAndVelocity nv : b.notes())
+					{
+					if(null != nv)
+						{
+						// Add a note-on event to the track.
+					    final ShortMessage noteOn = new ShortMessage();
+					    noteOn.setMessage(ShortMessage.NOTE_ON, channel, nv.note(), nv.velocity());
+					    final MidiEvent noteOnEvent = new MidiEvent(noteOn, clock);
+					    trackMelody.add(noteOnEvent);
+					    // Add a note-off event to the track.
+					    final ShortMessage noteOff = new ShortMessage();
+					    noteOff.setMessage(ShortMessage.NOTE_OFF, channel, nv.note(), 0);
+					    final MidiEvent noteOffEvent = new MidiEvent(noteOff, clock+clocksPerNote-1);
+					    trackMelody.add(noteOffEvent);
+						}
+					subClock += clocksPerNote;
+					}
+				clock += barClocks; // Ensure correct clocks per bar.
 				}
 			}
-
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
-
-//		return(sequence);
+		return(sequence);
 	    }
 
     /**Generate a MIDICSV stream from a tune. */
