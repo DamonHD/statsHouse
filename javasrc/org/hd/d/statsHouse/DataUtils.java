@@ -116,12 +116,13 @@ public final class DataUtils
 		            for(int i = fields.length; --i >= 0; )
 			            {
 		            	final String fi = fields[i];
-			            // Deduplicate "" values by using an implicitly intern()ed constant.
-						if("".equals(fi)) { fields[i] = ""; continue; }
-			            // Deduplicate "0" values by using an implicitly intern()ed constant.
-						if("0".equals(fi)) { fields[i] = "0"; continue; }
-			            // Deduplicate "1" values by using an implicitly intern()ed constant.
-						if("1".equals(fi)) { fields[i] = "1"; continue; }
+		            	switch(fi)
+			            	{
+		            		// Deduplicate values by using an implicitly intern()ed constant.
+			            	case "": fields[i] = ""; continue;
+			            	case "0": fields[i] = "0"; continue;
+			            	case "1": fields[i] = "1"; continue;
+			            	}
                         // Else if this matches the item from the previous row, reuse it.
 			            final String pi = prevRow.get(i);
 						if(fi.equals(pi)) { fields[i] = pi; }
