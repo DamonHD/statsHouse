@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**File utilities.
- * Handles the 'consolidated' style of EOU home data CSV.
+ * Includes nominally-atomic publishing of globally-readable files and updates.
  */
 public final class FileUtils
     {
