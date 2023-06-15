@@ -26,7 +26,6 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 
-import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.MIDIGen;
 
@@ -140,7 +139,7 @@ public final class Main
     	    sequencer.open();
 
     	    // Load data sample and convert to MIDI.
-            final EOUDataCSV csv1 = DataUtils.parseEOUDataCSV(new StringReader(sample_gen_Y));
+            final EOUDataCSV csv1 = EOUDataCSV.parseEOUDataCSV(new StringReader(sample_gen_Y));
             final Sequence s = MIDIGen.genMinimalMelodyMIDISCV(Writer.nullWriter(), csv1);
             sequencer.setSequence(s);
             final long usLength = sequencer.getMicrosecondLength();

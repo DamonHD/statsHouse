@@ -35,9 +35,9 @@ public final class TestDataUtils extends TestCase
     public static void testCountDataStreamsQuick()
 		throws IOException
     	{
-        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(3, DataUtils.countDataStreamsQuick(result1));
-        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
         assertEquals(3, DataUtils.countDataStreamsQuick(result2));
 	    }
 
@@ -47,9 +47,9 @@ public final class TestDataUtils extends TestCase
     public static void testMaxVal()
 		throws IOException
     	{
-        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(161f, DataUtils.maxVal(result1), 0.001f);
-        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
         assertEquals(4084.42f, DataUtils.maxVal(result2), 0.001f);
 	    }
 
@@ -59,9 +59,9 @@ public final class TestDataUtils extends TestCase
     public static void testMaxNVal()
 		throws IOException
     	{
-        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(2, DataUtils.maxNVal(result1));
-        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
         assertEquals(2, DataUtils.maxNVal(result2));
 	    }
 
@@ -71,9 +71,9 @@ public final class TestDataUtils extends TestCase
     public static void testExtractDataCadenceQuick()
 		throws IOException
     	{
-        final EOUDataCSV result1 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M));
         assertEquals(DataCadence.M, DataUtils.extractDataCadenceQuick(result1));
-        final EOUDataCSV result2 = DataUtils.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
         assertEquals(DataCadence.Y, DataUtils.extractDataCadenceQuick(result2));
 	    }
     }
