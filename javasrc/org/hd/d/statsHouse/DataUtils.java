@@ -105,9 +105,11 @@ public final class DataUtils
 
             // Memory micro-optimisation.
             // Where possible, share duplicate values from the previous row,
-            // or with a constant "", "0", or "1".
+            // or common values with a constant "" or "1".
             // Costs maybe ~10% of parse execution time doing this extra work,
             // but may save more than that in avoided GC on small JVM instance.
+            //
+            // DHD20230615: "0" is not common and mainly in successive records in a few files.
             if(OPTIMISE_MEMORY_IN_EOUDATACSV_PARSE && !result.isEmpty())
 	            {
 	            final List<String> prevRow = result.get(result.size() - 1);
@@ -120,7 +122,7 @@ public final class DataUtils
 			            	{
 		            		// Deduplicate values by using an implicitly intern()ed constant.
 			            	case "": fields[i] = ""; continue;
-			            	case "0": fields[i] = "0"; continue;
+//			            	case "0": fields[i] = "0"; continue; // Not actually very common!
 			            	case "1": fields[i] = "1"; continue;
 			            	}
                         // Else if this matches the item from the previous row, reuse it.
