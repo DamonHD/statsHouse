@@ -72,6 +72,9 @@ public final class MIDIGen
     	// Return empty tune if no data points.
     	if(data.data().isEmpty()) { return(new MIDITune(Collections.emptyList())); }
 
+    	// Initial partitioning/alignment/padding for main data melody.
+    	final List<DataProtoBar> protoBars = splitAndAlignData(params, data);
+
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
