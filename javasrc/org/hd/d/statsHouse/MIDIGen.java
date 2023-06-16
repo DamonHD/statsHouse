@@ -48,6 +48,20 @@ public final class MIDIGen
     /**Framework MIDI generation from data; never null.
      * Does not include creating of GenerationParameters
      * nor final conversion to final MIDI output form.
+     * <p>
+     * Possible processing stages:
+     * <p>
+     * <ul>
+     * <li>(Parse/collect generation parameters already parsed and collected.)
+     * <li>Align (ls part of date to position in bar; may involve inserting nulls/padding).
+     * <li>Populate with basic notes from data.
+     * <li>Extend to full bars, phrases, sections.
+     * <li>Add filler notes on data melody tracks.
+     * <li>Add decoration notes on data melody tracks.
+     * <li>Add dependent aux tracks such as pad notes.
+     * <li>Add independent aux tracks (though maybe changes at sections): percussion, bass.
+     * <li>(Save as .csv/.mid/.wav/etc to stdout or file, or play, from the returned MIDITune.)
+     * </ul>
      */
     public static MIDITune genMelody(final GenerationParameters params, final EOUDataCSV data)
 	    {
@@ -59,6 +73,7 @@ public final class MIDIGen
 
     	return(new MIDITune(Collections.emptyList())); // FIXME
 	    }
+
 
     /**Generate a MIDI Sequence from a tune.
      * @throws InvalidMidiDataException
