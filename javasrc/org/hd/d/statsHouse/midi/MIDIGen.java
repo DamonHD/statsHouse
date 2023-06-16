@@ -87,7 +87,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
 
-    /**Do initial splitting of data into proto melody bars, including any alignment; never null.
+    /**Do initial splitting of data into whole proto melody bars, including any alignment; never null.
      * @param params  generation parameters; never null
      * @param data  the entire ingested data set; never null
      */
