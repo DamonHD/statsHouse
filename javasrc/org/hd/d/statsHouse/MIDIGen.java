@@ -79,10 +79,13 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
 
-    /**Do initial splitting of data into proto melody bars, including any alignment.
+    /**Do initial splitting of data into proto melody bars, including any alignment; never null.
+     * @param params  generation parameters; never null
+     * @param data  the entire ingested data set; never null
      */
     public static List<DataProtoBar> splitAndAlignData(final GenerationParameters params, final EOUDataCSV data)
 	    {
+    	if(null == params) { throw new IllegalArgumentException(); }
     	if(null == data) { throw new IllegalArgumentException(); }
 
     	// Data notes per bar is determined by the cadence.
