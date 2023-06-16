@@ -110,6 +110,10 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testSplitAndAlignData() throws IOException
 	    {
+    	final List<DataProtoBar> result0 = MIDIGen.splitAndAlignData(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
+	    assertNotNull(result0);
+	    assertTrue(result0.isEmpty());
+
     	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
 	    assertNotNull(result1);
 	    assertFalse(result1.isEmpty());
