@@ -116,6 +116,11 @@ public final class TestMIDIGen extends TestCase
 	    assertEquals("4 bars of 4 notes", 4, result1.size());
 	    assertEquals("4 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
 
+    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
+	    assertNotNull(result2);
+	    assertFalse(result2.isEmpty());
+	    assertEquals("1 bar of 6/12 notes", 1, result2.size());
+	    assertEquals("1 bar of 6/12 notes", 12, result2.get(0).dataNotesPerBar());
 
 
 	    }
