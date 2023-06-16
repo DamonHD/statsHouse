@@ -104,7 +104,7 @@ public final class TestMIDIGen extends TestCase
 	    assertTrue(result1.dataMelody().isEmpty());
 	    }
 
-    /**Test zero-data generation of empty tune.
+    /**Test splitting of sample data.
      * @throws IOException
      * @throws InvalidMidiDataException
      */
@@ -113,6 +113,8 @@ public final class TestMIDIGen extends TestCase
     	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
 	    assertNotNull(result1);
 	    assertFalse(result1.isEmpty());
+	    assertEquals("4 bars of 4 notes", 4, result1.size());
+	    assertEquals("4 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
 
 
 
