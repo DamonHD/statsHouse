@@ -96,7 +96,7 @@ public final class TestMIDIGen extends TestCase
 
     /**Test zero-data generation of empty tune.
      * @throws InvalidMidiDataException */
-    public static void testGenMelody()
+    public static void testGenMelodyEmpty()
 	    {
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.EMPTY_LIST));
 	    assertTrue(result1.dataMelody().isEmpty());
