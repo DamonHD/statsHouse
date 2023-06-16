@@ -14,7 +14,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
    limitations under the License.
 */
 
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.midi;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -27,6 +27,14 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+
+import org.hd.d.statsHouse.DataCadence;
+import org.hd.d.statsHouse.DataProtoBar;
+import org.hd.d.statsHouse.DataUtils;
+import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.NoteAndVelocity;
+import org.hd.d.statsHouse.ProductionLevel;
 
 /**MIDI generation in various forms and with varying levels of sophistication.
  */

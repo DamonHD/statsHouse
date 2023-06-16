@@ -28,8 +28,8 @@ import javax.sound.midi.Sequence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
-import org.hd.d.statsHouse.MIDIGen;
-import org.hd.d.statsHouse.MIDITune;
+import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDITune;
 
 import junit.framework.TestCase;
 

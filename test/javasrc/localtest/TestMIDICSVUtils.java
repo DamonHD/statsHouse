@@ -19,7 +19,7 @@ package localtest;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.hd.d.statsHouse.MIDICSVUtils;
+import org.hd.d.statsHouse.midi.MIDICSVUtils;
 
 import junit.framework.TestCase;
 

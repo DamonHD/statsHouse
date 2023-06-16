@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.midi;
 
 /**Simple MIDI tack setup, in particular including the default channel and instrument. */
 public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pan)

@@ -1,9 +1,12 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.midi;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import org.hd.d.statsHouse.DataProtoBar;
+import org.hd.d.statsHouse.NoteAndVelocity;
 
 /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
  * Represents data melody from one data stream for one playable bar.

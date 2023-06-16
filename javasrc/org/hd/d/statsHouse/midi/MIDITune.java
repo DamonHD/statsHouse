@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.midi;
 
 import java.util.List;
 import java.util.Objects;

@@ -27,7 +27,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 
 import org.hd.d.statsHouse.EOUDataCSV;
-import org.hd.d.statsHouse.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDIGen;
 
 /**Main (command-line) entry-point for live access.
  */
