@@ -39,8 +39,7 @@ public final class TestMIDIGen extends TestCase
     {
     /**Test minimal data MIDICSV and Sequence generation.
      * @throws InvalidMidiDataException */
-    public static void testGenMinimalMelodyMIDISCV()
-        throws IOException, InvalidMidiDataException
+    public static void testGenMinimalMelodyMIDISCV() throws IOException, InvalidMidiDataException
 	    {
         final EOUDataCSV csv1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
         final StringWriter sw1 = new StringWriter();
@@ -97,7 +96,8 @@ public final class TestMIDIGen extends TestCase
 	    }
 
     /**Test zero-data generation of empty tune.
-     * @throws InvalidMidiDataException */
+     * @throws InvalidMidiDataException
+     */
     public static void testGenMelodyEmpty()
 	    {
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
