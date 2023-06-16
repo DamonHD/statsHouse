@@ -98,7 +98,7 @@ public final class TestMIDIGen extends TestCase
      * @throws InvalidMidiDataException */
     public static void testGenMelodyEmpty()
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.EMPTY_LIST));
+    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
 	    assertTrue(result1.dataMelody().isEmpty());
 	    }
     }
