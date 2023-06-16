@@ -119,7 +119,7 @@ public final class DataUtils
 	    return(busiestStream);
 	    }
 
-    /**Extracts the cadence of the data set using a quick method.
+    /**Extracts the cadence of the data set using a quick method; never null.
      * This only looks at the first row of the data.
      * <p>
      * If the date us of the form YYYY then the cadence is yearly;
@@ -147,12 +147,12 @@ public final class DataUtils
 	    }
 
 
-    /**Chop data into proto bars with no alignment or padding; never null, may be empty.
+    /**Chop data into proto bars with no alignment nor padding; never null, may be empty.
      * The final bar is likely to be incomplete (padded with nulls).
      * <p>
      * This does not look at the content of the data at all.
      */
-    public static List<DataProtoBar> chopDataIntoProtoBars(final int dataNotesPerBar, final EOUDataCSV data)
+    public static List<DataProtoBar> chopDataIntoProtoBarsSimple(final int dataNotesPerBar, final EOUDataCSV data)
 	    {
 	    if(dataNotesPerBar < 1) { throw new IllegalArgumentException(); }
 	    if(null == data) { throw new IllegalArgumentException(); }

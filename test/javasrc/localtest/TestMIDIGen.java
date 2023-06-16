@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
+import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
+import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.MIDIGen;
@@ -100,5 +102,19 @@ public final class TestMIDIGen extends TestCase
 	    {
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
 	    assertTrue(result1.dataMelody().isEmpty());
+	    }
+
+    /**Test zero-data generation of empty tune.
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     */
+    public static void testSplitAndAlignData() throws IOException
+	    {
+    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
+	    assertNotNull(result1);
+	    assertFalse(result1.isEmpty());
+
+
+
 	    }
     }

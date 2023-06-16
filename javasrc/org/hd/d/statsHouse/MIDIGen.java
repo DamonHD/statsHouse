@@ -18,6 +18,7 @@ package org.hd.d.statsHouse;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,8 +47,8 @@ public final class MIDIGen
 
 
     /**Framework MIDI generation from data; never null.
-     * Does not include creating of GenerationParameters
-     * nor final conversion to final MIDI output form.
+     * Does not include parsing (etc) of GenerationParameters,
+     * nor conversion to final MIDI output form.
      * <p>
      * Possible processing stages:
      * <p>
@@ -71,7 +72,50 @@ public final class MIDIGen
     	// Return empty tune if no data points.
     	if(data.data().isEmpty()) { return(new MIDITune(Collections.emptyList())); }
 
-    	return(new MIDITune(Collections.emptyList())); // FIXME
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+	    }
+
+
+    /**Do initial splitting of data into proto melody bars, including any alignment.
+     */
+    public static List<DataProtoBar> splitAndAlignData(final GenerationParameters params, final EOUDataCSV data)
+	    {
+    	if(null == data) { throw new IllegalArgumentException(); }
+
+    	// Data notes per bar is determined by the cadence.
+    	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
+    	final int dataNotesPerBar = switch(cadence)
+    			{
+    			case Y -> 4;
+    			case M -> 12;
+    			case D -> 32;
+    			};
+
+    	// We may choose not to align in the most produced music for some seeds.
+    	final boolean canAlign = switch(cadence)
+    			{
+    			case Y -> false;
+    			case M -> true;
+    			case D -> true;
+    			};
+		// FIXME: do alignment where appropriate.
+
+	    final int size = data.data().size(); // TODO: allow for alignment
+	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
+
+		for(int i = 0; i < size; i += dataNotesPerBar)
+		    {
+		    final List<List<String>> out = new ArrayList<>(dataNotesPerBar);
+		    // FIXME: wrap leaf List if not already Unmodifiable.
+		    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
+			    { out.add(data.data().get(j)); }
+		    // Pad the final partial bar if necessary.
+		    while(out.size() < dataNotesPerBar) { out.add(null); }
+		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(out))));
+		    }
+
+		result.trimToSize();
+		return(Collections.unmodifiableList(result));
 	    }
 
 
@@ -166,7 +210,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
 		// Divide data into bars.
 		final int notesPerBar = 4;
-		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBars(notesPerBar, data);
+		final List<DataProtoBar> protoBars = DataUtils.chopDataIntoProtoBarsSimple(notesPerBar, data);
 
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
 		final byte melodyTrack = 2;

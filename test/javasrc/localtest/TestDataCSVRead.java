@@ -122,7 +122,7 @@ public final class TestDataCSVRead extends TestCase
 	    {
     	// Expecting 2 bars, the first of 4 notes, the second of 2 notes plus 2 nulls.
         final EOUDataCSV edc1 = EOUDataCSV.parseEOUDataCSV(new StringReader(sample_gen_M));
-        final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBars(4, edc1);
+        final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBarsSimple(4, edc1);
         assertNotNull(result1);
         assertEquals(2, result1.size());
         assertEquals(4, result1.get(0).dataNotesPerBar());
@@ -137,7 +137,7 @@ public final class TestDataCSVRead extends TestCase
         assertNull(result1.get(1).dataRows().data().get(3));
 
         final EOUDataCSV edc2 = EOUDataCSV.parseEOUDataCSV(new StringReader(sample_gen_Y));
-        final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBars(4, edc2);
+        final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBarsSimple(4, edc2);
         assertEquals(4, result2.size());
 	    }
     }
