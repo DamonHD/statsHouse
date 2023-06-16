@@ -25,7 +25,12 @@ import org.hd.d.statsHouse.NoteAndVelocity;
  * <p>
  * This may be the output of a chain of transformations.
  * <p>
- * This object is immutable if the list is.
+ * This object is immutable if the List is.
+ *
+ * @param dpr  data proto bar
+ * @param stream  which data stream this is from in the dpr
+ * @param notes  notes from the above stream in neutral MIDI-like form; null slots are empty/silent;
+ *     never null, same length as the dpr
  */
 public record MIDIPlayableMonophonicBar(DataProtoBar dpr, int stream, List<NoteAndVelocity> notes)
     {
