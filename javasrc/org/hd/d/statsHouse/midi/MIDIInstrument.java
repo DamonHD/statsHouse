@@ -9,7 +9,11 @@ package org.hd.d.statsHouse.midi;
  */
 public enum MIDIInstrument
 	{
-	OCARINA(79), // Aka flute.
+	SYNTHBRASS1(62), // Aka bright synth brass (GB).
+
+	TENOR_SAX(67),
+
+	OCARINA(79), // Aka flute solo (GB).
 	LEAD_1_SQUARE_WAVE(80);
 
 
