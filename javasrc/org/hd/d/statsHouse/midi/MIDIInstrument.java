@@ -1,6 +1,6 @@
 package org.hd.d.statsHouse.midi;
 
-/**GM instrument patch map.
+/**GM instrument patch map, for instruments used in this code.
  * 0-based (non-negative) numbers ready to use in MIDI messages.
  * <p>
  * See
