@@ -1,11 +1,15 @@
 package org.hd.d.statsHouse.midi;
 
-/**GM instrument patch map, for instruments used in this code.
+/**GM 1 instrument patch map, for instruments used in this code.
  * 0-based (non-negative) numbers ready to use in MIDI messages.
  * <p>
- * See
- * <a href="http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html">http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html</a>
- * though note that the numbers given in the table are 1-based.
+ * See:
+ * <p>
+ * <ul>
+ * <li><a href="http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html">http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html</a>
+ * though note that the numbers given in the table are 1-based.</li>
+ * <li><a href="https://en.wikipedia.org/wiki/General_MIDI">General MIDI</a>.</li>
+ * </ul>
  */
 public enum MIDIInstrument
 	{
@@ -13,7 +17,7 @@ public enum MIDIInstrument
 	SYNTH_VOICE(55),
 
 	/**Aka bright synth brass (GB).  Use for house secondary data stream. */
-	SYNTHBRASS1(62),
+	SYNTH_BRASS_1(62),
 
 	TENOR_SAX(67),
 
