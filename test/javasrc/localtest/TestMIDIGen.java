@@ -28,6 +28,7 @@ import javax.sound.midi.Sequence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
 
@@ -110,17 +111,17 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testSplitAndAlignData() throws IOException
 	    {
-    	final List<DataProtoBar> result0 = MIDIGen.splitAndAlignData(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
+    	final List<DataProtoBar> result0 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
 	    assertNotNull(result0);
 	    assertTrue(result0.isEmpty());
 
-    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
+    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
 	    assertNotNull(result1);
 	    assertFalse(result1.isEmpty());
 	    assertEquals("4 bars of 4 notes", 4, result1.size());
 	    assertEquals("4 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
 
-    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
+    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
 	    assertNotNull(result2);
 	    assertFalse(result2.isEmpty());
 	    assertEquals("1 bar of 6/12 notes", 1, result2.size());

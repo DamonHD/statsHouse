@@ -5,7 +5,7 @@ import java.util.Objects;
 
 // TODO: add other non-data-melody tracks.
 
-/**An representation of a full MIDI 'tune' created from data.
+/**A representation of a full MIDI 'tune' created from data.
  * Is immutable if dataMelody is.
  */
 public record MIDITune(List<MIDIMelodyTrack> dataMelody)

@@ -35,6 +35,7 @@ import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.NoteAndVelocity;
 import org.hd.d.statsHouse.ProductionLevel;
+import org.hd.d.statsHouse.TuneSection;
 
 /**MIDI generation in various forms and with varying levels of sophistication.
  */
@@ -80,19 +81,24 @@ public final class MIDIGen
     	// Return empty tune if no data points.
     	if(data.data().isEmpty()) { return(new MIDITune(Collections.emptyList())); }
 
-    	// Initial partitioning/alignment/padding for main data melody.
-    	final List<DataProtoBar> protoBars = splitAndAlignData(params, data);
+    	// Initial partitioning/alignment/padding for main data melody verse.
+    	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
 
-    /**Do initial splitting of data into whole proto melody bars, including any alignment; never null.
+    /**Do initial splitting of data into whole proto melody bars for given section, including any alignment; never null.
+     * The verse output is the one most reflective of the input data,
+     * and should be the only one used for plain style for example.
+     *
+     * @param section  which song section this is for; never null
      * @param params  generation parameters; never null
      * @param data  the entire ingested data set; never null
      */
-    public static List<DataProtoBar> splitAndAlignData(final GenerationParameters params, final EOUDataCSV data)
+    public static List<DataProtoBar> splitAndAlignData(final TuneSection section, final GenerationParameters params, final EOUDataCSV data)
 	    {
+    	if(null == section) { throw new IllegalArgumentException(); }
     	if(null == params) { throw new IllegalArgumentException(); }
     	if(null == data) { throw new IllegalArgumentException(); }
 
