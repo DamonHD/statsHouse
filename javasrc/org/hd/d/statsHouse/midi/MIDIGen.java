@@ -239,7 +239,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
 		final byte melodyTrack = 2;
 		final byte channel = 2;
-		final byte instrument = 80; // Lead 1 (square wave).
+		final byte instrument = MIDIInstrument.LEAD_1_SQUARE_WAVE.inst; // Lead 1 (square wave).
 		final byte noteVelocity = 63;
 		final int clksPQtr = MIDIGen.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
