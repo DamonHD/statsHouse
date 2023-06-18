@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**A single data stream melody track that is playable as MIDI.
- * It immutable if 'bars' is.
+ * Is immutable if 'bars' is.
  * <p>
  * Melody bars are assumed to be a constant duration (eg ticks)
  * throughout a track and across melody (and other) tracks

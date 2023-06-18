@@ -53,6 +53,10 @@ public final class MIDIGen
 	public static final int DEFAULT_BEATS_PER_BAR = 4;
     /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM. */
     public static final int DEFAULT_SECTION_BARS = 16;
+    /**Default note velocity. */
+    public static final byte DEFAULT_MELODY_VELOCITY = 63;
+    /**Default root/lowest melody note (middle C). */
+    public static final byte DEFAULT_ROOT_NOTE = 60;
 
 
     /**Framework MIDI generation from data; never null.
