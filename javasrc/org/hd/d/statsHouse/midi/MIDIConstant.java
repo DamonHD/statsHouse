@@ -16,16 +16,4 @@ public final class MIDIConstant
 
     /**GM1 reserved percussion channel (1-based). */
     public static final byte GM1_PERCUSSION_CHANNEL = 10;
-
-
-
-
-    /**Maximum number of data streams allowed.
-     * The highest number in any one file as of 2023-06 is 3.
-     * <p>
-     * Keeping this below GM1_PERCUSSION_CHANNEL
-     * allows channels below that you be used for data melody,
-     * and above for other things such as bass line.
-     */
-    public static final int MAX_DATA_STREAMS = 4;
 	}

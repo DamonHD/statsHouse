@@ -21,6 +21,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
@@ -98,6 +99,9 @@ public final class MIDIGen
     	// Return empty tune if no data points.
     	if(data.data().isEmpty()) { return(new MIDITune(Collections.emptyList())); }
 
+    	// Compute data bounds, including capping number of data streams.
+		final DataBounds db = new DataBounds(data);
+
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
@@ -128,12 +132,39 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	        }
 
+    	// For plain/gentle style the data is used as-is as a single verse section.
+		return switch (params.style()) {
+		case plain -> (_genPlainMIDIMelodyTune(params, verseProtoBars, protoPlan));
+default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+		};
+
+
+//throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+	    }
+
+    /**Create a plain melody from the data; never null
+     *
+     * @param params  generation parameters; never null
+     * @param verseProtoBars  data split into proto bars; never null
+     * @param protoPlan  outline plan; containing exactly one verse section and possible intro/outrp;
+     *     never null
+     * @return   data melody, one or more tracks; never null
+     */
+    private static MIDITune _genPlainMIDIMelodyTune(
+    		final GenerationParameters params,
+    		final List<DataProtoBar> verseProtoBars,
+			final List<TuneSectionMetadata> protoPlan)
+        {
+    	Objects.requireNonNull(params);
+    	Objects.requireNonNull(verseProtoBars);
+    	Objects.requireNonNull(protoPlan);
+
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
 
-    /**Do initial splitting of data into whole proto melody bars for given section, including any alignment; never null.
+	/**Do initial splitting of data into whole proto melody bars for given section, including any alignment; never null.
      * The verse output is the one most reflective of the input data,
      * and should be the only one used for plain style for example.
      *
