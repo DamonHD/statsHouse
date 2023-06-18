@@ -94,7 +94,7 @@ public final class MIDIGen
 
     	final List<TuneSectionMetadata> protoPlan = new ArrayList<>();
 
-    	// For plain/gentle the data is used as-is as a single verse section.
+    	// For plain/gentle style the data is used as-is as a single verse section.
         switch(params.style())
 	        {
 	        case plain, gentle:
@@ -113,6 +113,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	        {
 	        protoPlan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
 	        protoPlan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	        }
 
 
