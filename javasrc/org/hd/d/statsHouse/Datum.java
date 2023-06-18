@@ -47,13 +47,19 @@ public record Datum(String source, Float coverage, Float value)
 		if("".equals(source)) { source = null; }
 
 		Float coverage = null;
-		try { coverage = Float.parseFloat(row.get(lastIndex - 1)); } catch(final NumberFormatException e) { }
-        if(!Float.isFinite(coverage)) { coverage = null; }
-        else if(coverage < 0) { coverage = null; }
+		try {
+			coverage = Float.parseFloat(row.get(lastIndex - 1));
+	        if(!Float.isFinite(coverage)) { coverage = null; }
+	        else if(coverage < 0) { coverage = null; }
+	        }
+		catch(final NumberFormatException e) { }
 
 		Float value = null;
-		try { value = Float.parseFloat(row.get(lastIndex)); } catch(final NumberFormatException e) { }
-        if(!Float.isFinite(value)) { value = null; }
+		try {
+			value = Float.parseFloat(row.get(lastIndex));
+	        if(!Float.isFinite(value)) { value = null; }
+			}
+		catch(final NumberFormatException e) { }
 
         final Datum result = new Datum(source, coverage, value);
         if(result.isEmpty()) { return(EMPTY); }

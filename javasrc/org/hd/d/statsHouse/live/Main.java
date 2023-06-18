@@ -18,7 +18,6 @@ package org.hd.d.statsHouse.live;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.Writer;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -27,7 +26,10 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 
 import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDITune;
 
 /**Main (command-line) entry-point for live access.
  */
@@ -140,7 +142,9 @@ public final class Main
 
     	    // Load data sample and convert to MIDI.
             final EOUDataCSV csv1 = EOUDataCSV.parseEOUDataCSV(new StringReader(sample_gen_Y));
-            final Sequence s = MIDIGen.genMinimalMelodyMIDISCV(Writer.nullWriter(), csv1);
+//            final Sequence s = MIDIGen.genMinimalMelodyMIDISCV(Writer.nullWriter(), csv1);
+        	final MIDITune mt1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), csv1);
+            final Sequence s = MIDIGen.genFromTuneSequence(mt1);
             sequencer.setSequence(s);
             final long usLength = sequencer.getMicrosecondLength();
         	System.out.println(String.format("Duration %.1fs...", usLength / 1_000_000f));
