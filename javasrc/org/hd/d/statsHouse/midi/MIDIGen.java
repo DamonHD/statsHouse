@@ -165,15 +165,22 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(protoPlan);
 
+    	// TODO: work correctly with het data, eg no primary.
+
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[db.streams()];
     	Arrays.setAll(tracks,
 			i -> new MIDIMelodyTrack(new MIDITrackSetup(
+					// Use separate channels for each data stream, starting from 0.
 					(byte) i,
-					MIDIInstrument.OCARINA.instrument0,
+					// Use ocarina for main data stream, synth brass 1 for remainder.
+					(i+1 == db.mainDataStream()) ? MIDIInstrument.OCARINA.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
+					// Use default volume for main data stream, with the rest quieter.
 					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : MIDITrackSetup.DEFAULT_VOLUME/2),
 				new ArrayList<>()));
 
+    	// Clock starts at zero, and runs in tandem across all bars/streams.
+    	final int clock = 0;
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
