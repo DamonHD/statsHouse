@@ -229,7 +229,7 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
             			final Datum d = Datum.extractDatum(s, row);
             			// Rest/silence for missing stream or value,
             			// or where coverage is not strictly positive.
-            			if(d.isEmpty() ||
+            			if(// d.isEmpty() ||
         					(null == d.value()) ||
         					(null == d.coverage()) || (d.coverage() <= 0))
             			    { notes.add(null); }
