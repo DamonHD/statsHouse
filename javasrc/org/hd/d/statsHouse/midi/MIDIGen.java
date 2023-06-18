@@ -64,6 +64,8 @@ public final class MIDIGen
      * Does not include parsing (etc) of GenerationParameters,
      * nor conversion to final MIDI output form.
      * <p>
+     * Does include generation of additional tracks such as percussion.
+     * <p>
      * Possible processing stages:
      * <p>
      * <ul>

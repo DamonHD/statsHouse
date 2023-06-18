@@ -20,8 +20,9 @@ import java.util.Objects;
  * @param style  the style of music to generate; never null
  * @param introBars  intro/outro length in bars, and section length if +ve; non-negative
  * @param hetero  true if heterogeneous data rather than different sources of the same data
+ * @param name  short ASCII name of track or source, eg "gen-M"; can be null
  */
-public record GenerationParameters(int seed, Style style, int introBars, boolean hetro)
+public record GenerationParameters(int seed, Style style, int introBars, boolean hetro, String name)
 	{
     public GenerationParameters
 	    {
@@ -30,7 +31,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    }
 
     /**Default sensible (sciency) defaults for homogeneous data. */
-    public GenerationParameters() { this(0, Style.plain, 0, false); }
+    public GenerationParameters() { this(0, Style.plain, 0, false, null); }
 
     /**True if no randomness should be applied, using only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
