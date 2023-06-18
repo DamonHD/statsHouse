@@ -130,7 +130,6 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	        {
 	        protoPlan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
 	        protoPlan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	        }
 
     	// For plain/gentle style the data is used as-is as a single verse section.
@@ -195,8 +194,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
             final int clockAtVerseStart = clock;
 
-
-
+            // Verify that section size is correct.
+            if(ts.bars() != verseProtoBars.size())
+            	{ throw new IllegalArgumentException(); }
 
 
 	    	}
