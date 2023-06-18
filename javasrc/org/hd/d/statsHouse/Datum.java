@@ -5,6 +5,7 @@ import java.util.Objects;
 
 /**A single data point from a single data stream, not including the date.
  * Sample data record:
+ * <p>
 <pre>
 2008-03,,,,meter,1,70,SunnyBeam,1,68.55
 </pre>
