@@ -36,6 +36,7 @@ import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.NoteAndVelocity;
 import org.hd.d.statsHouse.ProductionLevel;
 import org.hd.d.statsHouse.TuneSection;
+import org.hd.d.statsHouse.TuneSectionMetadata;
 
 /**MIDI generation in various forms and with varying levels of sophistication.
  */
@@ -87,6 +88,33 @@ public final class MIDIGen
 
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
+
+    	// Return empty tune if no bars (though in principle cannot happen).
+    	if(verseProtoBars.isEmpty()) { return(new MIDITune(Collections.emptyList())); }
+
+    	final List<TuneSectionMetadata> protoPlan = new ArrayList<>();
+
+    	// For plain/gentle the data is used as-is as a single verse section.
+        switch(params.style())
+	        {
+	        case plain, gentle:
+	        	{
+	        	protoPlan.add(new TuneSectionMetadata(verseProtoBars.size() * verseProtoBars.get(0).dataNotesPerBar(), TuneSection.verse));
+	            break;
+	        	}
+
+	        default:
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+	        }
+
+        // Top and tail with intro/outro if specified, eg to be mix-friendly.
+    	final boolean hasIntroOutro = (params.introBars() > 0);
+        if(hasIntroOutro)
+	        {
+	        protoPlan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
+	        protoPlan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
+	        }
+
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }

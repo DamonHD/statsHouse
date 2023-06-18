@@ -9,7 +9,7 @@ import java.util.Objects;
  * @param sections  in-order list of sections; non-null and non-empty
  *
  */
-public record TuneSectionPlan(List <TuneSectionDetails> sections)
+public record TuneSectionPlan(List <TuneSectionMetadata> sections)
 	{
 	public TuneSectionPlan
 		{

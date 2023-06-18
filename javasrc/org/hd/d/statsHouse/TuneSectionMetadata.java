@@ -8,9 +8,9 @@ import java.util.Objects;
  * @param sectionType  type of section; default is verse, eg for 'plain' style
  * @param bars  count of bars in this section; strictly positive, usually even
  */
-public record TuneSectionDetails(int bars, TuneSection sectionType)
+public record TuneSectionMetadata(int bars, TuneSection sectionType)
 	{
-    public TuneSectionDetails
+    public TuneSectionMetadata
 	    {
 	    if(bars <= 0) { throw new IllegalArgumentException(); }
 	    Objects.requireNonNull(sectionType);
@@ -19,5 +19,5 @@ public record TuneSectionDetails(int bars, TuneSection sectionType)
     /**Default (verse) section.
      * @param bars  count of bars in this section; strictly positive, usually even
      */
-    public TuneSectionDetails(final int bars) { this(bars, TuneSection.verse); }
+    public TuneSectionMetadata(final int bars) { this(bars, TuneSection.verse); }
 	}
