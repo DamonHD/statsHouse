@@ -1,6 +1,9 @@
 package org.hd.d.statsHouse.midi;
 
-/**Simple MIDI tack setup, in particular including the default channel and instrument. */
+/**Simple MIDI tack setup, in particular including the default channel and instrument.
+ * For data melody the 1-based channel number will be the 1-based data stream number.
+ * (This the actual raw channel number in messages will be one less.)
+ */
 public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pan)
 	{
     public MIDITrackSetup
@@ -12,7 +15,9 @@ public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pa
 	    if(pan < 0) { throw new IllegalArgumentException(); }
 	    }
 
-    public static final byte DEFAULT_VOLUME = 127;
+    /**The default volume is a little below max for some headroom; GM 2 apparently has 100. */
+    public static final byte DEFAULT_VOLUME = 100;
+    /**The default is centred, ie 64. */
     public static final byte DEFAULT_PAN = 64;
 
     /**The pan is set to the default centre position. */

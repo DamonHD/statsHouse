@@ -143,10 +143,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    }
 
     /**Create a plain melody from the data; never null
+     * Will insert a copy of the data melody at each verse in the plan
+     * (the number of bars allowed must be large enough)
+     * and will rest through all other sections.
      *
      * @param params  generation parameters; never null
      * @param verseProtoBars  data split into proto bars; never null
-     * @param protoPlan  outline plan; containing exactly one verse section and possible intro/outrp;
+     * @param protoPlan  outline plan; preferably containing exactly one verse section and possible intro/outrp;
      *     never null
      * @return   data melody, one or more tracks; never null
      */
