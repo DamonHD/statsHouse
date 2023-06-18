@@ -19,6 +19,7 @@ package org.hd.d.statsHouse.midi;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -163,6 +164,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(protoPlan);
+
+    	// Create tracks with deliberately- mutable/extendable (by us) bars.
+    	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[db.streams()];
+    	Arrays.setAll(tracks,
+			i -> new MIDIMelodyTrack(new MIDITrackSetup(
+					(byte) i,
+					MIDIInstrument.OCARINA.instrument0,
+					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : MIDITrackSetup.DEFAULT_VOLUME/2),
+				new ArrayList<>()));
 
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
@@ -320,7 +330,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		// Paying homage to textToMIDIv4-consolidated.sh and friends.
 		final byte melodyTrack = 2;
 		final byte channel = 2;
-		final byte instrument = MIDIInstrument.LEAD_1_SQUARE_WAVE.inst; // Lead 1 (square wave).
+		final byte instrument = MIDIInstrument.LEAD_1_SQUARE_WAVE.instrument0; // Lead 1 (square wave).
 		final byte noteVelocity = 63;
 		final int clksPQtr = MIDIGen.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;

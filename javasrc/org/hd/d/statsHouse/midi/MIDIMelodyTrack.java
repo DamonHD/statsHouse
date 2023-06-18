@@ -14,7 +14,9 @@ import java.util.Objects;
  */
 public record MIDIMelodyTrack(MIDITrackSetup setup, List<MIDIPlayableMonophonicBar> bars)
 	{
-    public MIDIMelodyTrack
+    public static final byte DEFAULT_VOLUME = 0;
+
+	public MIDIMelodyTrack
 	    {
 	    Objects.requireNonNull(setup);
 	    Objects.requireNonNull(bars);

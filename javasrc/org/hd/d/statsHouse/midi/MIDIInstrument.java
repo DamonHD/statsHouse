@@ -30,10 +30,10 @@ public enum MIDIInstrument
 	LEAD_2_SAWTOOTH_WAVE(81);
 
 
-	/**Production level for this style. */
-	public final byte inst;
+	/**Raw zero-based instrument number. */
+	public final byte instrument0;
 
 	private MIDIInstrument(final int inst)
-		{ this.inst = (byte) inst; }
+		{ this.instrument0 = (byte) inst; }
 
 	}
