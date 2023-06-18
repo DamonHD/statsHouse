@@ -25,7 +25,7 @@ public record DataBounds(int streams, int mainDataStream, float maxVal)
      * The highest number in any one file as of 2023-06 is 3.
      * <p>
      * Keeping this below GM1_PERCUSSION_CHANNEL
-     * allows channels below that you be used for data melody,
+     * allows channels below that to be used for data melody,
      * and above for other things such as bass line.
      */
     public static final int MAX_DATA_STREAMS = 4;
