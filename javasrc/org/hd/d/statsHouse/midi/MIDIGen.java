@@ -148,10 +148,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * Will insert a copy of the data melody at each verse in the plan
      * (the number of bars allowed must be large enough)
      * and will rest through all other sections.
+     * <p>
+     * All melody tracks in the result have the same number of bars.
      *
      * @param params  generation parameters; never null
      * @param verseProtoBars  data split into proto bars; never null
-     * @param plan  section plan; preferably containing exactly one verse section and possible intro/outrp;
+     * @param plan  section plan,
+     *     preferably containing exactly one verse section and possible intro/outro;
      *     never null
      * @return   data melody, one or more tracks; never null
      */
@@ -166,7 +169,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(plan);
 
-    	// FIXME: work correctly with het data, eg no primary.
+// FIXME: work correctly with het data, eg no primary.
+if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); }
 
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final int streams = db.streams();
@@ -187,8 +191,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final byte offset = DEFAULT_ROOT_NOTE;
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
-    	// Clock starts at zero, and runs in tandem across all bars/streams.
-    	int clock = 0;
+//    	// Clock starts at zero, and runs in tandem across all bars/streams.
+//    	int clock = 0;
 
     	// Run through all the sections,
     	// inserting the full data melody in any 'verse' section(s).
@@ -198,11 +202,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             if(ts.sectionType() != TuneSection.verse)
 	            {
                 // Skip over this section silently.
-            	clock += clocksThisSection;
+//            	clock += clocksThisSection;
             	continue;
 	            }
 
-            final int clockAtVerseStart = clock;
+//            final int clockAtVerseStart = clock;
 
             // Verify that section size is correct.
             if(ts.bars() != verseProtoBars.size())
@@ -210,8 +214,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
             for(final DataProtoBar dbp : verseProtoBars)
             	{
+//            	final int clockAtBarStart = clock;
+
             	for(int s = 1; s <= streams; ++s)
             		{
+//            		// Reset clock to start of bar.
+//            		clock = clockAtBarStart;
+
             		final List<List<String>> rows = dbp.dataRows().data();
             		final int dnpb = dbp.dataNotesPerBar();
             		final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
@@ -237,18 +246,19 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
 							notes.add(nv);
             				}
-            			clock += DEFAULT_CLOCKS_PER_BAR / dnpb;
+//            			clock += DEFAULT_CLOCKS_PER_BAR / dnpb;
             			}
 
             		// Construct MIDI-playable bar for this stream.
             		final MIDIPlayableMonophonicBar mpmb = new MIDIPlayableMonophonicBar(
             				dnpb, dbp, s, Collections.unmodifiableList(notes));
+            		tracks[s - 1].bars().add(mpmb);
             		}
             	}
 
-            assert(clock <= clockAtVerseStart + clocksThisSection);
-            // Advance exactly to the end of the section.
-        	clock = clockAtVerseStart + clocksThisSection;
+//            assert(clock <= clockAtVerseStart + clocksThisSection);
+//            // Advance exactly to the end of the section.
+//        	clock = clockAtVerseStart + clocksThisSection;
 	    	}
 
     	// Return unmodifiable compact version.
