@@ -14,6 +14,8 @@ import org.hd.d.statsHouse.TuneSectionPlan;
  *     non-null but may be empty
  * @param plan  the section plan which should cover the whole melody at least if present;
  *     may be null
+ *
+ * The section plan may in part be folded into markers etc in a MIDI tempo track.
  */
 public record MIDITune(List<MIDIMelodyTrack> dataMelody, TuneSectionPlan plan)
     {
