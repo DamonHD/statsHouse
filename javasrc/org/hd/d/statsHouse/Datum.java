@@ -1,7 +1,6 @@
 package org.hd.d.statsHouse;
 
 import java.util.List;
-import java.util.Objects;
 
 /**A single data point from a single data stream, not including the date.
  * Sample data record:
@@ -31,12 +30,12 @@ public record Datum(String source, Float coverage, Float value)
 	/**Extract a Datum from the specified 1-indexed stream in the supplied parsed record.
 	 * @param stream  stream number to extract the datum from
 	 *     with 1 being the first (left-most) stream
-	 * @param row  one row of EOUDataCSV data; never null
-	 * @return  extract Datum, or empty datum for invalid stream all values missing
+	 * @param row  one row of EOUDataCSV data
+	 * @return  extract Datum, or empty datum for null row, invalid stream, all values missing
 	 */
 	public static Datum extractDatum(final int stream, final List<String> row)
 		{
-		Objects.requireNonNull(row);
+		if(null == row) { return(EMPTY); }
 		if(stream < 1) { return(EMPTY); }
 
 		// If final index needed is absent then the requested stream is not present.

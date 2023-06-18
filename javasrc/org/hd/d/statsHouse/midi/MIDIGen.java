@@ -33,6 +33,7 @@ import javax.sound.midi.Track;
 import org.hd.d.statsHouse.DataCadence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.DataUtils;
+import org.hd.d.statsHouse.Datum;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.NoteAndVelocity;
@@ -180,6 +181,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : MIDITrackSetup.DEFAULT_VOLUME/2),
 				new ArrayList<>()));
 
+    	// Parameterisation of play.
+		final int octaves = 2;
+		final byte range = 12 * octaves;
+		final byte offset = DEFAULT_ROOT_NOTE;
+		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+
     	// Clock starts at zero, and runs in tandem across all bars/streams.
     	int clock = 0;
 
@@ -200,18 +207,42 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             // Verify that section size is correct.
             if(ts.bars() != verseProtoBars.size())
         		{ throw new IllegalArgumentException(); }
-//        		{ throw new IllegalArgumentException("section bars "+ts.bars()+" vs verse bars "+verseProtoBars.size()); }
-
 
             for(final DataProtoBar dbp : verseProtoBars)
             	{
-            	for(int i = 0; i < streams; ++i)
+            	for(int s = 1; s <= streams; ++s)
             		{
+            		final List<List<String>> rows = dbp.dataRows().data();
+            		final int dnpb = dbp.dataNotesPerBar();
+            		final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
+            		for(final List<String> row : rows)
+            			{
+            			final Datum d = Datum.extractDatum(s, row);
+            			// Rest/silence for missing stream or value,
+            			// or where coverage is not strictly positive.
+            			if(d.isEmpty() ||
+        					(null == d.value()) ||
+        					(null == d.coverage()) || (d.coverage() <= 0))
+            			    { notes.add(null); }
+            			else
+            				{
+            				final byte note = (byte) Math.max(1, Math.min(127,
+            						offset + (d.value() * multScaling)));
+                            byte velocity = DEFAULT_MELODY_VELOCITY;
+                            if(d.coverage() < 1)
+                                {
+                            	velocity = (byte) Math.max(1, Math.min(127,
+                            		velocity * d.coverage()));
+                                }
+							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
+							notes.add(nv);
+            				}
+            			clock += DEFAULT_CLOCKS_PER_BAR / dnpb;
+            			}
 
-// FIXME: melody!
-
-
-
+            		// Construct MIDI-playable bar for this stream.
+            		final MIDIPlayableMonophonicBar mpmb = new MIDIPlayableMonophonicBar(
+            				dnpb, dbp, s, Collections.unmodifiableList(notes));
             		}
             	}
 
