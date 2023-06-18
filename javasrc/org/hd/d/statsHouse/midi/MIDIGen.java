@@ -59,6 +59,14 @@ public final class MIDIGen
     /**Default root/lowest melody note (middle C). */
     public static final byte DEFAULT_ROOT_NOTE = 60;
 
+    /**Default max verse sections of ~30s each.
+     * This is intended to keep the full tune length to a few minutes
+     * even when interspersed with other sections such as chorus.
+     * <p>
+     * This is entirely a stylistic 'limit' guideline!
+     */
+    public static final int DEFAULT_MAX_VERSE_SECTIONS = 4;
+
 
     /**Framework MIDI generation from data; never null.
      * Does not include parsing (etc) of GenerationParameters,
