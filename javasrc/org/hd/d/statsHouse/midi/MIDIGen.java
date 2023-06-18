@@ -180,7 +180,26 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				new ArrayList<>()));
 
     	// Clock starts at zero, and runs in tandem across all bars/streams.
-    	final int clock = 0;
+    	int clock = 0;
+
+    	// Run through all the sections,
+    	// inserting full data melody in any 'verse' section.
+    	for(final TuneSectionMetadata ts : protoPlan)
+	    	{
+            if(ts.sectionType() != TuneSection.verse)
+	            {
+                // Skip over this section silently.
+            	clock += ts.bars() * DEFAULT_CLOCKS_PER_BAR;
+            	continue;
+	            }
+
+            final int clockAtVerseStart = clock;
+
+
+
+
+
+	    	}
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
