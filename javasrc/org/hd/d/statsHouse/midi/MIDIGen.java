@@ -39,6 +39,7 @@ import org.hd.d.statsHouse.NoteAndVelocity;
 import org.hd.d.statsHouse.ProductionLevel;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.TuneSectionMetadata;
+import org.hd.d.statsHouse.TuneSectionPlan;
 
 /**MIDI generation in various forms and with varying levels of sophistication.
  */
@@ -116,7 +117,7 @@ public final class MIDIGen
 	        {
 	        case plain, gentle:
 	        	{
-	        	protoPlan.add(new TuneSectionMetadata(verseProtoBars.size() * verseProtoBars.get(0).dataNotesPerBar(), TuneSection.verse));
+	        	protoPlan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse));
 	            break;
 	        	}
 
@@ -134,7 +135,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
-		case plain -> (_genPlainMIDIMelodyTune(params, db, verseProtoBars, protoPlan));
+		case plain -> (_genPlainMIDIMelodyTune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan)));
 default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		};
 
@@ -149,7 +150,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      *
      * @param params  generation parameters; never null
      * @param verseProtoBars  data split into proto bars; never null
-     * @param protoPlan  outline plan; preferably containing exactly one verse section and possible intro/outrp;
+     * @param plan  section plan; preferably containing exactly one verse section and possible intro/outrp;
      *     never null
      * @return   data melody, one or more tracks; never null
      */
@@ -157,14 +158,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		final GenerationParameters params,
     		final DataBounds db,
     		final List<DataProtoBar> verseProtoBars,
-			final List<TuneSectionMetadata> protoPlan)
+			final TuneSectionPlan plan)
         {
     	Objects.requireNonNull(params);
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(verseProtoBars);
-    	Objects.requireNonNull(protoPlan);
+    	Objects.requireNonNull(plan);
 
-    	// TODO: work correctly with het data, eg no primary.
+    	// FIXME: work correctly with het data, eg no primary.
 
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[db.streams()];
@@ -182,13 +183,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	int clock = 0;
 
     	// Run through all the sections,
-    	// inserting full data melody in any 'verse' section.
-    	for(final TuneSectionMetadata ts : protoPlan)
+    	// inserting the full data melody in any 'verse' section(s).
+    	for(final TuneSectionMetadata ts : plan.sections())
 	    	{
+    		final int clocksThisSection = ts.bars() * DEFAULT_CLOCKS_PER_BAR;
             if(ts.sectionType() != TuneSection.verse)
 	            {
                 // Skip over this section silently.
-            	clock += ts.bars() * DEFAULT_CLOCKS_PER_BAR;
+            	clock += clocksThisSection;
             	continue;
 	            }
 
@@ -196,12 +198,28 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
             // Verify that section size is correct.
             if(ts.bars() != verseProtoBars.size())
-            	{ throw new IllegalArgumentException(); }
+        		{ throw new IllegalArgumentException(); }
+//        		{ throw new IllegalArgumentException("section bars "+ts.bars()+" vs verse bars "+verseProtoBars.size()); }
 
 
+
+// FIXME: melody!
+
+
+
+
+            assert(clock <= clockAtVerseStart + clocksThisSection);
+            // Advance exactly to the end of the section.
+        	clock = clockAtVerseStart + clocksThisSection;
 	    	}
 
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+    	// Return unmodifiable compact version.
+    	for(int i = tracks.length; --i >= 0; )
+	    	{
+	    	tracks[i] = new MIDIMelodyTrack(tracks[i].setup(),
+    			Collections.unmodifiableList(new ArrayList<>(tracks[i].bars())));
+	    	}
+    	return(new MIDITune(Arrays.asList(tracks), plan));
 	    }
 
 

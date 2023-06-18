@@ -28,6 +28,7 @@ import javax.sound.midi.Sequence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -126,6 +127,24 @@ public final class TestMIDIGen extends TestCase
 	    assertFalse(result2.isEmpty());
 	    assertEquals("1 bar of 6/12 notes", 1, result2.size());
 	    assertEquals("1 bar of 6/12 notes", 12, result2.get(0).dataNotesPerBar());
+	    }
+
+    /**Test zero-data generation of minimal plain tune.
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     */
+    public static void testGenMelodyMinimalPlain() throws IOException
+	    {
+    	// Single data point.
+    	final String minimal_sample_Y = """
+#YYYY,device,coverage,gen
+2009,meter,1,2956.1
+    			""";
+    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
+	    assertFalse(result1.dataMelody().isEmpty());
+
+
+
 
 
 	    }
