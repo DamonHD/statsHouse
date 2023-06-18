@@ -134,7 +134,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
-		case plain -> (_genPlainMIDIMelodyTune(params, verseProtoBars, protoPlan));
+		case plain -> (_genPlainMIDIMelodyTune(params, db, verseProtoBars, protoPlan));
 default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		};
 
@@ -155,10 +155,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      */
     private static MIDITune _genPlainMIDIMelodyTune(
     		final GenerationParameters params,
+    		final DataBounds db,
     		final List<DataProtoBar> verseProtoBars,
 			final List<TuneSectionMetadata> protoPlan)
         {
     	Objects.requireNonNull(params);
+    	Objects.requireNonNull(db);
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(protoPlan);
 
