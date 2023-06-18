@@ -33,6 +33,6 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Default sensible (sciency) defaults for homogeneous data. */
     public GenerationParameters() { this(0, Style.plain, 0, false, null); }
 
-    /**True if no randomness should be applied, using only 'best' choices. */
+    /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
 	}
