@@ -168,7 +168,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// FIXME: work correctly with het data, eg no primary.
 
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
-    	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[db.streams()];
+    	final int streams = db.streams();
+    	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[streams];
     	Arrays.setAll(tracks,
 			i -> new MIDIMelodyTrack(new MIDITrackSetup(
 					// Use separate channels for each data stream, starting from 0.
@@ -202,11 +203,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 //        		{ throw new IllegalArgumentException("section bars "+ts.bars()+" vs verse bars "+verseProtoBars.size()); }
 
 
+            for(final DataProtoBar dbp : verseProtoBars)
+            	{
+            	for(int i = 0; i < streams; ++i)
+            		{
 
 // FIXME: melody!
 
 
 
+            		}
+            	}
 
             assert(clock <= clockAtVerseStart + clocksThisSection);
             // Advance exactly to the end of the section.
