@@ -53,7 +53,7 @@ public final class MIDIGen
 	/**Default beats / quarter notes per bar (4/4 time). */
 	public static final int DEFAULT_BEATS_PER_BAR = 4;
 	/**Default clock pulses per bar, eg for empty bars. */
-	public static final int DEFAULT_CLOCKS_PER_BAR = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
+	public static final int DEFAULT_CLOCKS_PER_BAR = DEFAULT_CLKSPQTR * 4;
     /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM. */
     public static final int DEFAULT_SECTION_BARS = 16;
     /**Default note velocity. */

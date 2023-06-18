@@ -2,6 +2,8 @@ package org.hd.d.statsHouse;
 
 import java.util.Objects;
 
+import org.hd.d.statsHouse.midi.MIDIGen;
+
 /**Parameters for music generation from data.
  * May be extracted from a command-line or elsewhere.
  * <p>
@@ -18,7 +20,7 @@ import java.util.Objects;
  *
  * @param seed  randomisation seed; 0 for no randomness (use 'best') choices
  * @param style  the style of music to generate; never null
- * @param introBars  intro/outro length in bars, and section length if +ve; non-negative
+ * @param introBars  intro/outro length in bars, also section length if +ve; non-negative
  * @param hetero  true if heterogeneous data rather than different sources of the same data
  * @param name  short ASCII name of track or source, eg "gen-M"; can be null
  */
@@ -35,4 +37,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
+
+    /**Get section length in bars; use intro length if non-zero. */
+    public int sectionBars() { return((0 != introBars) ? introBars : MIDIGen.DEFAULT_SECTION_BARS); }
 	}
