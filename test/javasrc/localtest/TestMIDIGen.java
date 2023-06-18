@@ -129,17 +129,18 @@ public final class TestMIDIGen extends TestCase
 	    assertEquals("1 bar of 6/12 notes", 12, result2.get(0).dataNotesPerBar());
 	    }
 
-    /**Test zero-data generation of minimal plain tune.
+	/**Single data point, yealy cadence. */
+	private static final String minimal_sample_Y = """
+#YYYY,device,coverage,gen
+2009,meter,1,2956.1
+			""";
+
+    /**Test generation of minimal plain MIDITune.
      * @throws IOException
      * @throws InvalidMidiDataException
      */
-    public static void testGenMelodyMinimalPlain() throws IOException
+    public static void testGenMelodyMinimalPlainMIDITune() throws IOException
 	    {
-    	// Single data point.
-    	final String minimal_sample_Y = """
-#YYYY,device,coverage,gen
-2009,meter,1,2956.1
-    			""";
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
 	    assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", result1.dataMelody().size(), 1);
@@ -148,5 +149,17 @@ public final class TestMIDIGen extends TestCase
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
+	    }
+
+    /**Test generation of minimal plain Sequence.
+     * @throws InvalidMidiDataException
+     */
+    public static void testGenMelodyMinimalPlainSequence() throws IOException, InvalidMidiDataException
+	    {
+    	final MIDITune mt1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
+    	final Sequence result1 = MIDIGen.genFromTuneSequence(mt1);
+	    assertNotNull(result1);
+        assertEquals(500_000, result1.getMicrosecondLength(), 10_000);
+        assertTrue(result1.getTracks().length > 0);
 	    }
     }
