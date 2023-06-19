@@ -16,6 +16,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 /**Main (command-line) entry-point for the data handler.
  */
 public final class Main
@@ -37,37 +41,42 @@ public final class Main
     public static void main(final String[] args)
         {
     	// Name of file (or "-" for stdin) for list of command, one per line.
-        String cmdfilename = null;
+        InputStream cmdstream = null;
 
-
+        // Generate help if asked or if no parameters.
         if((args.length < 1) || "-help".equals(args[0]))
             {
             printOptions();
             return; // Not an error.
             }
 
-        if((null != args[0]) && args[0].startsWith("-@"))
-	        {
-	        cmdfilename = args[1].substring(2);
-	        }
-
-        // Command is first argument.
-        final String command = args[0];
-
         try
             {
+            // If "-@" is specified, select a command stream...
+            if((null != args[0]) && args[0].startsWith("-@"))
+    	        {
+    	        final String cmdfilename = args[1].substring(2);
+    	        if("-".equals(cmdfilename))
+    	            { cmdstream = new BufferedInputStream(System.in); }
+    	        else
+    	            { cmdstream = new BufferedInputStream(new FileInputStream(cmdfilename)); }
+    	        }
+
+
+
+
 
 
             }
         catch(final Throwable e)
             {
-            System.err.println("FAILED command: " + command);
+            System.err.println("FAILED command");
             e.printStackTrace();
             System.exit(1);
             }
 
         // Unrecognised/unhandled command.
-        System.err.println("Unrecognised or unhandled command: " + command);
+        System.err.println("Unrecognised or unhandled command");
         printOptions();
         System.exit(1);
         }
