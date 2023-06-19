@@ -29,7 +29,7 @@ public final class Main
         System.err.println("  -@(filename|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
-        System.err.println("  infilename.csv (-play|outfilename.(csv|mid)) [-seed n] [-het] [-intro bars] [-style (plain|gentle|house]) [OFFSET [INSTRUMENT]]");
+        System.err.println("  infilename.csv (-play|outfilename.(csv|mid)) [-seed n] [-het] [-intro bars] [-style (plain|gentle|house)] [OFFSET [INSTRUMENT]]");
         System.err.println("    This may be used, one per line, in the command file.");
         }
 
