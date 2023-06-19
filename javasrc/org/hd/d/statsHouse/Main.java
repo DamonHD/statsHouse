@@ -28,8 +28,8 @@ public final class Main
         System.err.println("    This summary/help.");
         System.err.println("  -@(filename|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
-        System.err.println("    Stop processing further command-line args.");
-        System.err.println("  infilename.csv [-seed n] [-het] [-intro bars] [-style [plain|gentle|house]] outfilename.(csv|mid)");
+        System.err.println("    Do not process further command-line arguments.");
+        System.err.println("  infilename.csv [-seed n] [-het] [-intro bars] [-style (plain|gentle|house]) [OFFSET [INSTRUMENT] outfilename.(csv|mid)");
         System.err.println("    This may be used, one per line, in the command file.");
         }
 
