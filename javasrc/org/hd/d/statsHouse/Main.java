@@ -52,7 +52,7 @@ public final class Main
 
         try
             {
-            // If "-@" is specified, select a command stream...
+            // If "-@" is specified then select a command stream...
             if((null != args[0]) && args[0].startsWith("-@"))
     	        {
     	        final String cmdfilename = args[1].substring(2);
