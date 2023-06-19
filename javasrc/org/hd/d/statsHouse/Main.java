@@ -51,7 +51,7 @@ public final class Main
             return; // Not an error.
             }
 
-        if((null != args[1]) && args[1].startsWith("-@"))
+        if((null != args[0]) && args[0].startsWith("-@"))
 	        {
 	        cmdfilename = args[1].substring(2);
 	        }
