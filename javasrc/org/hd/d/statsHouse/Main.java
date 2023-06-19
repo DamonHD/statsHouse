@@ -16,12 +16,17 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**Main (command-line) entry-point for the data handler.
  */
@@ -40,11 +45,19 @@ public final class Main
         System.err.println("    This format may be used, one per line, in the command file.");
         }
 
+
+	/**Charset for command list (ASCII 7-bit). */
+	public static final Charset CMD_STREAM_CHARSET = StandardCharsets.US_ASCII;
+
+	/**Immutable regex pattern used to split command line into arguments; never null.
+	 * This is basically just a simple " "
+	 * which with split() should preserve empty fields.
+	 */
+	public static final Pattern delimCmdStream = Pattern.compile(" ");
+
     /**Accepts command-line invocation. */
     public static void main(final String[] args)
         {
-    	// Name of file (or "-" for stdin) for list of command, one per line.
-        InputStream cmdstream = null;
         // List of command lines split at spaces.
         List<List<String>> cmdlines = null;
 
@@ -60,29 +73,32 @@ public final class Main
             // If "-@" is specified then select a command stream...
             if((null != args[0]) && args[0].startsWith("-@"))
     	        {
+            	cmdlines = new ArrayList<>();
     	        final String cmdfilename = args[1].substring(2);
-    	        if("-".equals(cmdfilename))
-    	            { cmdstream = new BufferedInputStream(System.in); }
-    	        else
-    	            { cmdstream = new BufferedInputStream(new FileInputStream(cmdfilename)); }
-
-    	        // Parse into list of command lines in cmdlines.
-
-
-
-
-// TODO
-
-
-
-
+    	        try(Reader cmdStreamReader = switch(cmdfilename) {
+	    	        case "" -> new InputStreamReader(System.in);
+	    	        default -> new FileReader(cmdfilename);
+	    	        })
+	    	        {
+	    	        try(final BufferedReader br = new BufferedReader(cmdStreamReader, 8192))
+		    	        {
+	    	        	String line;
+	    		        while(null != (line = br.readLine()))
+	    		            {
+	    		        	// Skip empty lines.
+	    		        	if("".equals(line)) { continue; }
+	    		            final String fields[] = delimCmdStream.split(line);
+                            cmdlines.add(Collections.unmodifiableList(Arrays.asList(fields)));
+	    		            }
+		    	        }
+	    	        }
     	        }
 
             // If no command stream then wrap up args[].
             if(null == cmdlines)
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
-            // Execute command lines in turn, aborting at first exception.
+            // Execute command line(s) sequentially, aborting at any exception.
             for(final List<String> cmdline : cmdlines)
             	{
 
