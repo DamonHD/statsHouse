@@ -133,7 +133,7 @@ public final class Main
 	                {
 	                // Generate and publish MIDICSV file.
                 	try (
-            			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            			ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
                 		Writer w = new OutputStreamWriter(baos)
                 		)
 	                	{
@@ -148,7 +148,7 @@ public final class Main
                 	if(outputFileName.endsWith(".mid"))
 	                	{
     	                // Generate and publish MIDI binary file.
-                    	try (ByteArrayOutputStream baos = new ByteArrayOutputStream())
+                    	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
     	                	{
     	                	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
                             FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
