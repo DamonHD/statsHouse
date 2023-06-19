@@ -26,6 +26,11 @@ public final class Main
         System.err.println("Commands/options");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
+        System.err.println("  -@(filename|-)");
+        System.err.println("    Read independent command lines from specified file or stdin if '-'");
+        System.err.println("    Stop processing further command-line args.");
+        System.err.println("  infilename.csv [-seed n] [-het] [-intro bars] [-style [plain|gentle|house]] outfilename.(csv|mid)");
+        System.err.println("    This may be used, one per line, in the command file.");
         }
 
     /**Accepts command-line arguments.
@@ -47,8 +52,8 @@ public final class Main
 
         try
             {
-            
-            
+
+
             }
         catch(final Throwable e)
             {
