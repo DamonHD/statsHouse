@@ -101,6 +101,9 @@ public final class Main
             // Execute command line(s) sequentially, aborting at any exception.
             for(final List<String> cmdline : cmdlines)
             	{
+            	final int argCount = cmdline.size();
+            	if(argCount < 2)
+            	    { throw new IllegalArgumentException("Too few arguments: at least input.csv and -play or output.csv or output.mid required: " + Arrays.toString(args)); }
 
 
 
@@ -124,7 +127,7 @@ public final class Main
             }
 
         // Unrecognised/unhandled command.
-        System.err.println("Unrecognised or unhandled command");
+        System.err.println("Unrecognised or unhandled command.");
         printOptions();
         System.exit(1);
         }
