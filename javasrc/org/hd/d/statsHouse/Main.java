@@ -30,15 +30,10 @@ public final class Main
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  infilename.csv (-play|outfilename.(csv|mid)) [-seed n] [-het] [-intro bars] [-style (plain|gentle|house)] [OFFSET [INSTRUMENT]]");
-        System.err.println("    This may be used, one per line, in the command file.");
+        System.err.println("    This format may be used, one per line, in the command file.");
         }
 
-    /**Accepts command-line arguments.
-     *
-     * Accepts the following commands:
-     * <ul>
-     * </ul>
-     */
+    /**Accepts command-line invocation. */
     public static void main(final String[] args)
         {
     	// Name of file (or "-" for stdin) for list of command, one per line.
