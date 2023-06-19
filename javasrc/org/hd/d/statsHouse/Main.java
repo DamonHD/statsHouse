@@ -103,9 +103,9 @@ public final class Main
             for(final List<String> cmdline : cmdlines)
             	{
             	final int argCount = cmdline.size();
-            	System.out.println((++cmdCount) + ": " + Arrays.toString(args));
+            	System.out.println("INFO: " + (++cmdCount) + ": " + Arrays.toString(args));
             	if(argCount < 2)
-            	    { throw new IllegalArgumentException("Too few arguments: at least input.csv and -play or output.csv or output.mid required."); }
+            	    { throw new IllegalArgumentException("ERROR: too few arguments: at least input.csv and -play or output.csv or output.mid required."); }
 
 
 
@@ -125,13 +125,13 @@ public final class Main
             }
         catch(final Throwable e)
             {
-            System.err.println("FAILED command");
+            System.err.println("ERROR: FAILED command");
             e.printStackTrace();
             System.exit(1);
             }
 
         // Unrecognised/unhandled command.
-        System.err.println("Unrecognised or unhandled command.");
+        System.err.println("ERROR: unrecognised or unhandled command.");
         printOptions();
         System.exit(1);
         }
