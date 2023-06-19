@@ -182,7 +182,7 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 					// Use ocarina for main data stream, synth brass 1 for remainder.
 					(i+1 == db.mainDataStream()) ? MIDIInstrument.OCARINA.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
 					// Use default volume for main data stream, with the rest quieter.
-					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : MIDITrackSetup.DEFAULT_VOLUME/2),
+					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : (byte)(MIDITrackSetup.DEFAULT_VOLUME/2)),
 				new ArrayList<>()));
 
     	// Parameterisation of play.
@@ -348,11 +348,24 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 			final byte channel = ts.channel();
 			final byte instrument = ts.instrument();
 
+			// Program change (setting the instrument).
 			final ShortMessage pc = new ShortMessage();
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
 			trackMelody.add(new MidiEvent(pc, 0));
-			// TODO: volume
-			// TODO: pan (if not default)
+			// Volume setting (if not the default).
+			if(MIDITrackSetup.DEFAULT_VOLUME != ts.volume())
+				{
+				final ShortMessage vol = new ShortMessage();
+				vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
+				trackMelody.add(new MidiEvent(vol, 0));
+				}
+			// Pan (if not default).
+			if(MIDITrackSetup.DEFAULT_PAN != ts.pan())
+				{
+				final ShortMessage pan = new ShortMessage();
+				pan.setMessage(ShortMessage.CONTROL_CHANGE, channel, 10, ts.pan());
+				trackMelody.add(new MidiEvent(pan, 0));
+				}
 
 			int clock = 0;
 			for(final MIDIPlayableMonophonicBar b : mt.bars())
