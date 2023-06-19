@@ -99,11 +99,13 @@ public final class Main
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
             // Execute command line(s) sequentially, aborting at any exception.
+            int cmdCount = 0;
             for(final List<String> cmdline : cmdlines)
             	{
             	final int argCount = cmdline.size();
+            	System.out.println((++cmdCount) + ": " + Arrays.toString(args));
             	if(argCount < 2)
-            	    { throw new IllegalArgumentException("Too few arguments: at least input.csv and -play or output.csv or output.mid required: " + Arrays.toString(args)); }
+            	    { throw new IllegalArgumentException("Too few arguments: at least input.csv and -play or output.csv or output.mid required."); }
 
 
 
@@ -118,6 +120,8 @@ public final class Main
 
 
             	}
+            // Done, no errors.
+            System.exit(0);
             }
         catch(final Throwable e)
             {
