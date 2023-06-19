@@ -26,7 +26,7 @@ public final class Main
         System.err.println("Commands/options");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
-        System.err.println("  -@(filename|-)");
+        System.err.println("  -@(cmdfilename|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  infilename.csv (-play|outfilename.(csv|mid)) [-seed n] [-het] [-intro bars] [-style (plain|gentle|house)] [OFFSET [INSTRUMENT]]");
@@ -41,11 +41,20 @@ public final class Main
      */
     public static void main(final String[] args)
         {
+    	// Name of file (or "-" for stdin) for list of command, one per line.
+        String cmdfilename = null;
+
+
         if((args.length < 1) || "-help".equals(args[0]))
             {
             printOptions();
             return; // Not an error.
             }
+
+        if((null != args[1]) && args[1].startsWith("-@"))
+	        {
+	        cmdfilename = args[1].substring(2);
+	        }
 
         // Command is first argument.
         final String command = args[0];
