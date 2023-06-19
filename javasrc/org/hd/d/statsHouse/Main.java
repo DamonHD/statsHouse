@@ -107,6 +107,8 @@ public final class Main
             	if(argCount < 2)
             	    { throw new IllegalArgumentException("ERROR: too few arguments: at least input.csv and -play or output.csv or output.mid required."); }
 
+                final String inputFileName = cmdline.get(0);
+                final String outputFileName = cmdline.get(1);
 
 
 
