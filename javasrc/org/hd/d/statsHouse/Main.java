@@ -110,6 +110,8 @@ public final class Main
                 final String inputFileName = cmdline.get(0);
                 final String outputFileName = cmdline.get(1);
 
+                // TODO: remaining optional args determine GenerationParameters.
+                final GenerationParameters param = new GenerationParameters();
 
 
 
