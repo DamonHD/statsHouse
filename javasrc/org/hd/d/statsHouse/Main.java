@@ -19,6 +19,9 @@ package org.hd.d.statsHouse;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**Main (command-line) entry-point for the data handler.
  */
@@ -42,6 +45,8 @@ public final class Main
         {
     	// Name of file (or "-" for stdin) for list of command, one per line.
         InputStream cmdstream = null;
+        // List of command lines split at spaces.
+        List<List<String>> cmdlines = null;
 
         // Generate help if asked or if no parameters.
         if((args.length < 1) || "-help".equals(args[0]))
@@ -60,13 +65,40 @@ public final class Main
     	            { cmdstream = new BufferedInputStream(System.in); }
     	        else
     	            { cmdstream = new BufferedInputStream(new FileInputStream(cmdfilename)); }
+
+    	        // Parse into list of command lines in cmdlines.
+
+
+
+
+// TODO
+
+
+
+
     	        }
 
+            // If no command stream then wrap up args[].
+            if(null == cmdlines)
+	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
+
+            // Execute command lines in turn, aborting at first exception.
+            for(final List<String> cmdline : cmdlines)
+            	{
 
 
 
 
 
+
+            	// TODO
+
+
+
+
+
+
+            	}
             }
         catch(final Throwable e)
             {
