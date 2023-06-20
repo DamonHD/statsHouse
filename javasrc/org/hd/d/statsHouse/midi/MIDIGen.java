@@ -231,19 +231,14 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
             				{
             				final byte note = (byte) Math.max(1, Math.min(127,
             						offset + (d.value() * multScaling)));
-                            byte velocity = DEFAULT_MELODY_VELOCITY;
+                            byte velocity = isMainDataStream ?
+                        		DEFAULT_MELODY_VELOCITY : (DEFAULT_MELODY_VELOCITY/2);
                             if(d.coverage() < 1)
                                 {
                             	// Reduce volume for low coverage / low certainty.
                             	velocity = (byte) Math.max(1, Math.min(127,
                             		velocity * d.coverage()));
                                 }
-                            if(!isMainDataStream)
-	                            {
-                            	// Reduce volume for non-primary stream.
-	                        	velocity = (byte) Math.max(1, Math.min(127,
-	                        		velocity * 0.7f));
-	                            }
 							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
 							notes.add(nv);
             				}
