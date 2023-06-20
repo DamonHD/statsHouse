@@ -152,6 +152,10 @@ public final class Main
     	                	{
     	                	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
                             FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
+
+// Write WAV instead?
+//                    	    AudioInputStream stream = AudioSystem.getAudioInputStream(baos);
+//                          AudioSystem.write(stream, AudioFileFormat.Type.WAVE, outputstream);
     	                	}
 	                	}
                 	else if("-play".equals(outputFileName))
