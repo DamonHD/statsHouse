@@ -352,13 +352,10 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 			final ShortMessage pc = new ShortMessage();
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
 			trackMelody.add(new MidiEvent(pc, 0));
-			// Volume setting (if not the default).
-			if(MIDITrackSetup.DEFAULT_VOLUME != ts.volume())
-				{
-				final ShortMessage vol = new ShortMessage();
-				vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
-				trackMelody.add(new MidiEvent(vol, 0));
-				}
+			// Volume setting.; done rely on a consistent defualt.
+			final ShortMessage vol = new ShortMessage();
+			vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
+			trackMelody.add(new MidiEvent(vol, 0));
 			// Pan (if not default).
 			if(MIDITrackSetup.DEFAULT_PAN != ts.pan())
 				{
