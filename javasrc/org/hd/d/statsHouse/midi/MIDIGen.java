@@ -174,15 +174,16 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final int streams = db.streams();
+    	final int mainDataStream = db.mainDataStream();
     	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[streams];
     	Arrays.setAll(tracks,
 			i -> new MIDIMelodyTrack(new MIDITrackSetup(
 					// Use separate channels for each data stream, starting from 0.
 					(byte) i,
 					// Use ocarina for main data stream, synth brass 1 for remainder.
-					(i+1 == db.mainDataStream()) ? MIDIInstrument.OCARINA.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
+					db.isMainDataStream(i+1) ? MIDIInstrument.OCARINA.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
 					// Use default volume for main data stream, with the rest quieter.
-					(i+1 == db.mainDataStream()) ? MIDITrackSetup.DEFAULT_VOLUME : (byte)(MIDITrackSetup.DEFAULT_VOLUME/2)),
+					db.isMainDataStream(i+1) ? MIDITrackSetup.DEFAULT_VOLUME : (byte)(MIDITrackSetup.DEFAULT_VOLUME/2)),
 				new ArrayList<>()));
 
     	// Parameterisation of play.
@@ -198,15 +199,14 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
     	// inserting the full data melody in any 'verse' section(s).
     	for(final TuneSectionMetadata ts : plan.sections())
 	    	{
-    		final int clocksThisSection = ts.bars() * DEFAULT_CLOCKS_PER_BAR;
             if(ts.sectionType() != TuneSection.verse)
 	            {
-                // Skip over this section silently.
-//            	clock += clocksThisSection;
+                // Skip over this section silently,
+            	// inserting empty bars for all streams.
+            	for(int s = 1; s <= streams; ++s)
+	            	{ tracks[s - 1].bars().add(MIDIPlayableMonophonicBar.EMPTY_1_NOTE_BAR); }
             	continue;
 	            }
-
-//            final int clockAtVerseStart = clock;
 
             // Verify that section size is correct.
             if(ts.bars() != verseProtoBars.size())
@@ -214,12 +214,9 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 
             for(final DataProtoBar dbp : verseProtoBars)
             	{
-//            	final int clockAtBarStart = clock;
-
             	for(int s = 1; s <= streams; ++s)
             		{
-//            		// Reset clock to start of bar.
-//            		clock = clockAtBarStart;
+            		final boolean isMainDataStream = db.isMainDataStream(s);
 
             		final List<List<String>> rows = dbp.dataRows().data();
             		final int dnpb = dbp.dataNotesPerBar();
@@ -240,13 +237,19 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
                             byte velocity = DEFAULT_MELODY_VELOCITY;
                             if(d.coverage() < 1)
                                 {
+                            	// Reduce volume for low coverage / low certainty.
                             	velocity = (byte) Math.max(1, Math.min(127,
                             		velocity * d.coverage()));
                                 }
+                            if(!isMainDataStream)
+	                            {
+                            	// Reduce volume for non-primary stream.
+	                        	velocity = (byte) Math.max(1, Math.min(127,
+	                        		velocity * 0.7f));
+	                            }
 							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
 							notes.add(nv);
             				}
-//            			clock += DEFAULT_CLOCKS_PER_BAR / dnpb;
             			}
 
             		// Construct MIDI-playable bar for this stream.
@@ -255,10 +258,6 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
             		tracks[s - 1].bars().add(mpmb);
             		}
             	}
-
-//            assert(clock <= clockAtVerseStart + clocksThisSection);
-//            // Advance exactly to the end of the section.
-//        	clock = clockAtVerseStart + clocksThisSection;
 	    	}
 
     	// Return unmodifiable compact version.

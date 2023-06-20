@@ -43,8 +43,12 @@ public record MIDIPlayableMonophonicBar(int dataNotesPerBar, DataProtoBar dpr, i
 	    if((null != dpr) && (stream < 1)) { throw new IllegalArgumentException(); }
 	    if((null == dpr) && (0 != stream)) { throw new IllegalArgumentException(); }
 	    Objects.requireNonNull(notes);
-	    if(dpr.dataNotesPerBar() != notes.size()) { throw new IllegalArgumentException(); }
+	    if((null != dpr) && (dpr.dataNotesPerBar() != notes.size())) { throw new IllegalArgumentException(); }
 	    }
+
+    /**Empty/rest immutable 1-note bar. */
+    public static final MIDIPlayableMonophonicBar EMPTY_1_NOTE_BAR =
+		new MIDIPlayableMonophonicBar(1, null, 0, Collections.singletonList(null));
 
     /**Make an immutable copy/close suitable for safe sharing. */
     public MIDIPlayableMonophonicBar getImmutableClone()

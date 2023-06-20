@@ -37,4 +37,9 @@ public record DataBounds(int streams, int mainDataStream, float maxVal)
 	    		DataUtils.maxNVal(data),
 	    		DataUtils.maxVal(data));
 	    }
+
+    /**True if the specified stream is the main stream (of homogeneous data).
+     * Convenience method to avoid some lambda boilerplate!
+     */
+    public boolean isMainDataStream(final int s) { return(s == mainDataStream); }
 	}
