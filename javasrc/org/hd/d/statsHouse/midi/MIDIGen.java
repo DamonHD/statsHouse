@@ -192,9 +192,6 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 		final byte offset = DEFAULT_ROOT_NOTE;
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
-//    	// Clock starts at zero, and runs in tandem across all bars/streams.
-//    	int clock = 0;
-
     	// Run through all the sections,
     	// inserting the full data melody in any 'verse' section(s).
     	for(final TuneSectionMetadata ts : plan.sections())
