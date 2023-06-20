@@ -180,8 +180,8 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
 			i -> new MIDIMelodyTrack(new MIDITrackSetup(
 					// Use separate channels for each data stream, starting from 0.
 					(byte) i,
-					// Use ocarina for main data stream, synth brass 1 for remainder.
-					db.isMainDataStream(i+1) ? MIDIInstrument.OCARINA.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
+					// Use tenor sax for main data stream, synth brass 1 for remainder.  (Alternative: ocinara.)
+					db.isMainDataStream(i+1) ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.SYNTH_BRASS_1.instrument0,
 					// Use default volume for main data stream, with the rest quieter.
 					db.isMainDataStream(i+1) ? MIDITrackSetup.DEFAULT_VOLUME : (byte)(MIDITrackSetup.DEFAULT_VOLUME/2)),
 				new ArrayList<>()));
