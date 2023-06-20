@@ -17,6 +17,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
@@ -35,6 +36,9 @@ import java.util.regex.Pattern;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIGen;
@@ -53,7 +57,10 @@ public final class Main
         System.err.println("  -@(cmdfilename|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
-        System.err.println("  infilename.csv (-play|outfilename.(csv|mid)) [-seed n] [-het] [-intro bars] [-style (plain|gentle|house)] [OFFSET [INSTRUMENT]]");
+        System.err.println("  infilename.csv (-play|outfilename.(csv|mid|wav)))");
+        System.err.println("      [-seed n] [-het] [-intro bars]");
+        System.err.println("      [-style (plain|gentle|house)]");
+		System.err.println("      [-highWorse] [OFFSET [INSTRUMENT]]");
         System.err.println("    This format may be used, one per line, in the command file.");
         }
 
@@ -145,17 +152,26 @@ public final class Main
 	                {
                 	// MIDI output to play immediately or to save.
                 	final Sequence s = MIDIGen.genFromTuneSequence(mt);
-                	if(outputFileName.endsWith(".mid"))
+                	final boolean isMid = outputFileName.endsWith(".mid");
+                	if(isMid || outputFileName.endsWith(".wav"))
 	                	{
     	                // Generate and publish MIDI binary file.
                     	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
     	                	{
     	                	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
-                            FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
-
-// Write WAV instead?
-//                    	    AudioInputStream stream = AudioSystem.getAudioInputStream(baos);
-//                          AudioSystem.write(stream, AudioFileFormat.Type.WAVE, outputstream);
+    	                	if(isMid)
+                                { FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true); }
+    	                	else
+	    	                	{
+    	                		// Write WAV instead.
+	                    	    final AudioInputStream stream = AudioSystem.getAudioInputStream(
+                    	    		new ByteArrayInputStream(baos.toByteArray()));
+	                    	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(256))
+		                    	    {
+		                            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, baosWAV);
+		                            FileUtils.replacePublishedFile(outputFileName, baosWAV.toByteArray(), true);
+		                    	    }
+	    	                	}
     	                	}
 	                	}
                 	else if("-play".equals(outputFileName))
