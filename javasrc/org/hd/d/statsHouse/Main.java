@@ -122,7 +122,7 @@ public final class Main
             for(final List<String> cmdline : cmdlines)
             	{
             	final int argCount = cmdline.size();
-            	System.out.println("INFO: " + (++cmdCount) + ": " + Arrays.toString(args));
+            	System.out.println("INFO: sonifying: " + (++cmdCount) + ": " + Arrays.toString(args));
             	if(argCount < 2)
             	    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
 
