@@ -144,6 +144,36 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 //throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
+    /**Generate MIDITrackSetup for a given stream (1-based); never null.
+     * This knows about instrument choices, relative volumes, etc.
+     * <p>
+     * TODO: incorporate seed-based randomness when appropriate
+     *
+     * @param stream  stream number (first stream is 1);
+     *     out of bounds value results is 'safe' result
+     * @return  track setup, with channel number 1 less than stream number
+     */
+    public static MIDITrackSetup genMIDITrackSetup(final int stream,
+		final GenerationParameters params, final DataBounds db)
+	    {
+    	Objects.requireNonNull(params);
+    	Objects.requireNonNull(db);
+
+    	// True if a major/main stream, else a minor/secondary stream.
+    	final boolean isMajorStream = params.hetro() || db.isMainDataStream(stream);
+
+		// Use tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
+    	final byte instrument = isMajorStream ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0;
+
+		// Use default volume for main data stream, with the rest quieter.
+		final byte volume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) (MIDITrackSetup.DEFAULT_VOLUME/2);
+
+// TODO: pan
+final byte pan = MIDITrackSetup.DEFAULT_PAN;
+
+    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan));
+	    }
+
     /**Create a plain melody from the data; never null
      * Will insert a copy of the data melody at each verse in the plan
      * (the number of bars allowed must be large enough)
@@ -169,21 +199,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(plan);
 
-// FIXME: work correctly with het data, eg no primary.
-if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); }
-
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final int streams = db.streams();
-    	final int mainDataStream = db.mainDataStream();
     	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[streams];
     	Arrays.setAll(tracks,
-			i -> new MIDIMelodyTrack(new MIDITrackSetup(
-					// Use separate channels for each data stream, starting from 0.
-					(byte) i,
-					// Use tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
-					db.isMainDataStream(i+1) ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0,
-					// Use default volume for main data stream, with the rest quieter.
-					db.isMainDataStream(i+1) ? MIDITrackSetup.DEFAULT_VOLUME : (byte)(MIDITrackSetup.DEFAULT_VOLUME/2)),
+			i -> new MIDIMelodyTrack(
+					genMIDITrackSetup(i+1, params, db),
 				new ArrayList<>()));
 
     	// Parameterisation of play.
@@ -231,7 +252,7 @@ if(params.hetro()) { throw new UnsupportedOperationException("NOT IMPLEMENTED YE
             				{
             				final byte note = (byte) Math.max(1, Math.min(127,
             						offset + (d.value() * multScaling)));
-                            byte velocity = isMainDataStream ?
+                            byte velocity = (params.hetro() || isMainDataStream) ?
                         		DEFAULT_MELODY_VELOCITY : ((3*DEFAULT_MELODY_VELOCITY)/2);
                             if(d.coverage() < 1)
                                 {
