@@ -383,7 +383,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final ShortMessage pc = new ShortMessage();
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
 			trackMelody.add(new MidiEvent(pc, 0));
-			// Volume setting.; done rely on a consistent defualt.
+			// Volume setting.; done rely on a consistent synthesiser default.
 			final ShortMessage vol = new ShortMessage();
 			vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
 			trackMelody.add(new MidiEvent(vol, 0));
