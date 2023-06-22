@@ -152,7 +152,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * TODO: unit tests
      *
      * @param stream  stream number (first stream is 1);
-     *     out of bounds value results is 'safe' result
+     *     out of bounds value results gives 'safe' result
      * @return  track setup, with channel number 1 less than stream number
      */
     public static MIDITrackSetup genMIDITrackSetup(final int stream,
