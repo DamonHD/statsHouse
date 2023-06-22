@@ -113,7 +113,7 @@ public final class Main
 	    	        }
     	        }
 
-            // If no command stream then wrap up args[].
+            // If no command stream then wrap up args[] as a single command.
             if(null == cmdlines)
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
