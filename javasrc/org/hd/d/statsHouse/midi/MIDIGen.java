@@ -148,6 +148,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * This knows about instrument choices, relative volumes, etc.
      * <p>
      * TODO: incorporate seed-based randomness when appropriate
+     * <p>
+     * TODO: unit tests
      *
      * @param stream  stream number (first stream is 1);
      *     out of bounds value results is 'safe' result
@@ -168,8 +170,25 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		// Use default volume for main data stream, with the rest quieter.
 		final byte volume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) (MIDITrackSetup.DEFAULT_VOLUME/2);
 
-// TODO: pan
-final byte pan = MIDITrackSetup.DEFAULT_PAN;
+		final byte pan;
+		if(params.hetro())
+			{
+			// Spread heterogeneous-and-equal streams around the L-R axis.
+			pan = (byte) ((127 / Math.max(1, db.streams() - 1)) * (stream - 1));
+			}
+		else
+			{
+			if(db.isMainDataStream(stream))
+				{
+				// Put main stream slightly to one side.
+				pan = 80; // In V4.x was 70;
+				}
+			else
+				{
+				// Spread non-major streams out on other side.
+				pan = (byte) ((63 / Math.max(1, db.streams() - 1)) * (stream - 1));
+				}
+			}
 
     	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan));
 	    }
