@@ -1,5 +1,6 @@
 package org.hd.d.statsHouse.midi;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,22 +9,28 @@ import org.hd.d.statsHouse.TuneSectionPlan;
 // TODO: add other non-data-melody tracks.
 
 /**A representation of a full MIDI 'tune' created from data.
- * Is immutable if dataMelody is.
+ * Is immutable if the bar List items are.
  *
  * @param dataMelody  the data melody parts of the final tune;
+ *     non-null but may be empty
+ * @param supportTracks  the non-data tracks of the final tune;
  *     non-null but may be empty
  * @param plan  the section plan which should cover the whole melody at least if present;
  *     may be null
  *
  * The section plan may in part be folded into markers etc in a MIDI tempo track.
  */
-public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, TuneSectionPlan plan)
+public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTrack> supportTracks, TuneSectionPlan plan)
     {
     public MIDITune
 	    {
 	    Objects.requireNonNull(dataMelody);
+	    Objects.requireNonNull(supportTracks);
 	    }
 
-    /**Bare melody. */
-    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, null); }
+    /**Data melody and support track. */
+    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody, final List<MIDISupportTrack> supportTracks) { this(dataMelody, supportTracks, null); }
+
+    /**Bare data melody. */
+    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, Collections.emptyList(), null); }
     }

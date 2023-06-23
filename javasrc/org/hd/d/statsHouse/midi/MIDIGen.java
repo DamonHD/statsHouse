@@ -298,7 +298,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    	tracks[i] = new MIDIDataMelodyTrack(tracks[i].setup(),
     			Collections.unmodifiableList(new ArrayList<>(tracks[i].bars())));
 	    	}
-    	return(new MIDITune(Arrays.asList(tracks), plan));
+    	return(new MIDITune(Arrays.asList(tracks), Collections.emptyList(), plan));
 	    }
 
 
