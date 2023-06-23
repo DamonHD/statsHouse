@@ -225,6 +225,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			i -> new MIDIDataMelodyTrack(
 					genMIDITrackSetup(i+1, params, db),
 				new ArrayList<>()));
+    	// Just one support (percussion) track for now.
+    	final MIDISupportTrack percTrack = new MIDISupportTrack(
+    			new MIDITrackSetup(MIDIConstant.GM1_PERCUSSION_CHANNEL, (byte) 0), // FIXME?
+    			new ArrayList<>());
 
     	// Parameterisation of play.
 		final int octaves = 2;
@@ -380,9 +384,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte instrument = ts.instrument();
 
 			// Program change (setting the instrument).
-			final ShortMessage pc = new ShortMessage();
-			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
-			trackMelody.add(new MidiEvent(pc, 0));
+			// Do not do this on the percussion channel.
+			if(MIDIConstant.GM1_PERCUSSION_CHANNEL != channel)
+				{
+				final ShortMessage pc = new ShortMessage();
+				pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+				trackMelody.add(new MidiEvent(pc, 0));
+				}
 			// Volume setting; do not assume a consistent synthesiser default.
 			final ShortMessage vol = new ShortMessage();
 			vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
