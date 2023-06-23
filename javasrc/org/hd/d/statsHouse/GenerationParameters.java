@@ -54,14 +54,20 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     public static GenerationParameters parseOptionalCommandArguments(final String args[], final int firstIndex)
 	    {
     	final int seed = DEFAULT_SEED;
+    	boolean hetero = DEFAULT_HETERO;
     	Style style = DEFAULT_SYLE;
     	final int introBars = DEFAULT_INTRO_BARS;
-    	final boolean hetero = DEFAULT_HETERO;
     	final String name = DEFAULT_NAME;
 
     	int i = firstIndex;
 
     	// FIXME: parse remaining args
+
+    	if((i < args.length) && "-het".equals(args[i]))
+	    	{
+    		++i;
+    		hetero = true;
+	    	}
 
     	if((i+1 < args.length) && "-style".equals(args[i]))
 	    	{
