@@ -122,7 +122,7 @@ public final class Main
             for(final List<String> cmdline : cmdlines)
             	{
             	final int argCount = cmdline.size();
-            	System.out.println("INFO: sonifying: " + (++cmdCount) + ": " + Arrays.toString(args));
+            	System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(args));
             	if(argCount < 2)
             	    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
 
@@ -156,18 +156,21 @@ public final class Main
                 	final boolean isMid = outputFileName.endsWith(".mid");
                 	if(isMid || outputFileName.endsWith(".wav"))
 	                	{
-    	                // Generate and publish MIDI binary file.
+    	                // Generate MIDI binary file.
                     	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
     	                	{
     	                	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
     	                	if(isMid)
-                                { FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true); }
+                                {
+    	                		// Publish binary MIDI file.
+    	                		FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
+    	                		}
     	                	else
 	    	                	{
-    	                		// Write WAV instead.
+    	                		// Generate and publish WAV.
 	                    	    final AudioInputStream stream = AudioSystem.getAudioInputStream(
                     	    		new ByteArrayInputStream(baos.toByteArray()));
-	                    	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(256))
+	                    	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(16384))
 		                    	    {
 		                            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, baosWAV);
 		                            FileUtils.replacePublishedFile(outputFileName, baosWAV.toByteArray(), true);
