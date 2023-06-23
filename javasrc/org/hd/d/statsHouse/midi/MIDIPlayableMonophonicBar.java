@@ -11,7 +11,7 @@ import org.hd.d.statsHouse.NoteAndVelocity;
 /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
  * Represents data melody from one data stream for one playable bar.
  * <p>
- * Covers one voice/track, can cannot be polyphonic.
+ * Covers one voice/track: cannot be polyphonic.
  * <p>
  * Individual note slots can be null to be empty.
  * <p>
