@@ -2,10 +2,9 @@ package org.hd.d.statsHouse.midi;
 
 import java.util.Collections;
 import java.util.Objects;
-import java.util.SortedMap;
+import java.util.SortedSet;
 
 import org.hd.d.statsHouse.NoteAndVelocity;
-import org.hd.d.statsHouse.midi.MIDIPlayableBar.NoteVelocityDuration;
 
 /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
  * Represents non-data melody or other sound for one playable bar.
@@ -21,13 +20,17 @@ import org.hd.d.statsHouse.midi.MIDIPlayableBar.NoteVelocityDuration;
  * <p>
  * This may be the output of a chain of transformations.
  * <p>
- * This object is immutable if the Map is.
+ * This object is immutable if the Set is.
+ * <p>
+ * A note should not run beyond the end of its bar, in general.
+ * <p>
+ * TODO: unit tests
  *
  * @param notes  time ordered by from non-negative clocks offset from start of bar,
  *     to note and velocity and note-on/note-off duration in clocks;
  *     may be empty but not null
  */
-public record MIDIPlayableBar(SortedMap<Integer, NoteVelocityDuration> notes, int clocks)
+public record MIDIPlayableBar(SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes, int clocks)
     {
     public MIDIPlayableBar
 	    {
@@ -36,21 +39,43 @@ public record MIDIPlayableBar(SortedMap<Integer, NoteVelocityDuration> notes, in
 		}
 
     /**Supplied notes, with default clocks per bar. */
-    public MIDIPlayableBar(final SortedMap<Integer, NoteVelocityDuration> notes)
+    public MIDIPlayableBar(final SortedSet<StartNoteVelocityDuration> notes)
     	{ this(notes, MIDIGen.DEFAULT_CLOCKS_PER_BAR); }
 
     /**Note and velocity, and +ve duration in clocks (MIDI note-on to note-off).
      * Immutable.
+     * <p>
+     * Totally ordered, first by start, to enforce time ordering.
      */
-    public record NoteVelocityDuration(NoteAndVelocity note, int clocks)
+    public record StartNoteVelocityDuration(int start, NoteAndVelocity note, int duration)
+    	implements Comparable<StartNoteVelocityDuration>
 	    {
-    	public NoteVelocityDuration
+    	public StartNoteVelocityDuration
 	    	{
+        	if(start <= 0) { throw new IllegalArgumentException(); }
         	Objects.requireNonNull(note);
-        	if(clocks <= 0) { throw new IllegalArgumentException(); }
+        	if(duration <= 0) { throw new IllegalArgumentException(); }
 	    	}
+
+        /**Total order: sort first by start clock offset. */
+    	@Override
+    	public int compareTo(final StartNoteVelocityDuration o)
+    		{
+    		Objects.requireNonNull(o);
+
+    		final int startDiff = start - o.start;
+    		if(0 != startDiff) { return(startDiff); }
+    		final int durationDiff = duration - o.duration;
+    		if(0 != durationDiff) { return(durationDiff); }
+    		final int noteDiff = note.note() - o.note.note();
+    		if(0 != noteDiff) { return(noteDiff); }
+    		final int velocityDiff = note.velocity() - o.note.velocity();
+    		if(0 != velocityDiff) { return(velocityDiff); }
+    		assert(o.equals(this));
+    		return(0);
+    		}
 	    }
 
     /**Empty bar with default number of clocks. */
-    public static final MIDIPlayableBar EMPTY_DEFAULT_CLOCKS = new MIDIPlayableBar(Collections.emptySortedMap());
+    public static final MIDIPlayableBar EMPTY_DEFAULT_CLOCKS = new MIDIPlayableBar(Collections.emptySortedSet());
     }
