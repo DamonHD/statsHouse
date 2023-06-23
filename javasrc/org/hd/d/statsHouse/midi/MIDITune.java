@@ -8,6 +8,8 @@ import org.hd.d.statsHouse.TuneSectionPlan;
 
 /**A representation of a full MIDI 'tune' created from data.
  * Is immutable if the bar List items are.
+ * <p>
+ * The section plan may in part be folded into markers etc in a MIDI tempo track.
  *
  * @param dataMelody  the data melody parts of the final tune;
  *     non-null but may be empty
@@ -16,7 +18,7 @@ import org.hd.d.statsHouse.TuneSectionPlan;
  * @param plan  the section plan which should cover the whole melody at least if present;
  *     may be null
  *
- * The section plan may in part be folded into markers etc in a MIDI tempo track.
+ *
  */
 public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTrack> supportTracks, TuneSectionPlan plan)
     {
@@ -26,9 +28,9 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTra
 	    Objects.requireNonNull(supportTracks);
 	    }
 
-    /**Data melody and support track. */
+    /**Data melody and support track, no plan. */
     public MIDITune(final List<MIDIDataMelodyTrack> dataMelody, final List<MIDISupportTrack> supportTracks) { this(dataMelody, supportTracks, null); }
 
-    /**Bare data melody. */
+    /**Bare data melody, no support nor plan. */
     public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, Collections.emptyList(), null); }
     }
