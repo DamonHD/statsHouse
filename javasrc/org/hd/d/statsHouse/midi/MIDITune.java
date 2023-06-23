@@ -6,8 +6,6 @@ import java.util.Objects;
 
 import org.hd.d.statsHouse.TuneSectionPlan;
 
-// TODO: add other non-data-melody tracks.
-
 /**A representation of a full MIDI 'tune' created from data.
  * Is immutable if the bar List items are.
  *
