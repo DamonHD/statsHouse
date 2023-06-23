@@ -33,9 +33,9 @@ import org.hd.d.statsHouse.NoteAndVelocity;
  * @param notes  notes from the above stream in neutral MIDI-like form; null slots are empty/silent;
  *     never null, same length as the dpr
  */
-public record MIDIPlayableMonophonicBar(int dataNotesPerBar, DataProtoBar dpr, int stream, List<NoteAndVelocity> notes)
+public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dpr, int stream, List<NoteAndVelocity> notes)
     {
-    public MIDIPlayableMonophonicBar
+    public MIDIPlayableMonophonicDataBar
 	    {
 		if(dataNotesPerBar < 1) { throw new IllegalArgumentException(); }
 		if(dataNotesPerBar != notes.size()) { throw new IllegalArgumentException(); }
@@ -47,13 +47,13 @@ public record MIDIPlayableMonophonicBar(int dataNotesPerBar, DataProtoBar dpr, i
 	    }
 
     /**Empty/rest immutable 1-note bar. */
-    public static final MIDIPlayableMonophonicBar EMPTY_1_NOTE_BAR =
-		new MIDIPlayableMonophonicBar(1, null, 0, Collections.singletonList(null));
+    public static final MIDIPlayableMonophonicDataBar EMPTY_1_NOTE_BAR =
+		new MIDIPlayableMonophonicDataBar(1, null, 0, Collections.singletonList(null));
 
     /**Make an immutable copy/close suitable for safe sharing. */
-    public MIDIPlayableMonophonicBar getImmutableClone()
+    public MIDIPlayableMonophonicDataBar getImmutableClone()
 	    {
-    	return(new MIDIPlayableMonophonicBar(dataNotesPerBar, dpr, stream,
+    	return(new MIDIPlayableMonophonicDataBar(dataNotesPerBar, dpr, stream,
             Collections.unmodifiableList(new ArrayList<>(notes))));
 	    }
 
@@ -63,11 +63,11 @@ public record MIDIPlayableMonophonicBar(int dataNotesPerBar, DataProtoBar dpr, i
      * @param note  new note for given index or null for no note
      * @return  immutable clone of original with the specified change
      */
-    public MIDIPlayableMonophonicBar cloneAndSet(final int index, final NoteAndVelocity note)
+    public MIDIPlayableMonophonicDataBar cloneAndSet(final int index, final NoteAndVelocity note)
 	    {
     	final List<NoteAndVelocity> l = new ArrayList<>(notes);
     	l.set(index, note);
-    	return(new MIDIPlayableMonophonicBar(dataNotesPerBar, dpr, stream,
+    	return(new MIDIPlayableMonophonicDataBar(dataNotesPerBar, dpr, stream,
             Collections.unmodifiableList(new ArrayList<>(l))));
 	    }
     }

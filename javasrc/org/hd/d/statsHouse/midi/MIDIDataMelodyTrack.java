@@ -12,11 +12,11 @@ import java.util.Objects;
  * @param setup  setup for the whole track; never null
  * @param bars   zero or more bars of melody; never null
  */
-public record MIDIMelodyTrack(MIDITrackSetup setup, List<MIDIPlayableMonophonicBar> bars)
+public record MIDIDataMelodyTrack(MIDITrackSetup setup, List<MIDIPlayableMonophonicDataBar> bars)
 	{
     public static final byte DEFAULT_VOLUME = 0;
 
-	public MIDIMelodyTrack
+	public MIDIDataMelodyTrack
 	    {
 	    Objects.requireNonNull(setup);
 	    Objects.requireNonNull(bars);

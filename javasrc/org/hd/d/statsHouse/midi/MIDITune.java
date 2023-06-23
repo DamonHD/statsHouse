@@ -17,7 +17,7 @@ import org.hd.d.statsHouse.TuneSectionPlan;
  *
  * The section plan may in part be folded into markers etc in a MIDI tempo track.
  */
-public record MIDITune(List<MIDIMelodyTrack> dataMelody, TuneSectionPlan plan)
+public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, TuneSectionPlan plan)
     {
     public MIDITune
 	    {
@@ -25,5 +25,5 @@ public record MIDITune(List<MIDIMelodyTrack> dataMelody, TuneSectionPlan plan)
 	    }
 
     /**Bare melody. */
-    public MIDITune(final List<MIDIMelodyTrack> dataMelody) { this(dataMelody, null); }
+    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, null); }
     }

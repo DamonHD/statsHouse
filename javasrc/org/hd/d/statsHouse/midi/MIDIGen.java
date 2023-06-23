@@ -220,9 +220,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     	// Create tracks with deliberately- mutable/extendable (by us) bars.
     	final int streams = db.streams();
-    	final MIDIMelodyTrack tracks[] = new MIDIMelodyTrack[streams];
+    	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
     	Arrays.setAll(tracks,
-			i -> new MIDIMelodyTrack(
+			i -> new MIDIDataMelodyTrack(
 					genMIDITrackSetup(i+1, params, db),
 				new ArrayList<>()));
 
@@ -241,7 +241,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 // Skip over this section silently,
             	// inserting empty bars for all streams.
             	for(int s = 1; s <= streams; ++s)
-	            	{ tracks[s - 1].bars().add(MIDIPlayableMonophonicBar.EMPTY_1_NOTE_BAR); }
+	            	{ tracks[s - 1].bars().add(MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR); }
             	continue;
 	            }
 
@@ -285,7 +285,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             			}
 
             		// Construct MIDI-playable bar for this stream.
-            		final MIDIPlayableMonophonicBar mpmb = new MIDIPlayableMonophonicBar(
+            		final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
             				dnpb, dbp, s, Collections.unmodifiableList(notes));
             		tracks[s - 1].bars().add(mpmb);
             		}
@@ -295,7 +295,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Return unmodifiable compact version.
     	for(int i = tracks.length; --i >= 0; )
 	    	{
-	    	tracks[i] = new MIDIMelodyTrack(tracks[i].setup(),
+	    	tracks[i] = new MIDIDataMelodyTrack(tracks[i].setup(),
     			Collections.unmodifiableList(new ArrayList<>(tracks[i].bars())));
 	    	}
     	return(new MIDITune(Arrays.asList(tracks), plan));
@@ -372,7 +372,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		// TODO: percussion (etc) tracks.
 
 		// Add data melody tracks.
-		for(final MIDIMelodyTrack mt : tune.dataMelody())
+		for(final MIDIDataMelodyTrack mt : tune.dataMelody())
 			{
 			final Track trackMelody = sequence.createTrack();
 			final MIDITrackSetup ts = mt.setup();
@@ -396,7 +396,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				}
 
 			int clock = 0;
-			for(final MIDIPlayableMonophonicBar b : mt.bars())
+			for(final MIDIPlayableMonophonicDataBar b : mt.bars())
 				{
 				final int noteCount = b.notes().size();
 				final int clocksPerNote = barClocks / noteCount;
