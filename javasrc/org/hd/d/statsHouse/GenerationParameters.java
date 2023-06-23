@@ -35,6 +35,20 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Default sensible (sciency) defaults for homogeneous data. */
     public GenerationParameters() { this(0, Style.plain, 0, false, null); }
 
+    /**Parse optional arguments from command-line starting at the given index.
+     * <pre>
+System.err.println("  infilename.csv (-play|outfilename.(csv|mid|wav)))");
+System.err.println("      [-seed n] [-het] [-intro bars]");
+System.err.println("      [-style (plain|gentle|house)]");
+System.err.println("      [-highWorse] [OFFSET [INSTRUMENT]]");
+     * </pre>
+     */
+    public static GenerationParameters parseOptionalCommandArguments(final String args[], final int firstIndex)
+	    {
+	    // FIXME
+    	return(new GenerationParameters());
+	    }
+
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
 
