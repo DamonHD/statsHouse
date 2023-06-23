@@ -32,21 +32,53 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    if(introBars < 0) { throw new IllegalArgumentException(); }
 	    }
 
+    public static final int DEFAULT_SEED = 0;
+    public static final Style DEFAULT_SYLE = Style.plain;
+    public static final int DEFAULT_INTRO_BARS = 0;
+    public static final boolean DEFAULT_HETERO = false;
+    public static final String DEFAULT_NAME = null;
+
     /**Default sensible (sciency) defaults for homogeneous data. */
-    public GenerationParameters() { this(0, Style.plain, 0, false, null); }
+    public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_SYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
 
     /**Parse optional arguments from command-line starting at the given index.
      * <pre>
-System.err.println("  infilename.csv (-play|outfilename.(csv|mid|wav)))");
-System.err.println("      [-seed n] [-het] [-intro bars]");
-System.err.println("      [-style (plain|gentle|house)]");
-System.err.println("      [-highWorse] [OFFSET [INSTRUMENT]]");
+infilename.csv (-play|outfilename.(csv|mid|wav)))
+  [-seed n] [-het] [-intro bars]
+  [-style (plain|gentle|house)]
+  [-highWorse] [OFFSET [INSTRUMENT]]
      * </pre>
+     * <p>
+     * FIXME: unit tests
      */
     public static GenerationParameters parseOptionalCommandArguments(final String args[], final int firstIndex)
 	    {
-	    // FIXME
-    	return(new GenerationParameters());
+    	final int seed = DEFAULT_SEED;
+    	Style style = DEFAULT_SYLE;
+    	final int introBars = DEFAULT_INTRO_BARS;
+    	final boolean hetero = DEFAULT_HETERO;
+    	final String name = DEFAULT_NAME;
+
+    	int i = firstIndex;
+
+    	// FIXME: parse remaining args
+
+    	if((i+1 < args.length) && "-style".equals(args[i]))
+	    	{
+            final String styleType = args[i+1];
+            i += 2;
+            style = (switch(styleType) {
+	            // Accept "none" as synonym for "plain" for backward compat with V4.x.
+	            case "none", "plain" -> Style.plain;
+	            case "gentle" -> Style.gentle;
+	            case "house" -> Style.house;
+	            default -> throw new IllegalArgumentException("unknown style '"+ styleType + "'");
+	            });
+	    	}
+
+    	// FIXME: parse remaining args
+
+    	return(new GenerationParameters(seed, style, introBars, hetero, name));
 	    }
 
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
