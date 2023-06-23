@@ -41,7 +41,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Default sensible (sciency) defaults for homogeneous data. */
     public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_SYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
 
-    /**Parse optional arguments from command-line starting at the given index.
+    /**Parse optional arguments from command-line starting at the given index (usually 2).
      * <pre>
 infilename.csv (-play|outfilename.(csv|mid|wav)))
   [-seed n] [-het] [-intro bars]
