@@ -523,7 +523,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				for(final MIDIPlayableBar.StartNoteVelocityDuration n : b.notes())
 					{
 					final int start = startOfBarClock + n.start();
-					final int end = start + Math.max(0, n.duration() - 1);
+					final int end = start + n.duration();
 					// Add a note-on event to the track.
 				    final ShortMessage noteOn = new ShortMessage();
 				    noteOn.setMessage(ShortMessage.NOTE_ON, channel, n.note().note(), n.note().velocity());
