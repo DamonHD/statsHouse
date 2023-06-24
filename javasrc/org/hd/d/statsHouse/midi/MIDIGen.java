@@ -361,13 +361,28 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    }
 
 
+    /**Validate MIDI Tune across various features.
+     * @param tune  for validation; never null
+     *
+     * Throws exception (mainly InvalidArgumentException)
+     * in case of badness.
+     */
+    public static void validateMIDITune(final MIDITune tune)
+		{
+    	if(null == tune) { throw new IllegalArgumentException(); }
+
+    	// TODO
+
+		}
+
     /**Generate a MIDI Sequence from a tune.
      * @throws InvalidMidiDataException
      */
     public static Sequence genFromTuneSequence(final MIDITune tune)
 		throws InvalidMidiDataException
 	    {
-    	if(null == tune) { throw new IllegalArgumentException(); }
+    	// Validate including that argument is non-null.
+    	validateMIDITune(tune);
 
 		final int barClocks = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
 		final Sequence sequence = new Sequence(Sequence.PPQ, DEFAULT_CLKSPQTR);
