@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -366,10 +367,46 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      *
      * Throws exception (mainly InvalidArgumentException)
      * in case of badness.
+     * <p>
+     * Ensures:
+     * </p>
+     * <ul>
+     * <li>The tune is not null.</li>
+     * <li>No data melody track is using the reserved (10) percussion channel.</li>
+     * <li>
+     * </ul>
+     * <p>
+     * TODO: other checks
+     * <p>
+     * TODO: unit tests
      */
     public static void validateMIDITune(final MIDITune tune)
 		{
     	if(null == tune) { throw new IllegalArgumentException(); }
+
+    	// Check that no data melody is using the percussion channel.
+    	for(final MIDIDataMelodyTrack t : tune.dataMelody())
+	    	{
+	    	if(MIDIConstant.GM1_PERCUSSION_CHANNEL-1 == t.setup().channel())
+	    		{ throw new IllegalArgumentException("data melody track using percussion channel"); }
+	    	}
+
+    	// Check that no channel (0-based) is being used from more than one track.
+    	final BitSet channelsInUse = new BitSet();
+    	for(final MIDIDataMelodyTrack t : tune.dataMelody())
+	    	{
+    		final int c = t.setup().channel();
+            if(channelsInUse.get(c))
+    			{ throw new IllegalArgumentException("channel in use more than once (melody): "+c); }
+            channelsInUse.set(c);
+	    	}
+    	for(final MIDISupportTrack t : tune.supportTracks())
+	    	{
+			final int c = t.setup().channel();
+	        if(channelsInUse.get(c))
+				{ throw new IllegalArgumentException("channel in use more than once (support): "+c); }
+	        channelsInUse.set(c);
+	    	}
 
     	// TODO
 
