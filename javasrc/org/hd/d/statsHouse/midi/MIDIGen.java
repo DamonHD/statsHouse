@@ -346,9 +346,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    }
 
 
-	/**Do initial splitting of data into whole proto melody bars for given section, including any alignment; never null.
+	/**Do initial splitting of data into whole proto melody bars for the given section type, including any alignment; never null.
      * The verse output is the one most reflective of the input data,
      * and should be the only one used for plain style for example.
+     * <p>
+     * Can only support a few section types, including verse.
      *
      * @param section  which song section this is for; never null
      * @param params  generation parameters; never null
@@ -357,6 +359,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     public static List<DataProtoBar> splitAndAlignData(final TuneSection section, final GenerationParameters params, final EOUDataCSV data)
 	    {
     	if(null == section) { throw new IllegalArgumentException(); }
+    	switch(section) {
+    	    case verse: break;
+	    	default: throw new IllegalArgumentException("unsupported section type");
+	    	}
     	if(null == params) { throw new IllegalArgumentException(); }
     	if(null == data) { throw new IllegalArgumentException(); }
 
