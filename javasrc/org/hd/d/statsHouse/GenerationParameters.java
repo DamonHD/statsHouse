@@ -74,7 +74,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
             final String styleType = args[i+1];
             i += 2;
             style = (switch(styleType) {
-	            // Accept "none" as synonym for "plain" for backward compat with V4.x.
+	            // Accept "none" as synonym for "plain" for backward compatibility with V4.x.
 	            case "none", "plain" -> Style.plain;
 	            case "gentle" -> Style.gentle;
 	            case "house" -> Style.house;
