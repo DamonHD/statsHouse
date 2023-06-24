@@ -510,11 +510,31 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte channel = ts.channel();
 			_setupMIDITrack(track, ts);
 
-// TODO
+			// Generate each bar.
+			// Note that javax implementation inserts events in correct order.
+			// TODO: prevent notes extending beyond bar end, usually.
+			int clock = 0;
+			for(final MIDIPlayableBar b : t.bars())
+				{
+				final int startOfBarClock = clock;
 
-
-
-
+				for(final MIDIPlayableBar.StartNoteVelocityDuration n : b.notes())
+					{
+					final int start = startOfBarClock + n.start();
+					final int end = start + Math.max(0, n.duration() - 1);
+					// Add a note-on event to the track.
+				    final ShortMessage noteOn = new ShortMessage();
+				    noteOn.setMessage(ShortMessage.NOTE_ON, channel, n.note().note(), n.note().velocity());
+				    final MidiEvent noteOnEvent = new MidiEvent(noteOn, start);
+				    track.add(noteOnEvent);
+				    // Add a note-off event to the track.
+				    final ShortMessage noteOff = new ShortMessage();
+				    noteOff.setMessage(ShortMessage.NOTE_OFF, channel, n.note().note(), 0);
+				    final MidiEvent noteOffEvent = new MidiEvent(noteOff, end);
+				    track.add(noteOffEvent);
+					}
+				clock += barClocks; // Ensure correct clocks per bar.
+				}
 	    	}
 
 		// Generate from data melody tracks.
