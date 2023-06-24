@@ -228,7 +228,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(params);
     	switch(params.style()) {
 			case plain, gentle: break;
-			default: throw new IllegalArgumentException("unsuppoted style");
+			default: throw new IllegalArgumentException("unsupported style");
 			}
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(verseProtoBars);
