@@ -413,7 +413,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <li>No two tracks are using the same channel (at least in their setup).</li>
      * </ul>
      * <p>
-     * TODO: other checks
+     * TODO: other checks, eg:
+     * <ul>
+     * <li>Bar lengths in clock ticks match across tracks.</li>
+     * </ul>
      * <p>
      * TODO: unit tests
      *
