@@ -373,7 +373,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <ul>
      * <li>The tune is not null.</li>
      * <li>No data melody track is using the reserved (10) percussion channel.</li>
-     * <li>
+     * <li>No two tracks are using the same channel (at least in their setup).</li>
      * </ul>
      * <p>
      * TODO: other checks
