@@ -24,5 +24,5 @@ Contributors may have different implementation language preferences: (g)awk is p
 
 [MIDICSV](https://www.fourmilab.ch/webtools/midicsv/) allows a useful intermediate lossless ASCII CSV representation.
 
-The version numbering starts at 5.0.0 to follow the awk/MIDICSV V4.x implementations at:
+This Java implementation version numbering starts at 5.0.0 so as to follow the awk/MIDICSV V4.x implementations at:
     [https://www.earth.org.uk/script/mkaudio/house/textToMIDIv4*](https://www.earth.org.uk/script/mkaudio/house/)
