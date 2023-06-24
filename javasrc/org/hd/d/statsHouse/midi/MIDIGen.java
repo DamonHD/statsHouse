@@ -363,8 +363,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 
     /**Validate MIDI Tune across various features.
-     * @param tune  for validation; never null
-     *
      * Throws exception (mainly InvalidArgumentException)
      * in case of badness.
      * <p>
@@ -379,6 +377,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * TODO: other checks
      * <p>
      * TODO: unit tests
+     *
+     * @param tune  for validation; never null
+     *
      */
     public static void validateMIDITune(final MIDITune tune)
 		{
