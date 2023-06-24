@@ -30,6 +30,7 @@ import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
+import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
 
@@ -150,6 +151,8 @@ public final class TestMIDIGen extends TestCase
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
+        assertTrue("do not expect any percussion track",
+    		result1.supportTracks().stream().noneMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
 	    }
 
     /**Test generation of minimal plain Sequence.
@@ -159,9 +162,32 @@ public final class TestMIDIGen extends TestCase
 	    {
     	final MIDITune mt1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
     	MIDIGen.validateMIDITune(mt1);
+        assertTrue("do not expect any percussion track",
+    		mt1.supportTracks().stream().noneMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
     	final Sequence result1 = MIDIGen.genFromTuneSequence(mt1);
 	    assertNotNull(result1);
         assertEquals(500_000, result1.getMicrosecondLength(), 10_000);
         assertTrue(result1.getTracks().length > 0);
 	    }
+
+
+    /**Test generation of minimal gentle MIDITune.
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     */
+    public static void testGenMelodyGentlelPlainMIDITune() throws IOException
+	    {
+    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.gentle, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
+    	MIDIGen.validateMIDITune(result1);
+    	assertFalse(result1.dataMelody().isEmpty());
+        assertEquals("expect exactly 1 melody track", result1.dataMelody().size(), 1);
+        assertNotNull(result1.dataMelody().get(0).bars());
+        assertEquals("expect exactly 1 melody bar", result1.dataMelody().get(0).bars().size(), 1);
+        assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
+        assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
+        assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
+//        assertTrue("expect a percussion track",
+//    		result1.supportTracks().stream().anyMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
+	    }
+
     }
