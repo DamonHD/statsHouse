@@ -510,7 +510,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte channel = ts.channel();
 			_setupMIDITrack(track, ts);
 
-			// Generate each bar.
+			// Generate each bar for this track.
 			// Note that javax implementation inserts events in correct order.
 			// TODO: prevent notes extending beyond bar end, usually.
 			int clock = 0;
