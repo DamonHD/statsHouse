@@ -170,7 +170,6 @@ public final class TestMIDIGen extends TestCase
         assertTrue(result1.getTracks().length > 0);
 	    }
 
-
     /**Test generation of minimal gentle MIDITune.
      * @throws IOException
      * @throws InvalidMidiDataException
@@ -192,5 +191,4 @@ public final class TestMIDIGen extends TestCase
 	    assertTrue("expect persussion note(s)",
     		result1.supportTracks().stream().anyMatch(st -> !st.bars().isEmpty()));
 	    }
-
     }
