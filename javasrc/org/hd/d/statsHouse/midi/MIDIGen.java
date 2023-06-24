@@ -413,6 +413,42 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		}
 
+    /**Set up a fresh Track.
+     *
+     * @param trackMelody  never null
+     * @param ts  track setup parameters; never null
+     * @throws InvalidMidiDataException
+     */
+	private static void _setupMIDITrack(final Track trackMelody, final MIDITrackSetup ts)
+		throws InvalidMidiDataException
+	    {
+		Objects.requireNonNull(trackMelody);
+		Objects.requireNonNull(ts);
+
+		final byte channel = ts.channel();
+		final byte instrument = ts.instrument();
+
+		// Program change (setting the instrument).
+		// Do not do this on the fixed percussion channel.
+		if(MIDIConstant.GM1_PERCUSSION_CHANNEL != channel)
+			{
+			final ShortMessage pc = new ShortMessage();
+			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+			trackMelody.add(new MidiEvent(pc, 0));
+			}
+		// Volume setting; do not assume a consistent synthesiser default.
+		final ShortMessage vol = new ShortMessage();
+		vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
+		trackMelody.add(new MidiEvent(vol, 0));
+		// Pan (if not default).
+		if(MIDITrackSetup.DEFAULT_PAN != ts.pan())
+			{
+			final ShortMessage pan = new ShortMessage();
+			pan.setMessage(ShortMessage.CONTROL_CHANGE, channel, 10, ts.pan());
+			trackMelody.add(new MidiEvent(pan, 0));
+			}
+	    }
+
     /**Generate a MIDI Sequence from a tune.
      * @throws InvalidMidiDataException
      */
@@ -430,6 +466,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		// Generate from support tracks, eg including percussion.
     	for(final MIDISupportTrack t : tune.supportTracks())
 	    	{
+			final Track track = sequence.createTrack();
+			final MIDITrackSetup ts = t.setup();
+			final byte channel = ts.channel();
+			_setupMIDITrack(track, ts);
+
 // TODO
 
 
@@ -443,27 +484,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final Track trackMelody = sequence.createTrack();
 			final MIDITrackSetup ts = mt.setup();
 			final byte channel = ts.channel();
-			final byte instrument = ts.instrument();
-
-			// Program change (setting the instrument).
-			// Do not do this on the percussion channel.
-			if(MIDIConstant.GM1_PERCUSSION_CHANNEL != channel)
-				{
-				final ShortMessage pc = new ShortMessage();
-				pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
-				trackMelody.add(new MidiEvent(pc, 0));
-				}
-			// Volume setting; do not assume a consistent synthesiser default.
-			final ShortMessage vol = new ShortMessage();
-			vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
-			trackMelody.add(new MidiEvent(vol, 0));
-			// Pan (if not default).
-			if(MIDITrackSetup.DEFAULT_PAN != ts.pan())
-				{
-				final ShortMessage pan = new ShortMessage();
-				pan.setMessage(ShortMessage.CONTROL_CHANGE, channel, 10, ts.pan());
-				trackMelody.add(new MidiEvent(pan, 0));
-				}
+			_setupMIDITrack(trackMelody, ts);
 
 			int clock = 0;
 			for(final MIDIPlayableMonophonicDataBar b : mt.bars())
