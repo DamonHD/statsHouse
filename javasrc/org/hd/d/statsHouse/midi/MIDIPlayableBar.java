@@ -52,7 +52,7 @@ public record MIDIPlayableBar(SortedSet<MIDIPlayableBar.StartNoteVelocityDuratio
 	    {
     	public StartNoteVelocityDuration
 	    	{
-        	if(start <= 0) { throw new IllegalArgumentException(); }
+        	if(start < 0) { throw new IllegalArgumentException(); }
         	Objects.requireNonNull(note);
         	if(duration <= 0) { throw new IllegalArgumentException(); }
 	    	}

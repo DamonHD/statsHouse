@@ -24,6 +24,7 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.TreeSet;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
@@ -249,19 +250,21 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     	if(null != percTrack)
     		{
-    		// The fixed gentle percussion bar.
+    		// Create the fixed gentle percussion bar: one hand clap at the start.
     		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
 				new MIDIPlayableBar.StartNoteVelocityDuration(0,
-					new NoteAndVelocity(N, (byte) (DEFAULT_MELODY_VELOCITY/2)),
+					new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
+										(byte) (DEFAULT_MELODY_VELOCITY/2)),
 					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
-    		final MIDIPlayableBar bar = new MIDIPlayableBar(X);
+    		final MIDIPlayableBar bar = new MIDIPlayableBar(
+				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
 
-
-        	// TODO: fill all bars of all sections with same percussion bar...
-
-
-
-
+        	// Fill all bars of all sections with same percussion bar...
+        	for(final TuneSectionMetadata ts : plan.sections())
+	        	{
+        		final int barCount = ts.bars();
+        		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
+	        	}
     		}
 
     	// Parameterisation of melody play.
