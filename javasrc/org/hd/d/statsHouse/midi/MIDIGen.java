@@ -234,7 +234,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(plan);
 
-    	// Create tracks with deliberately- mutable/extendable (by us) bars.
+    	// Create tracks with deliberately- mutable/extendable (within this method) bars.
     	final int streams = db.streams();
     	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
     	Arrays.setAll(tracks,
