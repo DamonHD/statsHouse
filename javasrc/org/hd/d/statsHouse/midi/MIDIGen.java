@@ -254,7 +254,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
 				new MIDIPlayableBar.StartNoteVelocityDuration(0,
 					new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
-										(byte) (DEFAULT_MELODY_VELOCITY/2)),
+										(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
 					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
     		final MIDIPlayableBar bar = new MIDIPlayableBar(
 				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));

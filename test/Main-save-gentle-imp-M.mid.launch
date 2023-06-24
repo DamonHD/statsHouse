@@ -17,6 +17,6 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.hd.d.statsHouse.Main"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="statsHouse"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="dataSample/imp-M.csv ../out/imp-M.mid  -style gentle"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="dataSample/imp-M.csv ../out/imp-M.mid  -intro 4 -style gentle"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="statsHouse"/>
 </launchConfiguration>
