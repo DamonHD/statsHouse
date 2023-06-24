@@ -56,33 +56,44 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     	final int seed = DEFAULT_SEED;
     	boolean hetero = DEFAULT_HETERO;
     	Style style = DEFAULT_SYLE;
-    	final int introBars = DEFAULT_INTRO_BARS;
+    	int introBars = DEFAULT_INTRO_BARS;
     	final String name = DEFAULT_NAME;
 
-    	int i = firstIndex;
-
-    	// FIXME: parse remaining args
-
-    	if((i < args.length) && "-het".equals(args[i]))
+    	for(int i = firstIndex; i < args.length; )
 	    	{
-    		++i;
-    		hetero = true;
-	    	}
 
-    	if((i+1 < args.length) && "-style".equals(args[i]))
-	    	{
-            final String styleType = args[i+1];
-            i += 2;
-            style = (switch(styleType) {
-	            // Accept "none" as synonym for "plain" for backward compatibility with V4.x.
-	            case "none", "plain" -> Style.plain;
-	            case "gentle" -> Style.gentle;
-	            case "house" -> Style.house;
-	            default -> throw new IllegalArgumentException("unknown style '"+ styleType + "'");
-	            });
-	    	}
+	    	// FIXME: parse remaining args
 
-    	// FIXME: parse remaining args
+	    	if("-het".equals(args[i]))
+		    	{
+				hetero = true;
+				++i;
+				continue;
+		    	}
+
+	    	if((i+1 < args.length) && "-intro".equals(args[i]))
+				{
+	    		introBars = Integer.parseInt(args[i+1]);
+	            i += 2;
+	            continue;
+				}
+
+	    	if((i+1 < args.length) && "-style".equals(args[i]))
+		    	{
+	            final String styleType = args[i+1];
+	            style = (switch(styleType) {
+		            // Accept "none" as synonym for "plain" for backward compatibility with V4.x.
+		            case "none", "plain" -> Style.plain;
+		            case "gentle" -> Style.gentle;
+		            case "house" -> Style.house;
+		            default -> throw new IllegalArgumentException("unknown style '"+ styleType + "'");
+		            });
+	            i += 2;
+	            continue;
+		    	}
+
+    		throw new IllegalArgumentException("unknown argument '"+ args[i] + "'");
+	    	}
 
     	return(new GenerationParameters(seed, style, introBars, hetero, name));
 	    }

@@ -282,7 +282,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 // Skip over this section silently,
             	// inserting empty bars for all streams.
             	for(int s = 1; s <= streams; ++s)
-	            	{ tracks[s - 1].bars().add(MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR); }
+	            	{
+            		tracks[s - 1].bars().addAll(
+        				Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR));
+            		}
             	continue;
 	            }
 
