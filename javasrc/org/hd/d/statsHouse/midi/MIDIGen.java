@@ -362,11 +362,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    }
 
 
-    /**Validate MIDI Tune across various features.
+    /**Validates the supplied MIDITune across various features.
      * Throws exception (mainly InvalidArgumentException)
      * in case of badness.
      * <p>
-     * Ensures:
+     * Checks that:
      * </p>
      * <ul>
      * <li>The tune is not null.</li>
