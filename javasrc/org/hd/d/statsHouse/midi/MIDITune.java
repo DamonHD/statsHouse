@@ -12,9 +12,9 @@ import org.hd.d.statsHouse.TuneSectionPlan;
  * The section plan may in part be folded into markers etc in a MIDI tempo track.
  *
  * @param dataMelody  the data melody parts of the final tune;
- *     non-null but may be empty
+ *     non-null, and no null entries, but may be empty
  * @param supportTracks  the non-data tracks of the final tune;
- *     non-null but may be empty
+ *     non-null, and no null entries but may be empty
  * @param plan  the section plan which should cover the whole melody at least if present;
  *     may be null
  */
@@ -23,7 +23,9 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTra
     public MIDITune
 	    {
 	    Objects.requireNonNull(dataMelody);
+	    if(dataMelody.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
 	    Objects.requireNonNull(supportTracks);
+	    if(supportTracks.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
 	    }
 
     /**Data melody and support track, no plan. */

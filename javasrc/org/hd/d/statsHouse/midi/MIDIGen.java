@@ -39,6 +39,7 @@ import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.NoteAndVelocity;
 import org.hd.d.statsHouse.ProductionLevel;
+import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.TuneSectionMetadata;
 import org.hd.d.statsHouse.TuneSectionPlan;
@@ -235,8 +236,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			i -> new MIDIDataMelodyTrack(
 					genMIDITrackSetup(i+1, params, db),
 				new ArrayList<>()));
-    	// Just one support (percussion) track for now.
-    	final MIDISupportTrack percTrack = new MIDISupportTrack(
+    	// At most one percussion track, not for "plain".
+    	final MIDISupportTrack percTrack = (Style.plain == params.style()) ? null :
+			new MIDISupportTrack(
     			new MIDITrackSetup(MIDIConstant.GM1_PERCUSSION_CHANNEL, (byte) 0), // FIXME?
     			new ArrayList<>());
 
