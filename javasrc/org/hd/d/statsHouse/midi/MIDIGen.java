@@ -200,6 +200,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * and will rest through all other sections.
      * <p>
      * All melody tracks in the result have the same number of bars.
+     * <p>
+     * The 'gentle' output is the same as plain but with two extras:
+     * <ul>
+     * <li>The data melody may be 'aligned' if appropriate,
+     *     eg to year boundaries for monthly-cadence data</li>
+     * <li>There is a simple percussion track added,
+     *     with a sound at the start of each bar,
+     *     eg to help emphasise alignment</li>
+     * </ul>
      *
      * @param params  generation parameters; never null
      * @param verseProtoBars  data split into proto bars; never null

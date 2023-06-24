@@ -186,8 +186,8 @@ public final class TestMIDIGen extends TestCase
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
-//        assertTrue("expect a percussion track",
-//    		result1.supportTracks().stream().anyMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
+        assertTrue("expect a percussion track",
+    		result1.supportTracks().stream().anyMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
 	    }
 
     }
