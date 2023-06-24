@@ -249,6 +249,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     	if(null != percTrack)
     		{
+    		// The fixed gentle percussion bar.
+    		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
+				new MIDIPlayableBar.StartNoteVelocityDuration(0,
+					new NoteAndVelocity(N, (byte) (DEFAULT_MELODY_VELOCITY/2)),
+					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
+    		final MIDIPlayableBar bar = new MIDIPlayableBar(X);
+
+
         	// TODO: fill all bars of all sections with same percussion bar...
 
 

@@ -189,6 +189,8 @@ public final class TestMIDIGen extends TestCase
         assertTrue("expect a support track", result1.supportTracks().size() > 0);
         assertTrue("expect a percussion support track",
     		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
+	    assertTrue("expect persussion note(s)",
+    		result1.supportTracks().stream().anyMatch(st -> !st.bars().isEmpty()));
 	    }
 
     }
