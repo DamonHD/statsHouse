@@ -409,7 +409,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        channelsInUse.set(c);
 	    	}
 
-    	// TODO
+    	// TODO: more checks
 
 		}
 
@@ -419,16 +419,25 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     public static Sequence genFromTuneSequence(final MIDITune tune)
 		throws InvalidMidiDataException
 	    {
-    	// Validate including that argument is non-null.
+    	// Validate, including that argument is non-null.
     	validateMIDITune(tune);
 
 		final int barClocks = DEFAULT_CLKSPQTR * DEFAULT_BEATS_PER_BAR;
 		final Sequence sequence = new Sequence(Sequence.PPQ, DEFAULT_CLKSPQTR);
 
 		// TODO: tempo track
-		// TODO: percussion (etc) tracks.
 
-		// Add data melody tracks.
+		// Generate from support tracks, eg including percussion.
+    	for(final MIDISupportTrack t : tune.supportTracks())
+	    	{
+// TODO
+
+
+
+
+	    	}
+
+		// Generate from data melody tracks.
 		for(final MIDIDataMelodyTrack mt : tune.dataMelody())
 			{
 			final Track trackMelody = sequence.createTrack();
