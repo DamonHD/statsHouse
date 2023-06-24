@@ -512,8 +512,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 			// Generate each bar for this track.
 			// Note that the javax implementation inserts events in correct order,
-			// which means that we can insert the on and off events easily,
-			// even if notes of differing lengths overlap or nest, etc.
+			// which means that this code can insert the on and off events easily,
+			// even when notes of differing lengths overlap or nest, etc.
 			// TODO: disallow notes extending beyond bar end, usually?
 			int clock = 0;
 			for(final MIDIPlayableBar b : t.bars())
