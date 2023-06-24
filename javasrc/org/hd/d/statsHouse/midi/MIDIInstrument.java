@@ -4,7 +4,6 @@ package org.hd.d.statsHouse.midi;
  * 0-based (non-negative) numbers ready to use in MIDI messages.
  * <p>
  * See:
- * <p>
  * <ul>
  * <li><a href="http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html">http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html</a>
  * though note that the numbers given in the table are 1-based.</li>
