@@ -151,7 +151,7 @@ public final class TestMIDIGen extends TestCase
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
-        assertTrue("do not expect any percussion track",
+        assertTrue("do not expect any support percussion track",
     		result1.supportTracks().stream().noneMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
 	    }
 
@@ -186,8 +186,9 @@ public final class TestMIDIGen extends TestCase
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
-        assertTrue("expect a percussion track",
-    		result1.supportTracks().stream().anyMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
+        assertTrue("expect a support track", result1.supportTracks().size() > 0);
+        assertTrue("expect a percussion support track",
+    		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
 	    }
 
     }

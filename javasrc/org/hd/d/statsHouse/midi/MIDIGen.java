@@ -225,6 +225,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final TuneSectionPlan plan)
         {
     	Objects.requireNonNull(params);
+    	switch(params.style()) {
+			case plain, gentle: break;
+			default: throw new IllegalArgumentException("unsuppoted style");
+			}
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(verseProtoBars);
     	Objects.requireNonNull(plan);
@@ -236,13 +240,23 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			i -> new MIDIDataMelodyTrack(
 					genMIDITrackSetup(i+1, params, db),
 				new ArrayList<>()));
+
     	// At most one percussion track, not for "plain".
     	final MIDISupportTrack percTrack = (Style.plain == params.style()) ? null :
 			new MIDISupportTrack(
-    			new MIDITrackSetup(MIDIConstant.GM1_PERCUSSION_CHANNEL, (byte) 0), // FIXME?
+    			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1), (byte) 0), // FIXME?
     			new ArrayList<>());
 
-    	// Parameterisation of play.
+    	if(null != percTrack)
+    		{
+        	// TODO: fill all bars of all sections with same percussion bar...
+
+
+
+
+    		}
+
+    	// Parameterisation of melody play.
 		final int octaves = 2;
 		final byte range = 12 * octaves;
 		final byte offset = DEFAULT_ROOT_NOTE;
@@ -314,7 +328,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    	tracks[i] = new MIDIDataMelodyTrack(tracks[i].setup(),
     			Collections.unmodifiableList(new ArrayList<>(tracks[i].bars())));
 	    	}
-    	return(new MIDITune(Arrays.asList(tracks), Collections.emptyList(), plan));
+    	final List<MIDISupportTrack> support = (null == percTrack) ? Collections.emptyList() :
+			Collections.singletonList(new MIDISupportTrack(percTrack.setup(),
+				Collections.unmodifiableList(percTrack.bars())));
+    	return(new MIDITune(Arrays.asList(tracks), support, plan));
 	    }
 
 
@@ -441,7 +458,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		// Program change (setting the instrument).
 		// Do not do this on the fixed percussion channel.
-		if(MIDIConstant.GM1_PERCUSSION_CHANNEL != channel)
+		if(MIDIConstant.GM1_PERCUSSION_CHANNEL-1 != channel)
 			{
 			final ShortMessage pc = new ShortMessage();
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
