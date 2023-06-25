@@ -269,16 +269,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        			sectionProtoBars.add(dbp);
 		        		}
 
-	        		// TODO: generate data for each section (for each stream).
-	        		// TODO: fill in missing data for each section (for each stream).
-
 	        		// Generate notes from data.
         			for(int s = 1; s <= streams; ++s)
 	                	{
-        				for(final DataProtoBar dbp : sectionProtoBars)
-	                		{
-	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
+                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
 
+                		// Collect all the bars for this stream (for this section).
+                		final List<MIDIPlayableMonophonicDataBar> mpmBars =
+            				new ArrayList<>(sectionBars);
+
+                		for(final DataProtoBar dbp : sectionProtoBars)
+	                		{
 	                		final List<List<String>> rows = dbp.dataRows().data();
 	                		final int dnpb = dbp.dataNotesPerBar();
 	                		final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
@@ -313,8 +314,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                		// Construct MIDI-playable bar for this stream.
 	                		final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
 	                				dnpb, dbp, s, Collections.unmodifiableList(notes));
-	                		tracks[s - 1].bars().add(mpmb);
+	                		mpmBars.add(mpmb);
 	                		}
+
+    	        		// TODO: fill in missing notes for each section (for each stream).
+                		// TODO: other transformation
+                		// TODO: construct padding track?
+
+                		tracks[s - 1].bars().addAll(mpmBars);
 	                	}
 
         			++verseCount;
