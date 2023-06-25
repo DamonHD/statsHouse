@@ -138,6 +138,29 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(data);
 
 
+    	// Initial partitioning/alignment/padding for main data melody verse.
+    	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
+
+    	// Return empty tune if no bars (though in principle cannot happen).
+    	if(verseProtoBars.isEmpty()) { return(new MIDITune()); }
+
+        // Construct tune plan/structure...
+    	final List<TuneSectionMetadata> plan = new ArrayList<>();
+
+
+// TODO
+
+
+
+
+        // Top and tail with intro/outro if specified, eg to be mix-friendly.
+    	final boolean hasIntroOutro = (params.introBars() > 0);
+        if(hasIntroOutro)
+	        {
+        	plan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
+        	plan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
+	        }
+
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	}
@@ -175,7 +198,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
     	// Return empty tune if no bars (though in principle cannot happen).
-    	if(verseProtoBars.isEmpty()) { return(new MIDITune(Collections.emptyList())); }
+    	if(verseProtoBars.isEmpty()) { return(new MIDITune()); }
 
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
     	plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse));

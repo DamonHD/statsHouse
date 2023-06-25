@@ -33,4 +33,7 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTra
 
     /**Bare data melody, no support nor plan. */
     public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, Collections.emptyList()); }
+
+    /**Empty tune. */
+    public MIDITune() { this(Collections.emptyList()); }
     }

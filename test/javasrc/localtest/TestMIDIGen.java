@@ -174,7 +174,7 @@ public final class TestMIDIGen extends TestCase
      * @throws IOException
      * @throws InvalidMidiDataException
      */
-    public static void testGenMelodyGentlelPlainMIDITune() throws IOException
+    public static void testGenMelodyMinimalGentleMIDITune() throws IOException
 	    {
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.gentle, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
     	MIDIGen.validateMIDITune(result1);
