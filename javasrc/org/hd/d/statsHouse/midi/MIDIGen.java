@@ -262,7 +262,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        			// Virtually extend the proto bars to a while section where necessary.
 	        			final DataProtoBar dbp = (dr < verseProtoBars.size()) ? verseProtoBars.get(dr) :
 	        				new DataProtoBar(1, new EOUDataCSV(Collections.singletonList(Collections.emptyList())));
-
 	                	for(int s = 1; s <= streams; ++s)
 	                		{
 	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
