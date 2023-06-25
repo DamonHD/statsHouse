@@ -12,6 +12,12 @@ package org.hd.d.statsHouse.midi;
  */
 public enum MIDIInstrument
 	{
+	ACOUSTIC_BASE(32),
+	ELECTRIC_BASE_FINGER(33),
+
+	SYNTH_BASE_1(38),
+	SYNTH_BASE_2(39),
+
 	/**Aka dream voice (GB).  Use as house main data stream. */
 	SYNTH_VOICE(55),
 

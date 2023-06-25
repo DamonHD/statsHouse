@@ -149,7 +149,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
 
 
-// TODO
+// TODO: section plan based on available data and song structure...
 
 plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // TEMP
 
@@ -181,7 +181,15 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
     					MIDITrackSetup.DEFAULT_PAN,
     					"percussion: house"),
     			new ArrayList<>());
-    	final MIDISupportTrack support[] = { percTrack };
+    	final MIDISupportTrack bassTrack = (Style.plain == params.style()) ? null :
+			new MIDISupportTrack(
+    			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel after percussion.
+    					MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary
+    					MIDITrackSetup.DEFAULT_VOLUME,
+    					(byte) (MIDITrackSetup.DEFAULT_PAN+1), // Slightly off to side.
+    					"bass: house"),
+    			new ArrayList<>());
+    	final MIDISupportTrack support[] = { percTrack, bassTrack };
 
     	// Run through all the sections,
     	// inserting the full data melody and support as needed.
@@ -193,11 +201,8 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 	            {
 	            case drop, breakdown:
 	            	// Skip this section type for percussion.
-		        	for(int s = 1; s <= streams; ++s)
-		            	{
-		        		percTrack.bars().addAll(
-		    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
-		        		}
+	        		percTrack.bars().addAll(
+	    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
 	            	break;
 	            // Default simple floor-to-the-floor.
                 default:
@@ -209,7 +214,24 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 	                }
 	            }
 
-            // TODO: bass
+            // Inject normal bass for verse and chorus only,
+    		// though possibly varying between types and instances.
+            switch(ts.sectionType())
+            	{
+            	case verse, chorus:
+            		{
+            		final MIDIPlayableBar bar = _makeBasicHouseBassBar();
+            		final int barCount = ts.bars();
+            		bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
+	                break;
+	                }
+            	default:
+            		// Skip this section type for bass.
+	        		bassTrack.bars().addAll(
+	    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
+	            	break;
+            	}
+
 
             // TODO: data melody!
 
@@ -243,8 +265,8 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 	}
 
 	/**Get the basic house percussion bar: four on the floor. */
-	private static MIDIPlayableBar _makeBasicHousePercussionBar() {
-
+	private static MIDIPlayableBar _makeBasicHousePercussionBar()
+		{
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
 		final byte DRUM = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0; // Alt: ELECTRIC_BASE_DRUM
@@ -305,6 +327,35 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 			3 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
 					new NoteAndVelocity(HAT, vHAT),
 					MIDIGen.DEFAULT_CLKSPQTR/2));
+
+		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
+		return(bar);
+		}
+
+	/**Get the basic house bass bar. */
+	private static MIDIPlayableBar _makeBasicHouseBassBar() {
+		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
+
+//		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
+		final byte vBASS = DEFAULT_MELODY_VELOCITY;
+
+		// Beat 1, 2, 3, 4.
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			0,
+				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				MIDIGen.DEFAULT_CLKSPQTR/4));
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			1 * MIDIGen.DEFAULT_CLKSPQTR,
+				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				MIDIGen.DEFAULT_CLKSPQTR/4));
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			2 * MIDIGen.DEFAULT_CLKSPQTR,
+				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				MIDIGen.DEFAULT_CLKSPQTR/4));
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			3 * MIDIGen.DEFAULT_CLKSPQTR,
+				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				MIDIGen.DEFAULT_CLKSPQTR/4));
 
 		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
 		return(bar);
