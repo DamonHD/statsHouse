@@ -1,7 +1,7 @@
 package org.hd.d.statsHouse.midi;
 
 /**GM 1 channel 10 percussion instruments, for percussion used in this code.
- * 0-based (non-negative) numbers ready to use in MIDI messages.
+ * 0-based (non-negative) numbers ready to use directly in MIDI messages.
  * <p>
  * See:
  * <ul>
@@ -12,7 +12,14 @@ package org.hd.d.statsHouse.midi;
  */
 public enum MIDIPercusssionInstrument
 	{
-	HAND_CLAP(39);
+	ACOUSTIC_BASE_DRUM(35),
+	ELECTRIC_BASE_DRUM(36),
+
+	HAND_CLAP(39),
+
+	CLOSED_HI_HAT(42),
+
+	OPEN_HI_HAT(46);
 
 	/**Raw zero-based instrument number. */
 	public final byte instrument0;
