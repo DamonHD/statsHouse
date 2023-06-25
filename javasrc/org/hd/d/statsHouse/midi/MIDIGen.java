@@ -247,9 +247,9 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
-		final byte DRUM = MIDIPercusssionInstrument.ELECTRIC_BASE_DRUM.instrument0;
+		final byte DRUM = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0; // Alt: ELECTRIC_BASE_DRUM
 		final byte vDRUM = DEFAULT_MELODY_VELOCITY;
-		final byte HAT = MIDIPercusssionInstrument.OPEN_HI_HAT.instrument0;
+		final byte HAT = MIDIPercusssionInstrument.CLOSED_HI_HAT.instrument0; // OPEN_HI_HAT: OPEN_HI_HAT
 		final byte vHAT = DEFAULT_MELODY_VELOCITY;
 		final byte CLAP = MIDIPercusssionInstrument.HAND_CLAP.instrument0;
 		final byte vCLAP = DEFAULT_MELODY_VELOCITY;
