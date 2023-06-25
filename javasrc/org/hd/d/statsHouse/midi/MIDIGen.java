@@ -162,6 +162,29 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        }
 
 
+    	// Create melody tracks with extendable (within this method) bars.
+    	final int streams = db.streams();
+    	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
+    	Arrays.setAll(tracks,
+			i -> new MIDIDataMelodyTrack(
+					genMIDITrackSetup(i+1, params, db,
+						((null==data)?null:("source: "+DataUtils.extractSourceName(data, i+1)))),
+				new ArrayList<>()));
+
+    	// Create support tracks with extendable (within this method) bars.
+    	final MIDISupportTrack percTrack = (Style.plain == params.style()) ? null :
+			new MIDISupportTrack(
+    			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
+    					(byte) 0,
+    					(byte) 127, // max
+    					MIDITrackSetup.DEFAULT_PAN,
+    					"percussion: house"),
+    			new ArrayList<>());
+    	final MIDISupportTrack support[] = { percTrack };
+
+
+
+
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	}
 
