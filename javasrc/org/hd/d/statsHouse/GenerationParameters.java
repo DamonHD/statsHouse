@@ -62,7 +62,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     	for(int i = firstIndex; i < args.length; )
 	    	{
 
-	    	// FIXME: parse remaining args
+	    	// FIXME: parse remaining flag and argument types
 
 	    	if((i+1 < args.length) && "-seed".equals(args[i]))
 				{
