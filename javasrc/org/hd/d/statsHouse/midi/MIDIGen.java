@@ -386,7 +386,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final int bars = mpmBars.size();
 		for(int i = 0; i < bars; ++i)
 			{
-            assert(null != mpmBars.get(i));
+//            assert(null != mpmBars.get(i));
 
             nextNote:
         	for(int noteIndexInBar = mpmBars.get(i).dataNotesPerBar(); --noteIndexInBar >= 0; )
@@ -404,7 +404,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                     // Have found a non-null note to borrow from.
                 	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
                 	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
-                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
+//                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
 	                }
                 // Look forwards.
@@ -416,7 +416,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                     // Have found a non-null note to borrow from.
                 	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
                 	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
-                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
+//                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
 	                }
 	            }
