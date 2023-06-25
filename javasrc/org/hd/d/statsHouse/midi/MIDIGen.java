@@ -271,7 +271,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		// TODO: fill in missing notes forwards and backwards...
 
 	        		// Generate notes from data.
-	        		for(final  DataProtoBar dbp : sectionProtoBars)
+	        		for(final DataProtoBar dbp : sectionProtoBars)
 	                	{
 	                	for(int s = 1; s <= streams; ++s)
 	                		{
