@@ -147,24 +147,29 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		};
 	    }
 
-    /**Create a house tune from the data; never null though may be empty.
+    /**Create a house tune from data; never null though may be empty.
      *
-     * @param params
-     * @param db
-     * @param verseProtoBars
-     * @param tuneSectionPlan
-     * @param data
-     * @return
+     * @param params  generation parameters; never null
+     * @param db  data bounds; never null
+     * @return data melody, one or more tracks; never null
      */
     private static MIDITune _genHouseMIDITune(
     		final GenerationParameters params,
     		final DataBounds db,
 			final EOUDataCSV data)
-    {
+    	{
+    	Objects.requireNonNull(params);
+    	switch(params.style()) {
+			case house: break;
+			default: throw new IllegalArgumentException("unsupported style");
+			}
+    	Objects.requireNonNull(db);
+    	Objects.requireNonNull(data);
+
 
 
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
-	}
+    	}
 
 	/**Generate MIDITrackSetup for a given stream (1-based); never null.
      * This knows about instrument choices, relative volumes, etc.
@@ -218,13 +223,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
 	    }
 
-    /**Create a plain (or gentle) melody from the data; never null.
-     * Will insert a copy of the data melody at each verse in the plan
-     * (the number of bars allowed must be large enough)
-     * and will rest through all other sections.
-     * <p>
-     * If no plan, a single verse section will be imputed.
-     * <p>
+    /**Create a plain (or gentle) melody from data; never null.
      * All melody tracks in the result have the same number of bars.
      * <p>
      * The 'gentle' output is the same as plain but with two extras:
@@ -238,7 +237,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
      *
      * @param params  generation parameters; never null
      * @param db  data bounds; never null
-     * @return  data melody, one or more tracks; never null
+     * @return data melody, one or more tracks; never null
      */
     private static MIDITune _genPlainGentleMIDITune(
     		final GenerationParameters params,
