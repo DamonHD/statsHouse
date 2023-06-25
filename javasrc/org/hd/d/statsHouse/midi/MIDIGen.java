@@ -164,7 +164,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         // TODO: chorus, breakdown, drop, etc.
         for(int i = 0; i < verseSectionCount; ++i)
 	        {
-//        	if(0 != i) { plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.chorus)); }
+        	if(0 != i) { plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus)); }
         	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.verse));
 	        }
 
@@ -268,7 +268,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        			sectionProtoBars.add(dbp);
 		        		}
 
-	        		// TODO: fill in missing notes forwards and backwards...
+	        		// TODO: generate data for each section (for each stream).
+	        		// TODO: fill in missing data for each section (for each stream).
 
 	        		// Generate notes from data.
 	        		for(final DataProtoBar dbp : sectionProtoBars)
