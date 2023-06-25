@@ -141,12 +141,9 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
-		case plain, gentle -> (_genPlainGentleMIDIMelodyTune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan), data));
+		case plain, gentle -> _genPlainGentleMIDITune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan), data);
 default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		};
-
-
-//throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 	    }
 
     /**Generate MIDITrackSetup for a given stream (1-based); never null.
@@ -201,10 +198,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
 	    }
 
-    /**Create a plain (or gentle) melody from the data; never null
+    /**Create a plain (or gentle) melody from the data; never null.
      * Will insert a copy of the data melody at each verse in the plan
      * (the number of bars allowed must be large enough)
      * and will rest through all other sections.
+     * <p>
+     * If no plan, a single verse section will be imputed.
      * <p>
      * All melody tracks in the result have the same number of bars.
      * <p>
@@ -224,7 +223,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      *     never null
      * @return   data melody, one or more tracks; never null
      */
-    private static MIDITune _genPlainGentleMIDIMelodyTune(
+    private static MIDITune _genPlainGentleMIDITune(
     		final GenerationParameters params,
     		final DataBounds db,
     		final List<DataProtoBar> verseProtoBars,
@@ -286,7 +285,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     	// Run through all the sections,
     	// inserting the full data melody in any 'verse' section(s).
-    	for(final TuneSectionMetadata ts : plan.sections())
+		// If there is no plan, work to a single-verse plan.
+		final TuneSectionPlan proxy = (null != plan) ? plan :
+			new TuneSectionPlan(Collections.singletonList(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)));
+    	for(final TuneSectionMetadata ts : proxy.sections())
 	    	{
             if(ts.sectionType() != TuneSection.verse)
 	            {
