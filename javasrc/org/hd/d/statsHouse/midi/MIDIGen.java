@@ -141,12 +141,32 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
-		case plain, gentle -> _genPlainGentleMIDITune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan), data);
+		case plain, gentle -> _genPlainGentleMIDITune(params, db, data);
+		case house -> _genHouseMIDITune(params, db, data);
 default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		};
 	    }
 
-    /**Generate MIDITrackSetup for a given stream (1-based); never null.
+    /**Create a house tune from the data; never null though may be empty.
+     *
+     * @param params
+     * @param db
+     * @param verseProtoBars
+     * @param tuneSectionPlan
+     * @param data
+     * @return
+     */
+    private static MIDITune _genHouseMIDITune(
+    		final GenerationParameters params,
+    		final DataBounds db,
+			final EOUDataCSV data)
+    {
+
+
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+	}
+
+	/**Generate MIDITrackSetup for a given stream (1-based); never null.
      * This knows about instrument choices, relative volumes, etc.
      * <p>
      * TODO: incorporate seed-based randomness when appropriate
@@ -217,17 +237,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * </ul>
      *
      * @param params  generation parameters; never null
-     * @param verseProtoBars  data split into proto bars; never null
-     * @param plan  section plan,
-     *     preferably containing exactly one verse section and possible intro/outro;
-     *     never null
-     * @return   data melody, one or more tracks; never null
+     * @param db  data bounds; never null
+     * @return  data melody, one or more tracks; never null
      */
     private static MIDITune _genPlainGentleMIDITune(
     		final GenerationParameters params,
     		final DataBounds db,
-    		final List<DataProtoBar> verseProtoBars,
-			final TuneSectionPlan plan,
 			final EOUDataCSV data)
         {
     	Objects.requireNonNull(params);
@@ -236,8 +251,24 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			default: throw new IllegalArgumentException("unsupported style");
 			}
     	Objects.requireNonNull(db);
-    	Objects.requireNonNull(verseProtoBars);
-    	Objects.requireNonNull(plan);
+    	Objects.requireNonNull(data);
+
+    	// Initial partitioning/alignment/padding for main data melody verse.
+    	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
+
+    	// Return empty tune if no bars (though in principle cannot happen).
+    	if(verseProtoBars.isEmpty()) { return(new MIDITune(Collections.emptyList())); }
+
+    	final List<TuneSectionMetadata> plan = new ArrayList<>();
+    	plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse));
+
+        // Top and tail with intro/outro if specified, eg to be mix-friendly.
+    	final boolean hasIntroOutro = (params.introBars() > 0);
+        if(hasIntroOutro)
+	        {
+        	plan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
+        	plan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
+	        }
 
     	// Create tracks with extendable (within this method) bars.
     	final int streams = db.streams();
@@ -270,7 +301,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
 
         	// Fill all bars of all sections with same percussion bar...
-        	for(final TuneSectionMetadata ts : plan.sections())
+        	for(final TuneSectionMetadata ts : plan)
 	        	{
         		final int barCount = ts.bars();
         		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
@@ -284,11 +315,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// Run through all the sections,
-    	// inserting the full data melody in each 'verse' section.
+    	// inserting the full data melody in the 'verse' section.
 		// If there is no plan, work to a single-verse plan.
-		final TuneSectionPlan proxy = (null != plan) ? plan :
-			new TuneSectionPlan(Collections.singletonList(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)));
-    	for(final TuneSectionMetadata ts : proxy.sections())
+    	for(final TuneSectionMetadata ts : plan)
 	    	{
             if(ts.sectionType() != TuneSection.verse)
 	            {
@@ -358,7 +387,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final List<MIDISupportTrack> support = (null == percTrack) ? Collections.emptyList() :
 			Collections.singletonList(new MIDISupportTrack(percTrack.setup(),
 				Collections.unmodifiableList(percTrack.bars())));
-    	return(new MIDITune(Arrays.asList(tracks), support, plan));
+    	return(new MIDITune(Arrays.asList(tracks), support, new TuneSectionPlan(plan)));
 	    }
 
 
