@@ -318,7 +318,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                		}
 
     	        		// Fill in missing notes for each section (for each stream).
-                		fillInMissingNotes(params, mpmBars);
+                		fillInMissingNotes(params, isNotSecondaryDataStream, mpmBars);
 
                 		// TODO: other transformations
 
@@ -361,12 +361,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <p>
      * TODO: unit tests
      *
+     * @param params  generation parameters; never null
+     * @param isNotSecondaryDataStream  true unless the primary data stream
      * @param mpmBars  mutable entire section of data bars possibly with some null notes;
      *     mpmBars should not be null not should any of the bars,
      *     and all bars should have the correct number of notes slots
      */
 	private static void fillInMissingNotes(
 			final GenerationParameters params,
+			final boolean isNotSecondaryDataStream,
 			final List<MIDIPlayableMonophonicDataBar> mpmBars)
 		{
 		Objects.requireNonNull(mpmBars);
