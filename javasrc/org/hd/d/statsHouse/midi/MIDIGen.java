@@ -186,7 +186,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				new ArrayList<>()));
 
     	// Create support tracks with extendable (within this method) bars.
-    	final MIDISupportTrack percTrack = (Style.plain == params.style()) ? null :
+    	final MIDISupportTrack percTrack =
 			new MIDISupportTrack(
     			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
     					(byte) 0,
@@ -194,7 +194,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     					MIDITrackSetup.DEFAULT_PAN,
     					"percussion: house"),
     			new ArrayList<>());
-    	final MIDISupportTrack bassTrack = (Style.plain == params.style()) ? null :
+    	final MIDISupportTrack bassTrack =
 			new MIDISupportTrack(
     			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel after percussion.
     					MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary
@@ -238,7 +238,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             	{
             	case verse, chorus:
             		{
-            		final MIDIPlayableBar bar = _makeBasicHouseBassBar();
+            		final MIDIPlayableBar bar = _makeBasicHouseBassBar(
+        				params, ts.sectionType());
             		final int barCount = ts.bars();
             		bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
 	                break;
@@ -425,34 +426,44 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(bar);
 		}
 
-	/**Get the basic house bass bar. */
-	private static MIDIPlayableBar _makeBasicHouseBassBar() {
+	/**Get the basic house bass bar.
+	 * Modulate slightly based on (eg) section type.
+	 * @return
+	 */
+	private static MIDIPlayableBar _makeBasicHouseBassBar(
+			final GenerationParameters params, final TuneSection section)
+		{
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
 //		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
 		final byte vBASS = DEFAULT_MELODY_VELOCITY;
 
+		// Much around with first note each chorus bar.
+		final byte defaultNote = (byte) (MIDIGen.DEFAULT_ROOT_NOTE-12);
+		final byte firstNote = (TuneSection.chorus != section) ? defaultNote :
+			(byte) (MIDIGen.DEFAULT_ROOT_NOTE);
+
 		// Beat 1, 2, 3, 4.
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			0,
-				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				new NoteAndVelocity(firstNote, vBASS),
 				MIDIGen.DEFAULT_CLKSPQTR/4));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			1 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				new NoteAndVelocity(defaultNote, vBASS),
 				MIDIGen.DEFAULT_CLKSPQTR/4));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			2 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				new NoteAndVelocity(defaultNote, vBASS),
 				MIDIGen.DEFAULT_CLKSPQTR/4));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			3 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity((byte) (MIDIGen.DEFAULT_ROOT_NOTE-12), vBASS),
+				new NoteAndVelocity(defaultNote, vBASS),
 				MIDIGen.DEFAULT_CLKSPQTR/4));
 
 		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
 		return(bar);
-	}
+		}
 
     /**Create a plain (or gentle) melody from data; never null.
      * All melody tracks in the result have the same number of bars.
@@ -622,7 +633,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * TODO: unit tests
      *
      * @param stream  stream number (first stream is 1);
-     *     out of bounds value results gives 'safe' result
+     *     out of bounds value indicates not a (primary) data stream
      * @return  track setup, with channel number 1 less than stream number
      */
     public static MIDITrackSetup genMIDITrackSetup(
@@ -641,7 +652,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final byte instrument = isMajorStream ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0;
 
 		// Use default volume for main data stream, with the rest quieter.
-		final byte volume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) (MIDITrackSetup.DEFAULT_VOLUME/2);
+    	// If the style is Danceable then turn down all the data melody volume!
+		final byte rawVolume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) ((2*MIDITrackSetup.DEFAULT_VOLUME)/3);
+		final byte volume = (ProductionLevel.Danceable == params.style().level) ?
+				((byte) ((2*rawVolume) / 3)) : rawVolume;
 
 		final byte pan;
 		if(params.hetro())
