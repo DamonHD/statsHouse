@@ -255,17 +255,24 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	{
 	        	case verse:
 	        		{
+	        		// Extract and pad to exactly section size for last one if needed.
+	        		final List<DataProtoBar> sectionProtoBars = new ArrayList<>(sectionBars);
 	        		final int startRow = verseCount * sectionBars;
 	        		final int endRow = startRow + sectionBars;
 	        		for(int dr = startRow; dr < endRow; ++dr)
-	                	{
-	        			// Virtually extend the proto bars to a whole section where necessary.
-	        			// Replicate the number of notes per bar of the final item.
-	        			// This enables uniform handling of eg counterpoint.
+		        		{
 	        			final DataProtoBar dpplast = verseProtoBars.get(verseProtoBars.size() - 1);
 	        			final DataProtoBar dbp = (dr < verseProtoBars.size()) ? verseProtoBars.get(dr) :
 	        				new DataProtoBar(dpplast.dataNotesPerBar(),
         						new EOUDataCSV(Collections.nCopies(dpplast.dataNotesPerBar(), Collections.emptyList())));
+	        			sectionProtoBars.add(dbp);
+		        		}
+
+	        		// TODO: fill in missing notes forwards and backwards...
+
+	        		// Generate notes from data.
+	        		for(final  DataProtoBar dbp : sectionProtoBars)
+	                	{
 	                	for(int s = 1; s <= streams; ++s)
 	                		{
 	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
