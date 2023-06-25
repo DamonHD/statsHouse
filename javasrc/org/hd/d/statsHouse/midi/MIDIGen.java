@@ -372,13 +372,55 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final boolean isNotSecondaryDataStream,
 			final List<MIDIPlayableMonophonicDataBar> mpmBars)
 		{
+		Objects.requireNonNull(params);
 		Objects.requireNonNull(mpmBars);
 
+		// For each note in each bar if null:
+		//   * copy (at low velocity) the latest note in this slot from a previous bar, else
+		//   * copy (at low velocity) the earliest note in this slot from a following bar.
+		// So echo this note position in the recent past, else foreshadow the near future.
 
+		// Velocity of filled-in ghost note.
+		final byte ghostVelocity = 1;
 
+		final int bars = mpmBars.size();
+		for(int i = 0; i < bars; ++i)
+			{
+            assert(null != mpmBars.get(i));
 
-		// TODO Auto-generated method stub
+            nextNote:
+        	for(int noteIndexInBar = mpmBars.get(i).dataNotesPerBar(); --noteIndexInBar >= 0; )
+	            {
+                if(null != mpmBars.get(i).notes().get(noteIndexInBar)) { continue; }
 
+                // Have found a missing note...
+
+                // Look backwards first.
+                for(int k = i; --k >= 0; )
+	                {
+                	final MIDIPlayableMonophonicDataBar otherBar = mpmBars.get(k);
+                	final NoteAndVelocity oldNote = otherBar.notes().get(noteIndexInBar);
+                	if(null == oldNote) { continue; }
+                    // Have found a non-null note to borrow from.
+                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
+                	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
+                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
+                	continue nextNote;
+	                }
+                // Look forwards.
+                for(int k = i; ++k < bars; )
+	                {
+                	final MIDIPlayableMonophonicDataBar otherBar = mpmBars.get(k);
+                	final NoteAndVelocity oldNote = otherBar.notes().get(noteIndexInBar);
+                	if(null == oldNote) { continue; }
+                    // Have found a non-null note to borrow from.
+                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
+                	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
+                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
+                	continue nextNote;
+	                }
+	            }
+			}
 		}
 
 	/**Get the fixed gentle percussion bar: one hand clap at the start. */
