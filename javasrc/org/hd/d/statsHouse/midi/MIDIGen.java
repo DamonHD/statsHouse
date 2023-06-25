@@ -25,6 +25,7 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -201,21 +202,14 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 	            // Default simple floor-to-the-floor.
                 default:
 	                {
-            		// Create the fixed gentle percussion bar: one hand clap at the start.
-            		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
-        				new MIDIPlayableBar.StartNoteVelocityDuration(0,
-        					new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
-        										(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
-        					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
-            		final MIDIPlayableBar bar = new MIDIPlayableBar(
-        				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
+            		final MIDIPlayableBar bar = _makeBasicHousePercussionBar();
             		final int barCount = ts.bars();
             		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
 	                break;
 	                }
 	            }
 
-            // TODO: base
+            // TODO: bass
 
             // TODO: data melody!
 
@@ -235,6 +229,86 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 			}
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
+
+	/**Get the fixed gentle percussion bar: one hand clap at the start. */
+	private static MIDIPlayableBar _makeBasicGentlePercussionBar() {
+		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
+			new MIDIPlayableBar.StartNoteVelocityDuration(0,
+				new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
+									(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
+				MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
+		final MIDIPlayableBar bar = new MIDIPlayableBar(
+			Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
+		return bar;
+	}
+
+	/**Get the basic house percussion bar: four on the floor. */
+	private static MIDIPlayableBar _makeBasicHousePercussionBar() {
+
+		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
+
+		final byte DRUM = MIDIPercusssionInstrument.ELECTRIC_BASE_DRUM.instrument0;
+		final byte vDRUM = DEFAULT_MELODY_VELOCITY;
+		final byte HAT = MIDIPercusssionInstrument.OPEN_HI_HAT.instrument0;
+		final byte vHAT = DEFAULT_MELODY_VELOCITY;
+		final byte CLAP = MIDIPercusssionInstrument.HAND_CLAP.instrument0;
+		final byte vCLAP = DEFAULT_MELODY_VELOCITY;
+
+		// Beat 1: drum
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			0,
+					new NoteAndVelocity(DRUM, vDRUM),
+					MIDIGen.DEFAULT_CLKSPQTR-1));
+		// Beat 1 off: hi-hat
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			0 + MIDIGen.DEFAULT_CLKSPQTR/2,
+					new NoteAndVelocity(HAT, vHAT),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+
+		// Beat 2: drum, clap
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			1 * MIDIGen.DEFAULT_CLKSPQTR,
+					new NoteAndVelocity(DRUM, vDRUM),
+					MIDIGen.DEFAULT_CLKSPQTR-1));
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			1 * MIDIGen.DEFAULT_CLKSPQTR,
+					new NoteAndVelocity(CLAP, vCLAP),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+		// Beat 2 off: hi-hat
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			1 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
+					new NoteAndVelocity(HAT, vHAT),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+
+		// Beat 3: drum
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			2 * MIDIGen.DEFAULT_CLKSPQTR,
+					new NoteAndVelocity(DRUM, vDRUM),
+					MIDIGen.DEFAULT_CLKSPQTR-1));
+		// Beat 3 off: hi-hat
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			2 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
+					new NoteAndVelocity(HAT, vHAT),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+
+		// Beat 4: drum, clap
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			3 * MIDIGen.DEFAULT_CLKSPQTR,
+					new NoteAndVelocity(DRUM, vDRUM),
+					MIDIGen.DEFAULT_CLKSPQTR-1));
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			3 * MIDIGen.DEFAULT_CLKSPQTR,
+					new NoteAndVelocity(CLAP, vCLAP),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+		// Beat 4 off: hi-hat
+		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+			3 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
+					new NoteAndVelocity(HAT, vHAT),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+
+		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
+		return(bar);
+	}
 
     /**Create a plain (or gentle) melody from data; never null.
      * All melody tracks in the result have the same number of bars.
@@ -303,14 +377,8 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 
     	if(null != percTrack)
     		{
-    		// Create the fixed gentle percussion bar: one hand clap at the start.
-    		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
-				new MIDIPlayableBar.StartNoteVelocityDuration(0,
-					new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
-										(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
-					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
-    		final MIDIPlayableBar bar = new MIDIPlayableBar(
-				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
+    		// Get the fixed gentle percussion bar: one hand clap at the start.
+    		final MIDIPlayableBar bar = _makeBasicGentlePercussionBar();
 
         	// Fill all bars of all sections with same percussion bar...
         	for(final TuneSectionMetadata ts : plan)
