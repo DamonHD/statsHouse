@@ -380,8 +380,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		//   * copy (at low velocity) the earliest note in this slot from a following bar.
 		// So echo this note position in the recent past, else foreshadow the near future.
 
-		// Velocity of filled-in ghost note.
-		final byte ghostVelocity = 1;
+		// Maximum velocity of filled-in ghost note.
+		final byte ghostVelocity = DEFAULT_MELODY_VELOCITY / 2;
 
 		final int bars = mpmBars.size();
 		for(int i = 0; i < bars; ++i)
@@ -402,7 +402,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 	final NoteAndVelocity oldNote = otherBar.notes().get(noteIndexInBar);
                 	if(null == oldNote) { continue; }
                     // Have found a non-null note to borrow from.
-                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
+                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), (byte) Math.min(ghostVelocity, oldNote.velocity()));
                 	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
 //                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
@@ -414,7 +414,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 	final NoteAndVelocity oldNote = otherBar.notes().get(noteIndexInBar);
                 	if(null == oldNote) { continue; }
                     // Have found a non-null note to borrow from.
-                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), ghostVelocity);
+                	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), (byte) Math.min(ghostVelocity, oldNote.velocity()));
                 	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
 //                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
