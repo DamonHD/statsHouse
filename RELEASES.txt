@@ -1,0 +1,26 @@
+ALL SIGNIFICANT RELEASES AND BRANCHES
+
+
+This document is used to record all significant releases and branches
+in the code tree.
+
+Please follow agreed procedures before creating (or deleting) branches
+or release/freeze points.
+
+
+
+
+SIGNIFICANT CHANGES SINCE LAST RELEASE
+======================================
+
+
+20230625:
+    freezepoint name: V5.0.0 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    Previous significant freezepoint: V4.x
+    DHD20230205: added compile-time Twitter kill switch TwitterUtils.ENABLE_TWEETING.
+    DHD20230410: activated kill switch given that posting apparently broke 2023-04-07 ~14:00Z.
+    Notes:
+	  * Can generate plain, gentle, house styles.
+	  * Some missing and some new functionality compared to V4.x chain.
+	  * The house style is now capable of much more structured processing that V4.x.
