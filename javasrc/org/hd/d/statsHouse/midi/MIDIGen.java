@@ -284,7 +284,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// Run through all the sections,
-    	// inserting the full data melody in any 'verse' section(s).
+    	// inserting the full data melody in each 'verse' section.
 		// If there is no plan, work to a single-verse plan.
 		final TuneSectionPlan proxy = (null != plan) ? plan :
 			new TuneSectionPlan(Collections.singletonList(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)));
