@@ -327,7 +327,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             				final byte note = (byte) Math.max(1, Math.min(127,
             						offset + (d.value() * multScaling)));
                             byte velocity = (params.hetro() || isMainDataStream) ?
-                        		DEFAULT_MELODY_VELOCITY : ((3*DEFAULT_MELODY_VELOCITY)/2);
+                        		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
                             if(d.coverage() < 1)
                                 {
                             	// Reduce volume for low coverage / low certainty.
