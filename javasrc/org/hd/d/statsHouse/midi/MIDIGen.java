@@ -259,12 +259,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		final int endRow = startRow + sectionBars;
 	        		for(int dr = startRow; dr < endRow; ++dr)
 	                	{
-	        			// Virtually extend the proto bars to a while section where necessary.
+	        			// Virtually extend the proto bars to a whole section where necessary.
 	        			// Replicate the number of notes per bar of the final item.
-	        			// FIXME: this won't work for all data.
+	        			// This enables uniform handling of eg counterpoint.
 	        			final DataProtoBar dpplast = verseProtoBars.get(verseProtoBars.size() - 1);
 	        			final DataProtoBar dbp = (dr < verseProtoBars.size()) ? verseProtoBars.get(dr) :
-	        				new DataProtoBar(dpplast.dataNotesPerBar(), new EOUDataCSV(Collections.nCopies(dpplast.dataNotesPerBar(), Collections.emptyList())));
+	        				new DataProtoBar(dpplast.dataNotesPerBar(),
+        						new EOUDataCSV(Collections.nCopies(dpplast.dataNotesPerBar(), Collections.emptyList())));
 	                	for(int s = 1; s <= streams; ++s)
 	                		{
 	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
