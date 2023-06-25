@@ -355,8 +355,10 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
             			    { notes.add(null); }
             			else
             				{
+            				// Simple linear scaling of data value to MIDI note.
             				final byte note = (byte) Math.max(1, Math.min(127,
             						offset + (d.value() * multScaling)));
+            				// Velocity/volume lowered for secondary streams and low coverage.
                             byte velocity = (params.hetro() || isMainDataStream) ?
                         		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
                             if(d.coverage() < 1)
