@@ -247,7 +247,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// At most one percussion track, not for "plain".
     	final MIDISupportTrack percTrack = (Style.plain == params.style()) ? null :
 			new MIDISupportTrack(
-    			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1), (byte) 0), // FIXME?
+    			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
+    					(byte) 0,
+    					MIDITrackSetup.DEFAULT_VOLUME,
+    					MIDITrackSetup.DEFAULT_PAN,
+    					"percussion: gentle"),
     			new ArrayList<>());
 
     	if(null != percTrack)
@@ -485,7 +489,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		if((null != ts.name()) && !ts.name().isBlank())
 			{
 			final byte[] text = ts.name().getBytes(StandardCharsets.US_ASCII);
-            final MetaMessage mn = new MetaMessage(channel, text, text.length);
+            final MetaMessage mn = new MetaMessage(MIDIConstant.METAMESSAGE_TITLE, text, text.length);
             trackMelody.add(new MidiEvent(mn, 0));
 			}
 
