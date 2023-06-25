@@ -317,8 +317,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                		mpmBars.add(mpmb);
 	                		}
 
-    	        		// TODO: fill in missing notes for each section (for each stream).
-                		// TODO: other transformation
+    	        		// Fill in missing notes for each section (for each stream).
+                		fillInMissingNotes(params, mpmBars);
+
+                		// TODO: other transformations
+
                 		// TODO: construct padding track?
 
                 		tracks[s - 1].bars().addAll(mpmBars);
@@ -352,6 +355,28 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
+
+    /**Fill in missing notes for each section (for each stream).
+     * (Possibly generalisable to with general transformation/plugin.)
+     * <p>
+     * TODO: unit tests
+     *
+     * @param mpmBars  mutable entire section of data bars possibly with some null notes;
+     *     mpmBars should not be null not should any of the bars,
+     *     and all bars should have the correct number of notes slots
+     */
+	private static void fillInMissingNotes(
+			final GenerationParameters params,
+			final List<MIDIPlayableMonophonicDataBar> mpmBars)
+		{
+		Objects.requireNonNull(mpmBars);
+
+
+
+
+		// TODO Auto-generated method stub
+
+		}
 
 	/**Get the fixed gentle percussion bar: one hand clap at the start. */
 	private static MIDIPlayableBar _makeBasicGentlePercussionBar() {
