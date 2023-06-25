@@ -375,7 +375,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		Objects.requireNonNull(params);
 		Objects.requireNonNull(mpmBars);
 
-		// For data with a cycle per par, eg typical monthlt-cadence...
+		// For data with a cycle per bar, eg typically monthly-cadence, one year per bar...
 		//
 		// For each note in each bar if null:
 		//   * copy (at low velocity) the latest note in this slot from a previous bar, else
