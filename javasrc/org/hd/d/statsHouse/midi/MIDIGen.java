@@ -726,11 +726,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <li>The tune is not null.</li>
      * <li>No data melody track is using the reserved (10) percussion channel.</li>
      * <li>No two tracks are using the same channel (at least in their setup).</li>
+     * <li>All tracks have the same length in bars (except possible a stub tempo track).</li>
      * </ul>
      * <p>
      * TODO: other checks, eg:
      * <ul>
-     * <li>All tracks have the same length (except possible a stub tempo track).</li>
      * <li>Bar lengths in clock ticks match across tracks.</li>
      * </ul>
      * <p>
@@ -765,6 +765,23 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        if(channelsInUse.get(c))
 				{ throw new IllegalArgumentException("channel in use more than once (support): "+c); }
 	        channelsInUse.set(c);
+	    	}
+
+    	// Check tracks for same number of vars.
+    	// Putative length of all tracks.
+    	final int lengthBars =
+			(!tune.dataMelody().isEmpty()) ? tune.dataMelody().get(0).bars().size() :
+				((!tune.supportTracks().isEmpty()) ? tune.supportTracks().get(0).bars().size() :
+					0);
+    	for(final MIDIDataMelodyTrack t : tune.dataMelody())
+	    	{
+	    	if(t.bars().size() != lengthBars)
+				{ throw new IllegalArgumentException("tracks not all equal length in bars (melody)"); }
+	    	}
+    	for(final MIDISupportTrack t : tune.supportTracks())
+    		{
+	    	if(t.bars().size() != lengthBars)
+				{ throw new IllegalArgumentException("tracks not all equal length in bars (support)"); }
 	    	}
 
     	// TODO: more checks
