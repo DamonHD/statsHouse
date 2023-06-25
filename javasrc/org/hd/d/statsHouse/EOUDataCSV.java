@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-/**Wraps input CSV data to make it clear what it is; data cannot be null.  */
+/**Wraps input CSV data to make it clear what it is; data cannot be null.
+ * Note that no rows not fields can be null, but may be empty.
+ */
 public record EOUDataCSV(List<List<String>> data)
     {
 	public EOUDataCSV { Objects.requireNonNull(data); }

@@ -161,7 +161,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @return  track setup, with channel number 1 less than stream number
      */
     public static MIDITrackSetup genMIDITrackSetup(final int stream,
-		final GenerationParameters params, final DataBounds db)
+    		final GenerationParameters params,
+    		final DataBounds db)
 	    {
     	Objects.requireNonNull(params);
     	Objects.requireNonNull(db);

@@ -87,7 +87,7 @@ public final class DataUtils
      * The first stream is 1.
      *
      * @param data  data set; never null
-     * @return return stream number with most data points; non-negative
+     * @return  stream number with most data points; non-negative
      */
     public static int maxNVal(final EOUDataCSV data)
 	    {
@@ -119,6 +119,35 @@ public final class DataUtils
 	    return(busiestStream);
 	    }
 
+    /**Extract source name for given 1-based stream.
+     * If there is no data or no such stream, then this will return null.
+     * <p>
+     * The first stream is 1.
+     * <p>
+     * This finds the first non-empty source name for the stream, if any.
+     *
+     * @param data  data set; never null
+     * @return  source name if any, else null
+     */
+    public String extractSourceName(final EOUDataCSV data, final int stream)
+	    {
+	    if(null == data) { throw new IllegalArgumentException(); }
+	    if(stream < 1) { throw new IllegalArgumentException(); }
+
+	    // Position of field containing specified stream's source name.
+// 2008-02,,,,meter,1,4,SunnyBeam,0.142857,3.54
+	    final int fieldNumber = (stream * 3) - 2;
+
+	    for(final List<String> row : data.data())
+		    {
+            final String field = row.get(fieldNumber);
+            if(!field.isEmpty()) { return(field); }
+		    }
+
+	    // Not found.
+	    return(null);
+	    }
+
     /**Extracts the cadence of the data set using a quick method; never null.
      * This only looks at the first row of the data.
      * <p>
@@ -145,7 +174,6 @@ public final class DataUtils
 	    if(10 == firstDate.length()) { return(DataCadence.D); }
 	    throw new IllegalArgumentException();
 	    }
-
 
     /**Chop data into proto bars with no alignment nor padding; never null, may be empty.
      * The final bar is likely to be incomplete (padded with nulls).

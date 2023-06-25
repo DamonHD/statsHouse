@@ -3,7 +3,7 @@ package org.hd.d.statsHouse.midi;
 import org.hd.d.statsHouse.DataUtils;
 import org.hd.d.statsHouse.EOUDataCSV;
 
-/**Discovered bounds on input data.
+/**Discovered bounds for input data.
  *
  * @param streams  number of usable streams in the data;
  *     non-negative and no larger than MAX_DATA_STREAMS
