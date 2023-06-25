@@ -519,7 +519,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 	    }
 
-    /**Generate a MIDI Sequence from a tune.
+    /**Generate a MIDI Sequence from a MIDITune; never null.
+     * @param tune  abstract tune with zero or more tracks and an optional plan; never null
+     * @return internal MIDI representation of the tune
      * @throws InvalidMidiDataException
      */
     public static Sequence genFromTuneSequence(final MIDITune tune)
