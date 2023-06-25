@@ -119,7 +119,7 @@ public final class DataUtils
 	    return(busiestStream);
 	    }
 
-    /**Extract source name for given 1-based stream.
+    /**Extract source name for given 1-based stream; non-empty or null.
      * If there is no data or no such stream, then this will return null.
      * <p>
      * The first stream is 1.
@@ -127,7 +127,7 @@ public final class DataUtils
      * This finds the first non-empty source name for the stream, if any.
      *
      * @param data  data set; never null
-     * @return  source name if any, else null
+     * @return  non-"" source name if any, else null
      */
     public static String extractSourceName(final EOUDataCSV data, final int stream)
 	    {
@@ -140,6 +140,7 @@ public final class DataUtils
 
 	    for(final List<String> row : data.data())
 		    {
+	    	if(fieldNumber >= row.size()) { continue; }
             final String field = row.get(fieldNumber);
             if(!field.isEmpty()) { return(field); }
 		    }
