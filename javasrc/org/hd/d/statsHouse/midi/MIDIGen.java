@@ -147,6 +147,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         // Construct tune plan/structure...
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
 
+    	// Parameterisation of melody play without scales.
+		final int octaves = 2;
+		final byte range = 12 * octaves;
+		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+
     	// First establish how many sections worth of 'verse' data there is.
     	// Always at least one.
     	// Prepared to stretch a bit (25%) else truncate as needed.
@@ -250,7 +255,55 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	{
 	        	case verse:
 	        		{
+	        		final int startRow = verseCount * sectionBars;
+	        		final int endRow = startRow + sectionBars;
+	        		for(int dr = startRow; dr < endRow; ++dr)
+	                	{
+	        			// Virtually extend the proto bars to a while section where necessary.
+	        			final DataProtoBar dbp = (dr < verseProtoBars.size()) ? verseProtoBars.get(dr) :
+	        				new DataProtoBar(1, new EOUDataCSV(Collections.singletonList(Collections.emptyList())));
 
+	                	for(int s = 1; s <= streams; ++s)
+	                		{
+	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
+
+	                		final List<List<String>> rows = dbp.dataRows().data();
+	                		final int dnpb = dbp.dataNotesPerBar();
+	                		final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
+	                		for(final List<String> row : rows)
+	                			{
+	                			final Datum d = Datum.extractDatum(s, row);
+	                			// Rest/silence for missing stream or value,
+	                			// or where coverage is not strictly positive.
+	                			if(// d.isEmpty() ||
+	            					(null == d.value()) ||
+	            					(null == d.coverage()) || (d.coverage() <= 0))
+	                			    { notes.add(null); }
+	                			else
+	                				{
+	                				// Simple linear scaling of data value to MIDI note.
+	                				final byte note = (byte) Math.max(1, Math.min(127,
+	                						DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
+	                				// Velocity/volume lowered for secondary streams and low coverage.
+	                                byte velocity = isNotSecondaryDataStream ?
+	                            		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
+	                                if(d.coverage() < 1)
+	                                    {
+	                                	// Reduce volume for low coverage / low certainty.
+	                                	velocity = (byte) Math.max(1, Math.min(127,
+	                                		velocity * d.coverage()));
+	                                    }
+	    							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
+	    							notes.add(nv);
+	                				}
+	                			}
+
+	                		// Construct MIDI-playable bar for this stream.
+	                		final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
+	                				dnpb, dbp, s, Collections.unmodifiableList(notes));
+	                		tracks[s - 1].bars().add(mpmb);
+	                		}
+	                	}
 
         			++verseCount;
 	                break;
@@ -471,7 +524,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Parameterisation of melody play.
 		final int octaves = 2;
 		final byte range = 12 * octaves;
-		final byte offset = DEFAULT_ROOT_NOTE;
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// Run through all the sections,
@@ -498,9 +550,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             	{
             	for(int s = 1; s <= streams; ++s)
             		{
-            		final boolean isMainDataStream = db.isMainDataStream(s);
+            		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
 
-            		final List<List<String>> rows = dbp.dataRows().data();
+            		final List<List<String>> rows = dbp.dataRows().data(); // Notes in bar.
             		final int dnpb = dbp.dataNotesPerBar();
             		final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
             		for(final List<String> row : rows)
@@ -516,9 +568,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             				{
             				// Simple linear scaling of data value to MIDI note.
             				final byte note = (byte) Math.max(1, Math.min(127,
-            						offset + (d.value() * multScaling)));
+            						DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
             				// Velocity/volume lowered for secondary streams and low coverage.
-                            byte velocity = (params.hetro() || isMainDataStream) ?
+                            byte velocity = isNotSecondaryDataStream ?
                         		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
                             if(d.coverage() < 1)
                                 {
