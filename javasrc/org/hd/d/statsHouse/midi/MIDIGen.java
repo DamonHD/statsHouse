@@ -138,7 +138,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(data);
 
-
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
@@ -147,6 +146,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
         // Construct tune plan/structure...
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
+
+    	// First establish how many sections worth of 'verse' data there is.
+    	// Always at least one.
+    	// Prepared to stretch a bit (25%) else truncate as needed.
+    	final int sectionBars = params.sectionBars();
+        final int availableVerseSections =
+        	Math.max(1, (verseProtoBars.size() + (sectionBars/4)) / sectionBars);
+        final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);
+
+
+
 
 
 // TODO: section plan based on available data and song structure...

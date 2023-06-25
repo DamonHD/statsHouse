@@ -101,6 +101,6 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
 
-    /**Get section length in bars; use intro length if non-zero. */
+    /**Get section length in bars - uses intro length if non-zero; strictly positive */
     public int sectionBars() { return((0 != introBars) ? introBars : MIDIGen.DEFAULT_SECTION_BARS); }
 	}
