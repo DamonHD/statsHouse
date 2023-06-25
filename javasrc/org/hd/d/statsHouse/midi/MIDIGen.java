@@ -18,6 +18,7 @@ package org.hd.d.statsHouse.midi;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
@@ -478,6 +480,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		final byte channel = ts.channel();
 		final byte instrument = ts.instrument();
+
+		// Set the track name, if available.
+		if((null != ts.name()) && !ts.name().isBlank())
+			{
+			final byte[] text = ts.name().getBytes(StandardCharsets.US_ASCII);
+            final MetaMessage mn = new MetaMessage(channel, text, text.length);
+            trackMelody.add(new MidiEvent(mn, 0));
+			}
 
 		// Program change (setting the instrument).
 		// Do not do this on the fixed percussion channel.
