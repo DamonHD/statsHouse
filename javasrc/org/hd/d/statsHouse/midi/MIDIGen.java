@@ -273,9 +273,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		// TODO: fill in missing data for each section (for each stream).
 
 	        		// Generate notes from data.
-	        		for(final DataProtoBar dbp : sectionProtoBars)
+        			for(int s = 1; s <= streams; ++s)
 	                	{
-	                	for(int s = 1; s <= streams; ++s)
+        				for(final DataProtoBar dbp : sectionProtoBars)
 	                		{
 	                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
 
