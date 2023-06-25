@@ -129,7 +129,7 @@ public final class DataUtils
      * @param data  data set; never null
      * @return  source name if any, else null
      */
-    public String extractSourceName(final EOUDataCSV data, final int stream)
+    public static String extractSourceName(final EOUDataCSV data, final int stream)
 	    {
 	    if(null == data) { throw new IllegalArgumentException(); }
 	    if(stream < 1) { throw new IllegalArgumentException(); }

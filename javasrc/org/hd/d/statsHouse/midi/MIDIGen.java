@@ -141,7 +141,7 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
-		case plain, gentle -> (_genPlainGentleMIDIMelodyTune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan)));
+		case plain, gentle -> (_genPlainGentleMIDIMelodyTune(params, db, verseProtoBars, new TuneSectionPlan(protoPlan), data));
 default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		};
 
@@ -160,9 +160,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      *     out of bounds value results gives 'safe' result
      * @return  track setup, with channel number 1 less than stream number
      */
-    public static MIDITrackSetup genMIDITrackSetup(final int stream,
+    public static MIDITrackSetup genMIDITrackSetup(
+    		final int stream,
     		final GenerationParameters params,
-    		final DataBounds db)
+    		final DataBounds db,
+    		final String name)
 	    {
     	Objects.requireNonNull(params);
     	Objects.requireNonNull(db);
@@ -196,7 +198,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				}
 			}
 
-    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan));
+    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
 	    }
 
     /**Create a plain (or gentle) melody from the data; never null
@@ -226,7 +228,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		final GenerationParameters params,
     		final DataBounds db,
     		final List<DataProtoBar> verseProtoBars,
-			final TuneSectionPlan plan)
+			final TuneSectionPlan plan,
+			final EOUDataCSV data)
         {
     	Objects.requireNonNull(params);
     	switch(params.style()) {
@@ -242,7 +245,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
     	Arrays.setAll(tracks,
 			i -> new MIDIDataMelodyTrack(
-					genMIDITrackSetup(i+1, params, db),
+					genMIDITrackSetup(i+1, params, db,
+							((null==data)?null:DataUtils.extractSourceName(data, i+1))),
 				new ArrayList<>()));
 
     	// At most one percussion track, not for "plain".
