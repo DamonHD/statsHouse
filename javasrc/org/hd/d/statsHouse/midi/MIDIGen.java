@@ -110,35 +110,6 @@ public final class MIDIGen
     	// Compute data bounds, including capping number of data streams.
 		final DataBounds db = new DataBounds(data);
 
-    	// Initial partitioning/alignment/padding for main data melody verse.
-    	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
-
-    	// Return empty tune if no bars (though in principle cannot happen).
-    	if(verseProtoBars.isEmpty()) { return(new MIDITune(Collections.emptyList())); }
-
-    	final List<TuneSectionMetadata> protoPlan = new ArrayList<>();
-
-    	// For plain/gentle style the data is used as-is as a single verse section.
-        switch(params.style())
-	        {
-	        case plain, gentle:
-	        	{
-	        	protoPlan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse));
-	            break;
-	        	}
-
-	        default:
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
-	        }
-
-        // Top and tail with intro/outro if specified, eg to be mix-friendly.
-    	final boolean hasIntroOutro = (params.introBars() > 0);
-        if(hasIntroOutro)
-	        {
-	        protoPlan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
-	        protoPlan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
-	        }
-
     	// For plain/gentle style the data is used as-is as a single verse section.
 		return switch (params.style()) {
 		case plain, gentle -> _genPlainGentleMIDITune(params, db, data);
