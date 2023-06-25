@@ -150,7 +150,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 // TODO
 
-
+plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // TEMP
 
 
         // Top and tail with intro/outro if specified, eg to be mix-friendly.
@@ -182,10 +182,58 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     			new ArrayList<>());
     	final MIDISupportTrack support[] = { percTrack };
 
+    	// Run through all the sections,
+    	// inserting the full data melody and support as needed.
+    	for(final TuneSectionMetadata ts : plan)
+	    	{
+    		// Inject percussion for most section types,
+    		// though possibly varying between types and instances.
+            switch(ts.sectionType())
+	            {
+	            case drop, breakdown:
+	            	// Skip this section type for percussion.
+		        	for(int s = 1; s <= streams; ++s)
+		            	{
+		        		percTrack.bars().addAll(
+		    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
+		        		}
+	            	break;
+	            // Default simple floor-to-the-floor.
+                default:
+	                {
+            		// Create the fixed gentle percussion bar: one hand clap at the start.
+            		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
+        				new MIDIPlayableBar.StartNoteVelocityDuration(0,
+        					new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
+        										(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
+        					MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
+            		final MIDIPlayableBar bar = new MIDIPlayableBar(
+        				Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
+            		final int barCount = ts.bars();
+            		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
+	                break;
+	                }
+	            }
+
+            // TODO: base
+
+            // TODO: data melody!
+
+	    	}
 
 
-
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+		// Return unmodifiable compact version.
+		for(int i = tracks.length; --i >= 0; )
+			{
+			tracks[i] = new MIDIDataMelodyTrack(tracks[i].setup(),
+				Collections.unmodifiableList(new ArrayList<>(tracks[i].bars())));
+			}
+		for(int i = support.length; --i >= 0; )
+			{
+			support[i] = new MIDISupportTrack(support[i].setup(),
+				Collections.unmodifiableList(new ArrayList<>(support[i].bars())));
+			}
+		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
     /**Create a plain (or gentle) melody from data; never null.
@@ -280,7 +328,6 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 
     	// Run through all the sections,
     	// inserting the full data melody in the 'verse' section.
-		// If there is no plan, work to a single-verse plan.
     	for(final TuneSectionMetadata ts : plan)
 	    	{
             if(ts.sectionType() != TuneSection.verse)
