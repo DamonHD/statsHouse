@@ -202,6 +202,18 @@ public final class TestMIDIGen extends TestCase
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
+    	assertFalse(result1.dataMelody().isEmpty());
+        assertEquals("expect exactly 1 melody track", result1.dataMelody().size(), 1);
+        assertNotNull(result1.dataMelody().get(0).bars());
+//        assertEquals("expect exactly 1 melody bar", result1.dataMelody().get(0).bars().size(), 1);
+//        assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
+//        assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
+//        assertNull("expect 2st note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
+        assertTrue("expect a support track", result1.supportTracks().size() > 0);
+        assertTrue("expect a percussion support track",
+    		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
+	    assertTrue("expect persussion note(s)",
+    		result1.supportTracks().stream().anyMatch(st -> !st.bars().isEmpty()));
 
     	// TODO
 
