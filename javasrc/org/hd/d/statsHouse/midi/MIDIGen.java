@@ -142,58 +142,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	}
 
-	/**Generate MIDITrackSetup for a given stream (1-based); never null.
-     * This knows about instrument choices, relative volumes, etc.
-     * <p>
-     * TODO: incorporate seed-based randomness when appropriate
-     * <p>
-     * TODO: unit tests
-     *
-     * @param stream  stream number (first stream is 1);
-     *     out of bounds value results gives 'safe' result
-     * @return  track setup, with channel number 1 less than stream number
-     */
-    public static MIDITrackSetup genMIDITrackSetup(
-    		final int stream,
-    		final GenerationParameters params,
-    		final DataBounds db,
-    		final String name)
-	    {
-    	Objects.requireNonNull(params);
-    	Objects.requireNonNull(db);
-
-    	// True if a major/main stream, else a minor/secondary stream.
-    	final boolean isMajorStream = params.hetro() || db.isMainDataStream(stream);
-
-		// Use tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
-    	final byte instrument = isMajorStream ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0;
-
-		// Use default volume for main data stream, with the rest quieter.
-		final byte volume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) (MIDITrackSetup.DEFAULT_VOLUME/2);
-
-		final byte pan;
-		if(params.hetro())
-			{
-			// Spread heterogeneous-and-equal streams around the L-R axis.
-			pan = (byte) ((127 / Math.max(1, db.streams() - 1)) * (stream - 1));
-			}
-		else
-			{
-			if(db.isMainDataStream(stream))
-				{
-				// Put main stream slightly to one side.
-				pan = 80; // In V4.x was 70;
-				}
-			else
-				{
-				// Spread non-major streams out on other side.
-				pan = (byte) ((63 / Math.max(1, db.streams() - 1)) * (stream - 1));
-				}
-			}
-
-    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
-	    }
-
     /**Create a plain (or gentle) melody from data; never null.
      * All melody tracks in the result have the same number of bars.
      * <p>
@@ -362,6 +310,57 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
     	return(new MIDITune(Arrays.asList(tracks), support, new TuneSectionPlan(plan)));
 	    }
 
+	/**Generate MIDITrackSetup for a given stream (1-based); never null.
+     * This knows about instrument choices, relative volumes, etc.
+     * <p>
+     * TODO: incorporate seed-based randomness when appropriate
+     * <p>
+     * TODO: unit tests
+     *
+     * @param stream  stream number (first stream is 1);
+     *     out of bounds value results gives 'safe' result
+     * @return  track setup, with channel number 1 less than stream number
+     */
+    public static MIDITrackSetup genMIDITrackSetup(
+    		final int stream,
+    		final GenerationParameters params,
+    		final DataBounds db,
+    		final String name)
+	    {
+    	Objects.requireNonNull(params);
+    	Objects.requireNonNull(db);
+
+    	// True if a major/main stream, else a minor/secondary stream.
+    	final boolean isMajorStream = params.hetro() || db.isMainDataStream(stream);
+
+		// Use tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
+    	final byte instrument = isMajorStream ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0;
+
+		// Use default volume for main data stream, with the rest quieter.
+		final byte volume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) (MIDITrackSetup.DEFAULT_VOLUME/2);
+
+		final byte pan;
+		if(params.hetro())
+			{
+			// Spread heterogeneous-and-equal streams around the L-R axis.
+			pan = (byte) ((127 / Math.max(1, db.streams() - 1)) * (stream - 1));
+			}
+		else
+			{
+			if(db.isMainDataStream(stream))
+				{
+				// Put main stream slightly to one side.
+				pan = 80; // In V4.x was 70;
+				}
+			else
+				{
+				// Spread non-major streams out on other side.
+				pan = (byte) ((63 / Math.max(1, db.streams() - 1)) * (stream - 1));
+				}
+			}
+
+    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
+	    }
 
 	/**Do initial splitting of data into whole proto melody bars for the given section type, including any alignment; never null.
      * The verse output is the one most reflective of the input data,
