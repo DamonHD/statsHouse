@@ -155,14 +155,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         	Math.max(1, (verseProtoBars.size() + (sectionBars/4)) / sectionBars);
         final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);
 
-
-
-
-
-// TODO: section plan based on available data and song structure...
-
-plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // TEMP
-
+        // Section plan based on available data and song structure...
+        // TODO: chorus, breakdown, drop, etc.
+        for(int i = 0; i < verseSectionCount; ++i)
+	        {
+//        	if(0 != i) { plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.chorus)); }
+        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.verse));
+	        }
 
         // Top and tail with intro/outro if specified, eg to be mix-friendly.
     	final boolean hasIntroOutro = (params.introBars() > 0);
@@ -171,7 +170,6 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
         	plan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
         	plan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
 	        }
-
 
     	// Create melody tracks with extendable (within this method) bars.
     	final int streams = db.streams();
@@ -203,8 +201,13 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 
     	// Run through all the sections,
     	// inserting the full data melody and support as needed.
+    	int verseCount = 0;
+//    	int chorusCount = 0;
     	for(final TuneSectionMetadata ts : plan)
 	    	{
+            // Verify that section size is correct.
+            assert(ts.bars() == sectionBars);
+
     		// Inject percussion for most section types,
     		// though possibly varying between types and instances.
             switch(ts.sectionType())
@@ -242,11 +245,27 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
 	            	break;
             	}
 
+            // Inject relatively-vanilla data melody for verse.
+            switch(ts.sectionType())
+	        	{
+	        	case verse:
+	        		{
 
-            // TODO: data melody!
 
+        			++verseCount;
+	                break;
+	                }
+	        	default:
+	                // Skip over this section silently,
+	            	// inserting empty bars for all streams.
+	            	for(int s = 1; s <= streams; ++s)
+		            	{
+	            		tracks[s - 1].bars().addAll(
+	        				Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR));
+	            		}
+	            	break;
+	        	}
 	    	}
-
 
 		// Return unmodifiable compact version.
 		for(int i = tracks.length; --i >= 0; )
@@ -659,6 +678,7 @@ plan.add(new TuneSectionMetadata(verseProtoBars.size(), TuneSection.verse)); // 
      * <p>
      * TODO: other checks, eg:
      * <ul>
+     * <li>All tracks have the same length (except possible a stub tempo track).</li>
      * <li>Bar lengths in clock ticks match across tracks.</li>
      * </ul>
      * <p>
