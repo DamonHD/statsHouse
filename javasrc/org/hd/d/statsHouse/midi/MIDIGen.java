@@ -25,8 +25,6 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
@@ -47,6 +45,7 @@ import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.TuneSectionMetadata;
 import org.hd.d.statsHouse.TuneSectionPlan;
+import org.hd.d.statsHouse.midi.lib.BarGen;
 
 /**MIDI generation in various forms and with varying levels of sophistication.
  */
@@ -228,7 +227,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            // Default simple floor-to-the-floor.
                 default:
 	                {
-            		final MIDIPlayableBar bar = _makeBasicHousePercussionBar();
+            		final MIDIPlayableBar bar = BarGen.makeBasicHousePercussionBar();
             		final int barCount = ts.bars();
             		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
 	                break;
@@ -241,7 +240,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             	{
             	case verse, chorus:
             		{
-            		final MIDIPlayableBar bar = _makeBasicHouseBassBar(
+            		final MIDIPlayableBar bar = BarGen.makeBasicHouseBassBar(
         				params, ts.sectionType());
             		final int barCount = ts.bars();
             		bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
@@ -453,126 +452,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 		}
 
-	/**Get the fixed gentle percussion bar: one hand clap at the start. */
-	private static MIDIPlayableBar _makeBasicGentlePercussionBar() {
-		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
-			new MIDIPlayableBar.StartNoteVelocityDuration(0,
-				new NoteAndVelocity(MIDIPercusssionInstrument.HAND_CLAP.instrument0,
-									(byte) ((2*DEFAULT_MELODY_VELOCITY)/3)),
-				MIDIGen.DEFAULT_CLOCKS_PER_BAR / 16);
-		final MIDIPlayableBar bar = new MIDIPlayableBar(
-			Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(snvd))));
-		return bar;
-	}
-
-	/**Get the basic house percussion bar: four on the floor. */
-	private static MIDIPlayableBar _makeBasicHousePercussionBar()
-		{
-		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
-
-		final byte DRUM = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0; // Alt: ELECTRIC_BASE_DRUM
-		final byte vDRUM = DEFAULT_MELODY_VELOCITY;
-		final byte HAT = MIDIPercusssionInstrument.CLOSED_HI_HAT.instrument0; // OPEN_HI_HAT: OPEN_HI_HAT
-		final byte vHAT = DEFAULT_MELODY_VELOCITY;
-		final byte CLAP = MIDIPercusssionInstrument.HAND_CLAP.instrument0;
-		final byte vCLAP = DEFAULT_MELODY_VELOCITY;
-
-		// Beat 1: drum
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			0,
-					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
-		// Beat 1 off: hi-hat
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			0 + MIDIGen.DEFAULT_CLKSPQTR/2,
-					new NoteAndVelocity(HAT, vHAT),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-
-		// Beat 2: drum, clap
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			1 * MIDIGen.DEFAULT_CLKSPQTR,
-					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			1 * MIDIGen.DEFAULT_CLKSPQTR,
-					new NoteAndVelocity(CLAP, vCLAP),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-		// Beat 2 off: hi-hat
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			1 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
-					new NoteAndVelocity(HAT, vHAT),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-
-		// Beat 3: drum
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			2 * MIDIGen.DEFAULT_CLKSPQTR,
-					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
-		// Beat 3 off: hi-hat
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			2 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
-					new NoteAndVelocity(HAT, vHAT),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-
-		// Beat 4: drum, clap
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			3 * MIDIGen.DEFAULT_CLKSPQTR,
-					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			3 * MIDIGen.DEFAULT_CLKSPQTR,
-					new NoteAndVelocity(CLAP, vCLAP),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-		// Beat 4 off: hi-hat
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			3 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
-					new NoteAndVelocity(HAT, vHAT),
-					MIDIGen.DEFAULT_CLKSPQTR/2));
-
-		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
-		return(bar);
-		}
-
-	/**Get the basic house bass bar.
-	 * Modulate slightly based on (eg) section type.
-	 * @return
-	 */
-	private static MIDIPlayableBar _makeBasicHouseBassBar(
-			final GenerationParameters params, final TuneSection section)
-		{
-		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
-
-//		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
-		final byte vBASS = DEFAULT_MELODY_VELOCITY;
-
-		// Much around with first note each chorus bar.
-		final byte defaultNote = (byte) (MIDIGen.DEFAULT_ROOT_NOTE-12);
-		final byte firstNote = (TuneSection.chorus != section) ? defaultNote :
-			(byte) (MIDIGen.DEFAULT_ROOT_NOTE);
-
-		// Beat 1, 2, 3, 4.
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			0,
-				new NoteAndVelocity(firstNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			1 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			2 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
-		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			3 * MIDIGen.DEFAULT_CLKSPQTR,
-				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
-
-		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
-		return(bar);
-		}
-
-    /**Create a plain (or gentle) melody from data; never null.
+	/**Create a plain (or gentle) melody from data; never null.
      * All melody tracks in the result have the same number of bars.
      * <p>
      * The 'gentle' output is the same as plain but with two extras:
@@ -640,7 +520,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	if(null != percTrack)
     		{
     		// Get the fixed gentle percussion bar: one hand clap at the start.
-    		final MIDIPlayableBar bar = _makeBasicGentlePercussionBar();
+    		final MIDIPlayableBar bar = BarGen.makeBasicGentlePercussionBar();
 
         	// Fill all bars of all sections with same percussion bar...
         	for(final TuneSectionMetadata ts : plan)
