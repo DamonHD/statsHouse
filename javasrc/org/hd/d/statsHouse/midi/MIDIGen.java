@@ -736,8 +736,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// True if a major/main stream, else a minor/secondary stream.
     	final boolean isMajorStream = params.hetro() || db.isMainDataStream(stream);
 
-		// Use tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
-    	final byte instrument = isMajorStream ? MIDIInstrument.TENOR_SAX.instrument0 : MIDIInstrument.OCARINA.instrument0;
+		// None/gentle: tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
+		// House: saw lead for main data stream, synth brass for remainder.
+    	final MIDIInstrument instrument = isMajorStream ?
+			((Style.house == params.style()) ? MIDIInstrument.LEAD_2_SAWTOOTH_WAVE : MIDIInstrument.TENOR_SAX) :
+			((Style.house == params.style()) ? MIDIInstrument.SYNTH_BRASS_1 : MIDIInstrument.OCARINA);
 
 		// Use default volume for main data stream, with the rest quieter.
     	// If the style is Danceable then turn down all the data melody volume!
@@ -765,7 +768,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				}
 			}
 
-    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument, volume, pan, name));
+    	return(new MIDITrackSetup((byte) Math.max(0, stream - 1), instrument.instrument0, volume, pan, name));
 	    }
 
 	/**Do initial splitting of data into whole proto melody bars for the given section type, including any alignment; never null.
