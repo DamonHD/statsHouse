@@ -137,6 +137,4 @@ public final class BarGen
 		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
 		return(bar);
 		}
-
-
 	}
