@@ -27,7 +27,7 @@ public record Datum(String source, Float coverage, Float value)
         if((null != value) && !Float.isFinite(value)) { throw new IllegalArgumentException(); }
 		}
 
-	/**Extract a Datum from the specified 1-indexed stream in the supplied parsed record.
+	/**Extract a Datum from the specified 1-indexed stream in the supplied parsed record; never null.
 	 * @param stream  stream number to extract the datum from
 	 *     with 1 being the first (left-most) stream
 	 * @param row  one row of EOUDataCSV data

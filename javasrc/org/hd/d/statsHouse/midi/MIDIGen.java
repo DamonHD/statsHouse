@@ -70,6 +70,8 @@ public final class MIDIGen
     public static final byte DEFAULT_MELODY_VELOCITY = 63;
     /**Default root/lowest melody note (middle C). */
     public static final byte DEFAULT_ROOT_NOTE = 60;
+    /**Default range of a data melody in octaves. */
+    public static final int DEFAULT_RANGE_OCTAVES = 2;
 
     /**Default max verse sections of ~30s each.
      * This is intended to keep the full tune length to a few minutes
@@ -289,27 +291,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                			final Datum d = Datum.extractDatum(s, row);
 	                			// Rest/silence for missing stream or value,
 	                			// or where coverage is not strictly positive.
-	                			if(// d.isEmpty() ||
-	            					(null == d.value()) ||
-	            					(null == d.coverage()) || (d.coverage() <= 0))
-	                			    { notes.add(null); }
-	                			else
-	                				{
-	                				// Simple linear scaling of data value to MIDI note.
-	                				final byte note = (byte) Math.max(1, Math.min(127,
-	                						DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
-	                				// Velocity/volume lowered for secondary streams and low coverage.
-	                                byte velocity = isNotSecondaryDataStream ?
-	                            		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
-	                                if(d.coverage() < 1)
-	                                    {
-	                                	// Reduce volume for low coverage / low certainty.
-	                                	velocity = (byte) Math.max(1, Math.min(127,
-	                                		velocity * d.coverage()));
-	                                    }
-	    							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
-	    							notes.add(nv);
-	                				}
+	                			final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
+	                					d,
+										isNotSecondaryDataStream,
+										multScaling);
+	                			notes.add(n);
 	                			}
 
 	                		// Construct MIDI-playable bar for this stream.
@@ -356,6 +342,47 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
+
+    /**Convert datum to note/velocity without a scale; may be null.
+     *
+     * @param d  datum; never null
+     * @param isNotSecondaryDataStream  true unless a known secondary stream
+     * @param multScaling  +ve multiplier to file data value to note range; usually ]0,1]
+     * @return  note, or null for a rest ie (no note)
+     */
+	public static NoteAndVelocity datumToNoteAndVelocityNoScale(
+			final Datum d,
+			final boolean isNotSecondaryDataStream,
+			final float multScaling)
+		{
+		Objects.requireNonNull(d);
+		if(!Float.isFinite(multScaling)) { throw new IllegalArgumentException(); }
+		if(multScaling <= 0) { throw new IllegalArgumentException(); }
+
+		final NoteAndVelocity n;
+		if(// d.isEmpty() ||
+			(null == d.value()) ||
+			(null == d.coverage()) || (d.coverage() <= 0))
+		    { n = null; }
+		else
+			{
+			// Simple linear scaling of data value to MIDI note.
+			final byte note = (byte) Math.max(1, Math.min(127,
+					DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
+			// Velocity/volume lowered for secondary streams and low coverage.
+		    byte velocity = isNotSecondaryDataStream ?
+				DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
+		    if(d.coverage() < 1)
+		        {
+		    	// Reduce volume for low coverage / low certainty.
+		    	velocity = (byte) Math.max(1, Math.min(127,
+		    		velocity * d.coverage()));
+		        }
+			final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
+			n = nv;
+			}
+		return(n);
+		}
 
     /**Fill in missing notes for each section (for each stream).
      * (Possibly generalisable to with general transformation/plugin.)
@@ -624,8 +651,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		}
 
     	// Parameterisation of melody play.
-		final int octaves = 2;
-		final byte range = 12 * octaves;
+		final byte range = 12 * DEFAULT_RANGE_OCTAVES;
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// Run through all the sections,
@@ -660,29 +686,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             		for(final List<String> row : rows)
             			{
             			final Datum d = Datum.extractDatum(s, row);
-            			// Rest/silence for missing stream or value,
-            			// or where coverage is not strictly positive.
-            			if(// d.isEmpty() ||
-        					(null == d.value()) ||
-        					(null == d.coverage()) || (d.coverage() <= 0))
-            			    { notes.add(null); }
-            			else
-            				{
-            				// Simple linear scaling of data value to MIDI note.
-            				final byte note = (byte) Math.max(1, Math.min(127,
-            						DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
-            				// Velocity/volume lowered for secondary streams and low coverage.
-                            byte velocity = isNotSecondaryDataStream ?
-                        		DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
-                            if(d.coverage() < 1)
-                                {
-                            	// Reduce volume for low coverage / low certainty.
-                            	velocity = (byte) Math.max(1, Math.min(127,
-                            		velocity * d.coverage()));
-                                }
-							final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
-							notes.add(nv);
-            				}
+            			final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
+            					d,
+								isNotSecondaryDataStream,
+								multScaling);
+            			notes.add(n);
             			}
 
             		// Construct MIDI-playable bar for this stream.
@@ -1070,9 +1078,8 @@ throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
 		final byte noteVelocity = 63;
 		final int clksPQtr = MIDIGen.DEFAULT_CLKSPQTR;
 		final int noteDeltaTime = clksPQtr;
-		final int octaves = 2;
-		final byte range = 12 * octaves;
-		final byte offset = 60;
+		final byte range = 12 * DEFAULT_RANGE_OCTAVES;
+		final byte offset = DEFAULT_ROOT_NOTE;
 		final float multScaling = (maxVal > 0) ? ((range-1)/maxVal) : 1;
 
 		final Sequence sequence = new Sequence(Sequence.PPQ, clksPQtr);
