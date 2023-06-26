@@ -12,9 +12,11 @@ package org.hd.d.statsHouse.midi;
  */
 public enum MIDIInstrument
 	{
+	// Bass
 	ACOUSTIC_BASE(32),
 	ELECTRIC_BASE_FINGER(33),
-
+	ELECTRIC_BASE_PICKED(34),
+	ELECTRIC_BASE_FRETLESS(35),
 	SLAP_BASE_1(36),
 	SLAP_BASE_2(37),
 	SYNTH_BASE_1(38),
