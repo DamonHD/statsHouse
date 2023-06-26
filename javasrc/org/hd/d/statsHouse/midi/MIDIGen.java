@@ -197,8 +197,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final MIDISupportTrack bassTrack =
 			new MIDISupportTrack(
     			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel after percussion.
-    					MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary
-    					MIDITrackSetup.DEFAULT_VOLUME,
+    					//MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary eg SYNTH_BASE_1, SYNTH_BASE_2
+    					MIDIInstrument.SYNTH_BASE_1.instrument0, // Alt: vary
+    					(byte) (2*(MIDITrackSetup.DEFAULT_VOLUME/3)),
     					(byte) (MIDITrackSetup.DEFAULT_PAN+1), // Slightly off to side.
     					"bass: house"),
     			new ArrayList<>());
