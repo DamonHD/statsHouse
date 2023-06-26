@@ -149,8 +149,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
 
     	// Parameterisation of melody play without scales.
-		final int octaves = 2;
-		final byte range = 12 * octaves;
+    	// Have a more muted tonal range for house, to let percussion/base stand out.
+		final int octaves = Math.max(1, DEFAULT_RANGE_OCTAVES/2);
+		final int range = 12 * octaves;
 		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// First establish how many sections worth of 'verse' data there is.
