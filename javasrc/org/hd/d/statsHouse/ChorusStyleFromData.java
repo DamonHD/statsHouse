@@ -1,7 +1,7 @@
 package org.hd.d.statsHouse;
 
 /**This enumerates some possible algorithmic styles of data melody chorus generation. */
-public enum ChorusFromDataStyle
+public enum ChorusStyleFromData
 	{
 	FirstDataBar,
     FirstFullDataBar,
