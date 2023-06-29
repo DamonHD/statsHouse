@@ -378,6 +378,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(data);
 
+    	// Skip any secondary data stream by returning empty bars.
+    	if(!db.isMainDataStream(stream) && !params.hetro())
+    	    { return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
 
 
     	// TODO
@@ -429,7 +432,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		}
 
     /**Fill in missing notes for each section (for each stream).
-     * (Possibly generalisable to with general transformation/plugin.)
+     * (Possibly generalisable with general transformation/plugin.)
      * <p>
      * TODO: unit tests
      *
