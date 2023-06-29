@@ -407,4 +407,26 @@ public final class TestMIDIGen extends TestCase
 2023-05,synth,1,191.661
     		""";
 
+    /**Test generation of non-trivial house MIDITune, including intro, outro, verse and chorus sections.
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     */
+    public static void testGenMelodylHouseMIDITune() throws IOException
+	    {
+    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 4, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(conexDHW_M_to_202305)));
+    	MIDIGen.validateMIDITune(result1);
+    	assertFalse(result1.dataMelody().isEmpty());
+    	assertFalse(result1.dataMelody().isEmpty());
+        assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
+        assertNotNull(result1.dataMelody().get(0).bars());
+        assertFalse("expect bars non-empty", result1.dataMelody().get(0).bars().isEmpty());
+        assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
+//        assertEquals("expect exactly 16 melody bars", 16, result1.dataMelody().get(0).bars().size());
+        assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
+        assertTrue("expect a support track", result1.supportTracks().size() > 0);
+        assertTrue("expect a percussion support track",
+    		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
+	    assertTrue("expect persussion note(s)",
+    		result1.supportTracks().stream().anyMatch(st -> !st.bars().isEmpty()));
+	    }
     }
