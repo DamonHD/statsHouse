@@ -323,7 +323,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            	for(int s = 1; s <= streams; ++s)
 	            		{
         				final List<MIDIPlayableMonophonicDataBar> mpmBars =
-    						_getHouseChorus(chorusCount, s, ts, params, db, data);
+    						_genHouseChorus(chorusCount, s, ts, params, db, data);
 	        			assert(mpmBars.size() == ts.bars());
 	            		tracks[s - 1].bars().addAll(mpmBars);
 	            		}
@@ -365,7 +365,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @param data  full input data set; never null
      * @return  chorus section data melody track segment of correct section length; never null
      */
-    private static List<MIDIPlayableMonophonicDataBar> _getHouseChorus(
+    private static List<MIDIPlayableMonophonicDataBar> _genHouseChorus(
     		final int chorusCount,
     		final int stream,
     		final TuneSectionMetadata ts,
@@ -380,10 +380,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 
 
+    	// TODO
 
 
-
-throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+    	// Trivial empty chorus.
+		return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR));
     	}
 
 	/**Convert datum to note/velocity without a scale; may be null.
