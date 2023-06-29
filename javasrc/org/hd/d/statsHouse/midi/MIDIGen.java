@@ -210,7 +210,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Run through all the sections,
     	// inserting the full data melody and support as needed.
     	int verseCount = 0;
-    	final int chorusCount = 0;
+    	int chorusCount = 0;
     	for(final TuneSectionMetadata ts : plan)
 	    	{
             // Verify that section size is correct.
@@ -317,17 +317,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         			++verseCount;
 	                break;
 	                }
-//	        	case chorus:
-//	        		{
-//	            	for(int s = 1; s <= streams; ++s)
-//	            		{
-//        				final List<MIDIPlayableMonophonicDataBar> mpmBars =
-//        						_getHouseChorus(params, db, data, ts);
-//	        			assert(mpmBars.size() == ts.bars());
-//	            		tracks[s - 1].bars().addAll(mpmBars);
-//	            		}
-//        			++chorusCount;
-//	        		break;
+	        	case chorus:
+	        		{
+        			++chorusCount;
+	            	for(int s = 1; s <= streams; ++s)
+	            		{
+        				final List<MIDIPlayableMonophonicDataBar> mpmBars =
+    						_getHouseChorus(chorusCount, s, ts, params, db, data);
+	        			assert(mpmBars.size() == ts.bars());
+	            		tracks[s - 1].bars().addAll(mpmBars);
+	            		}
+	        		break;
 	        		}
 	        	default:
 	                // Skip over this section silently,
@@ -355,7 +355,38 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-    /**Convert datum to note/velocity without a scale; may be null.
+    /**Generate a house chorus data melody track.
+     *
+     * @param chorusIndex  chorus index, first is 1; strictly positive
+     * @param stream  data stream index, first is 1; strictly positive
+     * @param ts  tune section; never null
+     * @param params  generation parameters; never null
+     * @param db  data bounds; never null
+     * @param data  full input data set; never null
+     * @return  chorus section data melody track segment of correct section length; never null
+     */
+    private static List<MIDIPlayableMonophonicDataBar> _getHouseChorus(
+    		final int chorusCount,
+    		final int stream,
+    		final TuneSectionMetadata ts,
+			final GenerationParameters params, final DataBounds db, final EOUDataCSV data)
+    	{
+    	if(chorusCount < 1) { throw new IllegalArgumentException(); }
+    	if(stream < 1) { throw new IllegalArgumentException(); }
+    	Objects.requireNonNull(ts);
+    	Objects.requireNonNull(params);
+    	Objects.requireNonNull(db);
+    	Objects.requireNonNull(data);
+
+
+
+
+
+
+throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FIXME
+    	}
+
+	/**Convert datum to note/velocity without a scale; may be null.
      *
      * @param d  datum; never null
      * @param isNotSecondaryDataStream  true unless a known secondary stream
