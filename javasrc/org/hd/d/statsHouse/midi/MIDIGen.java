@@ -33,6 +33,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import org.hd.d.statsHouse.ChorusStyleFromData;
 import org.hd.d.statsHouse.DataCadence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.DataUtils;
@@ -382,12 +383,40 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	if(!db.isMainDataStream(stream) && !params.hetro())
     	    { return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
 
+    	final ChorusStyleFromData style = ChorusStyleFromData.FirstDataBar;
 
-    	// TODO
+        switch(style) {
+            default:
+        	case FirstDataBar:
+	    	// Parameterisation of melody play without scales.
+			final int octaves = DEFAULT_RANGE_OCTAVES; // Math.max(1, DEFAULT_RANGE_OCTAVES/2);
+			final int range = 12 * octaves;
+			final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+	    	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
+	    	// If there are no data bars, return empty section.
+	    	if(verseProtoBars.isEmpty())
+		    	{ return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
+	        final DataProtoBar dbp = verseProtoBars.get(0);
+			final List<List<String>> rows = dbp.dataRows().data();
+			final int dnpb = dbp.dataNotesPerBar();
+			final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
+			for(final List<String> row : rows)
+				{
+				final Datum d = Datum.extractDatum(stream, row);
+				// Rest/silence for missing stream or value,
+				// or where coverage is not strictly positive.
+				final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
+						d,
+						false, // isNotSecondaryDataStream: only do this for primary stream!
+						multScaling);
+				notes.add(n);
+				}
 
-
-    	// Trivial empty chorus.
-		return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR));
+			// Construct repeated MIDI-playable bar for this stream.
+			final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
+					dnpb, dbp, stream, Collections.unmodifiableList(notes));
+			return(Collections.nCopies(ts.bars(), mpmb));
+	        }
     	}
 
 	/**Convert datum to note/velocity without a scale; may be null.
