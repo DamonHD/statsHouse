@@ -6,6 +6,7 @@ public enum ChorusFromDataStyle
 	FirstDataBar,
     FirstFullDataBar,
     SyntheticRepresentativeDataBar,
+    SyntheticRepresentativeDataBarAndCounterpoint,
     MeansPlusSyntheticRepresentativeDataBar,
     MeansPlusSyntheticRepresentativeDataBarAndCounterpoint;
 	}
