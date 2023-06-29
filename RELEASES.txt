@@ -13,6 +13,13 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
+DHD20230629: Initial place-holder chorus generator repeats first data melody bar, with full tone range.
+
+
+
+
+RELEASES
+========
 
 20230625:
     freezepoint name: V5.0.0 (main)
