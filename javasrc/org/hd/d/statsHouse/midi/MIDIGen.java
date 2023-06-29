@@ -718,20 +718,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     	// Data notes per bar is determined by the cadence.
     	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
-    	final int dataNotesPerBar = switch(cadence)
-			{
-			case Y -> 4;
-			case M -> 12;
-			case D -> 32;
-			};
-
+    	final int dataNotesPerBar = cadence.defaultPerBar;
     	// We may choose not to align in the most produced music for some seeds.
-    	final boolean canAlign = switch(cadence)
-			{
-			case Y -> false;
-			case M -> true;
-			case D -> true;
-			};
+    	final boolean canAlign = cadence.canAlign();
 		final boolean doAlign = canAlign &&
 			(params.style().level == ProductionLevel.Gentle) ||
 			(params.style().level == ProductionLevel.Danceable); // TODO: randomness
