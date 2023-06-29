@@ -210,7 +210,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Run through all the sections,
     	// inserting the full data melody and support as needed.
     	int verseCount = 0;
-//    	int chorusCount = 0;
+    	final int chorusCount = 0;
     	for(final TuneSectionMetadata ts : plan)
 	    	{
             // Verify that section size is correct.
@@ -317,6 +317,18 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         			++verseCount;
 	                break;
 	                }
+//	        	case chorus:
+//	        		{
+//	            	for(int s = 1; s <= streams; ++s)
+//	            		{
+//        				final List<MIDIPlayableMonophonicDataBar> mpmBars =
+//        						_getHouseChorus(params, db, data, ts);
+//	        			assert(mpmBars.size() == ts.bars());
+//	            		tracks[s - 1].bars().addAll(mpmBars);
+//	            		}
+//        			++chorusCount;
+//	        		break;
+	        		}
 	        	default:
 	                // Skip over this section silently,
 	            	// inserting empty bars for all streams.
