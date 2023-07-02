@@ -55,6 +55,7 @@ public final class TestMIDIGen extends TestCase
     	assertNotNull("should generate a note", result1);
     	assertEquals("should generate a root note", MIDIGen.DEFAULT_ROOT_NOTE, result1.note());
     	assertTrue("should generate a non-slient note", result1.velocity() > 0);
+
     	final NoteAndVelocity result2 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1.0f, 1f),
     			true, // isNotSecondaryDataStream,
@@ -64,6 +65,7 @@ public final class TestMIDIGen extends TestCase
     	assertNotNull("should generate a note", result2);
     	assertEquals("should generate a root+12 note", MIDIGen.DEFAULT_ROOT_NOTE+12, result2.note());
     	assertTrue("should generate a non-slient note", result2.velocity() > 0);
+
     	final NoteAndVelocity result3 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1.0f, 1f),
     			true, // isNotSecondaryDataStream,
@@ -73,6 +75,7 @@ public final class TestMIDIGen extends TestCase
     	assertNotNull("should generate a note", result3);
     	assertEquals("should generate a root+24 note", MIDIGen.DEFAULT_ROOT_NOTE+24, result3.note());
     	assertTrue("should generate a non-slient note", result3.velocity() > 0);
+
     	final NoteAndVelocity result4 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1.0f, 1f),
     			true, // isNotSecondaryDataStream,
