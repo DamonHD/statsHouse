@@ -12,11 +12,11 @@ import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDIPercusssionInstrument;
 import org.hd.d.statsHouse.midi.MIDIPlayableBar;
 
-/**Simple bar generation, eg bass and percussion. */
-public final class BarGen
+/**Simple support-track bar generation, eg bass and percussion. */
+public final class SupportBarGen
 	{
     /**Prevent creation of an instance. */
-    private BarGen() { }
+    private SupportBarGen() { }
 
 
 	/**Get fixed gentle percussion bar: one hand clap at the start. */
