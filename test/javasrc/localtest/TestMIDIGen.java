@@ -26,8 +26,11 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
 import org.hd.d.statsHouse.DataProtoBar;
+import org.hd.d.statsHouse.Datum;
 import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.NoteAndVelocity;
+import org.hd.d.statsHouse.Scale;
 import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIConstant;
@@ -40,6 +43,26 @@ import junit.framework.TestCase;
  */
 public final class TestMIDIGen extends TestCase
     {
+    /**Test generation of notes on Scale. */
+    public static void testDatumToNoteAndVelocity()
+	    {
+    	final NoteAndVelocity result1 = MIDIGen.datumToNoteAndVelocity(
+    			new Datum(null, 1.0f, 0f),
+    			true, // isNotSecondaryDataStream,
+    			Scale.NO_SCALE,
+    			1,
+    			0);
+    	assertNotNull("should generate a note", result1);
+    	assertEquals("should generate a root note", MIDIGen.DEFAULT_ROOT_NOTE, result1.note());
+    	assertTrue("should generate a non-slient", result1.velocity() > 0);
+
+
+// TODO
+
+
+	    }
+
+
     /**Test minimal data MIDICSV and Sequence generation.
      * @throws InvalidMidiDataException */
     public static void testGenMinimalMelodyMIDISCV() throws IOException, InvalidMidiDataException
