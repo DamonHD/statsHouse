@@ -402,6 +402,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		}
 
     /**Convert datum to note/velocity with a scale; may be null.
+     * Maximum data value will be exactly 'octaves' above root,
+     * <p>
      * TODO: unit tests
      *
      * @param d  datum; never null
@@ -433,7 +435,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final int notesPerOctave = scale.semitones.size();
 			final int stepsRange = octaves * notesPerOctave;
 			final float multScaling = stepsRange / ((maxVal > 0) ? maxVal : 1);
-			final int scaledNote = Math.max(0, (int)Math.floor(d.value() * multScaling));
+			final int scaledNote = Math.max(0, Math.round(d.value() * multScaling));
 			final int octave = scaledNote / notesPerOctave;
 			final int residualIntervals =  scaledNote % notesPerOctave;
 			final int rawMIDINote = DEFAULT_ROOT_NOTE +
