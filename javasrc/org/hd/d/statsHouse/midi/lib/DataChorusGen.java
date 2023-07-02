@@ -34,6 +34,7 @@ public final class DataChorusGen
 	 * @return  chorus section data melody track segment of correct section length; never null
 	 */
 	public static List<MIDIPlayableMonophonicDataBar> makeHouseDataChorusBars(
+			final ChorusStyleFromData style,
 			final int chorusCount,
 			final int stream,
 			final TuneSectionMetadata ts,
@@ -49,8 +50,6 @@ public final class DataChorusGen
 		// Skip any secondary data stream by returning empty bars.
 		if(!db.isMainDataStream(stream) && !params.hetro())
 		    { return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
-
-		final ChorusStyleFromData style = ChorusStyleFromData.FirstDataBar;
 
 		// Parameterisation of melody play without scales.
 		final int octaves = MIDIGen.DEFAULT_RANGE_OCTAVES; // Math.max(1, DEFAULT_RANGE_OCTAVES/2);

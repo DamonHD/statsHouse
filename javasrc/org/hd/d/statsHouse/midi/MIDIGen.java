@@ -33,6 +33,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import org.hd.d.statsHouse.ChorusStyleFromData;
 import org.hd.d.statsHouse.DataCadence;
 import org.hd.d.statsHouse.DataProtoBar;
 import org.hd.d.statsHouse.DataUtils;
@@ -324,7 +325,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            	for(int s = 1; s <= streams; ++s)
 	            		{
         				final List<MIDIPlayableMonophonicDataBar> mpmBars =
-    						DataChorusGen.makeHouseDataChorusBars(chorusCount, s, ts, params, db, data);
+    						DataChorusGen.makeHouseDataChorusBars(
+    							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
+								chorusCount, s, ts, params, db, data);
 	        			assert(mpmBars.size() == ts.bars());
 	            		tracks[s - 1].bars().addAll(mpmBars);
 	            		}
