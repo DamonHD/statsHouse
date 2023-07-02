@@ -23,7 +23,7 @@ public final class Scale
 	public static final Scale NO_SCALE = new Scale(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 
-	/**Semitones for this scale; non-null, non-empty, all entries sin range[1,12]. */
+	/**Semitones for this scale; non-null, non-empty, all entries in range [1,12]. */
 	public final List<Integer> semitones;
 
 	/**Construct from variable length list of semitone steps. */
