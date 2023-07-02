@@ -14,7 +14,7 @@ import java.util.Objects;
  * <p>
  * See <a href="https://www.guitarland.com/Music10/FGA/LectureMIDIscales.html">Scales using MIDI note numbers</a>.
  */
-public class Scale
+public final class Scale
 	{
 	/**Major scale. */
 	public static final Scale MAJOR = new Scale(2,2,1,2,2,2,1);
@@ -26,7 +26,7 @@ public class Scale
 	/**Semitones for this scale; non-null, non-empty, all entries sin range[1,12]. */
 	public final List<Integer> semitones;
 
-	/**Construct from variable length list. */
+	/**Construct from variable length list of semitone steps. */
 	public Scale(final Integer... semitones)
 		{
 		Objects.requireNonNull(semitones);
