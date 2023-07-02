@@ -1,5 +1,6 @@
 package org.hd.d.statsHouse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,12 +27,16 @@ public final class Scale
 	/**Semitones for this scale; non-null, non-empty, all entries in range [1,12]. */
 	public final List<Integer> semitones;
 
-	/**Construct from variable length list of semitone steps. */
+	/**Construct from variable length list of semitone steps.
+	 * Defensively copies then validates.
+	 * @param semitones  non-null, non-empty list of strictly-positive semitone intervals summing to 12
+	 */
 	public Scale(final Integer... semitones)
 		{
 		Objects.requireNonNull(semitones);
-		if(!Arrays.stream(semitones).mapToInt(Integer::intValue).noneMatch(i -> i <= 0)) { throw new IllegalArgumentException(); }
-		if(12 != Arrays.stream(semitones).mapToInt(Integer::intValue).sum()) { throw new IllegalArgumentException(); }
-		this.semitones = Collections.unmodifiableList(Arrays.asList(semitones));
+		final List<Integer> copied = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(semitones)));
+		if(!copied.stream().mapToInt(Integer::intValue).noneMatch(i -> i <= 0)) { throw new IllegalArgumentException(); }
+		if(12 != copied.stream().mapToInt(Integer::intValue).sum()) { throw new IllegalArgumentException(); }
+		this.semitones = copied;
 		}
 	}
