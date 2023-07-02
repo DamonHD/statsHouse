@@ -24,6 +24,7 @@ public final class DataChorusGen
     private DataChorusGen() { }
 
 	/**Generate a house chorus data melody track section.
+	 * TODO: implement other types
 	 *
 	 * @param chorusIndex  chorus index, first is 1; strictly positive
 	 * @param stream  data stream index, first is 1; strictly positive
