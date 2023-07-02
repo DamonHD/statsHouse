@@ -42,6 +42,7 @@ import org.hd.d.statsHouse.EOUDataCSV;
 import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.NoteAndVelocity;
 import org.hd.d.statsHouse.ProductionLevel;
+import org.hd.d.statsHouse.Scale;
 import org.hd.d.statsHouse.Style;
 import org.hd.d.statsHouse.TuneSection;
 import org.hd.d.statsHouse.TuneSectionMetadata;
@@ -383,7 +384,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		else
 			{
 			// Simple linear scaling of data value to MIDI note.
-			final byte note = (byte) Math.max(1, Math.min(127,
+			final byte note = (byte) Math.max(0, Math.min(127,
 					DEFAULT_ROOT_NOTE + (d.value() * multScaling)));
 			// Velocity/volume lowered for secondary streams and low coverage.
 		    byte velocity = isNotSecondaryDataStream ?
@@ -399,6 +400,62 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 		return(n);
 		}
+
+    /**Convert datum to note/velocity with a scale; may be null.
+     * TODO: unit tests
+     *
+     * @param d  datum; never null
+     * @param isNotSecondaryDataStream  true unless a known secondary stream
+     * @param scale  never null
+     * @param octaves  number of octaves to range over; strictly positive
+     * @param maxVal  maximum data value across all relevant streams; finite, non-negative
+     * @return  note, or null for a rest ie (no note)
+     */
+	public static NoteAndVelocity datumToNoteAndVelocity(
+			final Datum d,
+			final boolean isNotSecondaryDataStream,
+			final Scale scale, final int octaves, final float maxVal)
+		{
+		Objects.requireNonNull(d);
+		Objects.requireNonNull(scale);
+		if(octaves < 1) { throw new IllegalArgumentException(); }
+		if(!Float.isFinite(maxVal)) { throw new IllegalArgumentException(); }
+		if(maxVal < 0) { throw new IllegalArgumentException(); }
+
+		final NoteAndVelocity n;
+		if(// d.isEmpty() ||
+			(d.value() < 0) || // FIXME: allow some -ve values.
+			(null == d.value()) ||
+			(null == d.coverage()) || (d.coverage() <= 0))
+		    { n = null; }
+		else
+			{
+			final int notesPerOctave = scale.semitones.size();
+			final int stepsRange = octaves * notesPerOctave;
+			final float multScaling = stepsRange / ((maxVal > 0) ? maxVal : 1);
+			final int scaledNote = Math.max(0, (int)Math.floor(d.value() * multScaling));
+			final int octave = scaledNote / notesPerOctave;
+			final int residualIntervals =  scaledNote % notesPerOctave;
+			final int rawMIDINote = DEFAULT_ROOT_NOTE +
+				(12 * octave) +
+				scale.semitones.subList(0, residualIntervals).stream().mapToInt(Integer::intValue).sum();
+			// Coerce into valid range of MIDI note.
+			final byte note = (byte) Math.max(0, Math.min(127, rawMIDINote));
+			// Velocity/volume lowered for secondary streams and low coverage.
+		    byte velocity = isNotSecondaryDataStream ?
+				DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
+		    if(d.coverage() < 1)
+		        {
+		    	// Reduce volume for low coverage / low certainty.
+		    	velocity = (byte) Math.max(1, Math.min(127,
+		    		velocity * d.coverage()));
+		        }
+			final NoteAndVelocity nv = new NoteAndVelocity(note, velocity);
+			n = nv;
+			}
+		return(n);
+		}
+
 
     /**Fill in missing notes for each section (for each stream).
      * (Possibly generalisable with general transformation/plugin.)
