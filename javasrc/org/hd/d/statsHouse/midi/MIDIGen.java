@@ -403,8 +403,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     /**Convert datum to note/velocity with a scale; may be null.
      * Maximum data value will be exactly 'octaves' above root,
-     * <p>
-     * TODO: unit tests
      *
      * @param d  datum; never null
      * @param isNotSecondaryDataStream  true unless a known secondary stream
