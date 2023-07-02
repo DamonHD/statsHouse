@@ -5,7 +5,7 @@ public enum ChorusStyleFromData
 	{
 	FirstDataBar,
     FirstFullDataBar,
-    SyntheticRepresentativeDataBar,
+    SyntheticRepresentativeDataBar, // Can capture means and max/min or 90/10 percentile points.
     SyntheticRepresentativeDataBarPlusCounterpoint,
     MeansPlusSyntheticRepresentativeDataBar,
     MeansPlusSyntheticRepresentativeDataBarPlusCounterpoint;
