@@ -172,8 +172,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         // TODO: breakdown, drop, etc.
         for(int i = 0; i < verseSectionCount; ++i)
 	        {
-        	if(0 != i) { plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus)); }
         	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.verse));
+        	// Chorus after every verse.
+        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus));
 	        }
 
         // Top and tail with intro/outro if specified, eg to be mix-friendly.
