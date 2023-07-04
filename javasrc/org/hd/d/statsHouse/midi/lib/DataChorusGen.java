@@ -74,10 +74,6 @@ public final class DataChorusGen
 				final Datum d = Datum.extractDatum(stream, row);
 				// Rest/silence for missing stream or value,
 				// or where coverage is not strictly positive.
-//				final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocityNoScale(
-//						d,
-//						true, // isNotSecondaryDataStream: only do this for primary stream!
-//						multScaling);
     			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
 					d,
 					true, /// isNotSecondaryDataStream,

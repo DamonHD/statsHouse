@@ -169,7 +169,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);
 
         // Section plan based on available data and song structure...
-        // TODO: chorus, breakdown, drop, etc.
+        // TODO: breakdown, drop, etc.
         for(int i = 0; i < verseSectionCount; ++i)
 	        {
         	if(0 != i) { plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus)); }
@@ -297,10 +297,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                			final Datum d = Datum.extractDatum(s, row);
 	                			// Rest/silence for missing stream or value,
 	                			// or where coverage is not strictly positive.
-//	                			final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
-//	                					d,
-//										isNotSecondaryDataStream,
-//										multScaling);
 	                			final NoteAndVelocity n = datumToNoteAndVelocity(
                 					d,
                 					isNotSecondaryDataStream,
