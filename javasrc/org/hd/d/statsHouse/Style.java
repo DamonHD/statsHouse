@@ -8,6 +8,7 @@ public enum Style
     plain(ProductionLevel.None),
     gentle(ProductionLevel.Gentle),
     house(ProductionLevel.Danceable);
+	// TODO: trance, drumAndBase, ...
 
 	/**Production level for this style. */
 	public final ProductionLevel level;
