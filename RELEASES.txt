@@ -13,7 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-DHD20230629: Initial place-holder chorus generator repeats first data melody bar, with full tone range.
 
 
 
@@ -21,12 +20,18 @@ DHD20230629: Initial place-holder chorus generator repeats first data melody bar
 RELEASES
 ========
 
+20230704:
+    freezepoint name: V5.1.0 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    Previous significant freezepoint: V5.0.0
+    DHD20230704: can generate simple house intro/verse/chorus/verse/.../outro, for monthly data.
+    DHD20230629: initial place-holder chorus generator repeats first data melody bar, w/full tone range.
+
+
 20230625:
     freezepoint name: V5.0.0 (main)
     Changes since last freezepoint (developer/mgr initials and brief description):
     Previous significant freezepoint: V4.x
-    DHD20230205: added compile-time Twitter kill switch TwitterUtils.ENABLE_TWEETING.
-    DHD20230410: activated kill switch given that posting apparently broke 2023-04-07 ~14:00Z.
     Notes:
 	  * Can generate plain, gentle, house styles.
 	  * Some missing and some new functionality compared to V4.x chain.

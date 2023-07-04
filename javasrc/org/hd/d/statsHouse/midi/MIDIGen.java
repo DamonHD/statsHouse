@@ -83,6 +83,9 @@ public final class MIDIGen
      */
     public static final int DEFAULT_MAX_VERSE_SECTIONS = 4;
 
+    /**Default scale to use for house tracks. */
+    public static final Scale DEFAULT_HOUSE_SCALE = Scale.MAJOR;
+
 
     /**Framework MIDI generation from data; never null.
      * Does not include parsing (etc) of GenerationParameters,
@@ -294,10 +297,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                			final Datum d = Datum.extractDatum(s, row);
 	                			// Rest/silence for missing stream or value,
 	                			// or where coverage is not strictly positive.
-	                			final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
-	                					d,
-										isNotSecondaryDataStream,
-										multScaling);
+//	                			final NoteAndVelocity n = datumToNoteAndVelocityNoScale(
+//	                					d,
+//										isNotSecondaryDataStream,
+//										multScaling);
+	                			final NoteAndVelocity n = datumToNoteAndVelocity(
+                					d,
+                					isNotSecondaryDataStream,
+                					DEFAULT_HOUSE_SCALE,
+                					octaves,
+                					db.maxVal());
 	                			notes.add(n);
 	                			}
 
@@ -424,8 +433,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		final NoteAndVelocity n;
 		if(// d.isEmpty() ||
-			(d.value() < 0) || // FIXME: allow some -ve values.
 			(null == d.value()) ||
+			(d.value() < 0) || // FIXME: allow some -ve values.
 			(null == d.coverage()) || (d.coverage() <= 0))
 		    { n = null; }
 		else

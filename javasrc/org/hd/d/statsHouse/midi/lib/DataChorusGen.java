@@ -67,16 +67,23 @@ public final class DataChorusGen
 	        final DataProtoBar dbp = verseProtoBars.get(0);
 			final List<List<String>> rows = dbp.dataRows().data();
 			final int dnpb = dbp.dataNotesPerBar();
+//assert(dnpb == rows.size());
 			final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
 			for(final List<String> row : rows)
 				{
 				final Datum d = Datum.extractDatum(stream, row);
 				// Rest/silence for missing stream or value,
 				// or where coverage is not strictly positive.
-				final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocityNoScale(
-						d,
-						false, // isNotSecondaryDataStream: only do this for primary stream!
-						multScaling);
+//				final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocityNoScale(
+//						d,
+//						true, // isNotSecondaryDataStream: only do this for primary stream!
+//						multScaling);
+    			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
+					d,
+					true, /// isNotSecondaryDataStream,
+					MIDIGen.DEFAULT_HOUSE_SCALE,
+					octaves,
+					db.maxVal());
 				notes.add(n);
 				}
 

@@ -38,7 +38,7 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
     public MIDIPlayableMonophonicDataBar
 	    {
 		if(dataNotesPerBar < 1) { throw new IllegalArgumentException(); }
-		if(dataNotesPerBar != notes.size()) { throw new IllegalArgumentException(); }
+		if(dataNotesPerBar != notes.size()) { throw new IllegalArgumentException("dataNotesPerBar="+dataNotesPerBar+" vs notes.size()="+notes.size()); }
 	    if((null != dpr) && (dpr.dataNotesPerBar() != dataNotesPerBar)) { throw new IllegalArgumentException(); }
 	    if((null != dpr) && (stream < 1)) { throw new IllegalArgumentException(); }
 	    if((null == dpr) && (0 != stream)) { throw new IllegalArgumentException(); }
