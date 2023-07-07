@@ -31,8 +31,11 @@ public final class SupportBarGen
 		return bar;
 	}
 
-	/**Get basic house percussion bar: four on the floor. */
-	public static MIDIPlayableBar makeBasicHousePercussionBar()
+	/**Get basic house percussion bar: four on the floor.
+	 * @param finalBar  if true, is the final bar in a longish section
+	 * @return
+	 */
+	public static MIDIPlayableBar makeBasicHousePercussionBar(final boolean finalBar)
 		{
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
@@ -46,13 +49,21 @@ public final class SupportBarGen
 		// Beat 1: drum
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			0,
-					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
+				new NoteAndVelocity(DRUM, vDRUM),
+				MIDIGen.DEFAULT_CLKSPQTR-1));
 		// Beat 1 off: hi-hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			0 + MIDIGen.DEFAULT_CLKSPQTR/2,
 					new NoteAndVelocity(HAT, vHAT),
 					MIDIGen.DEFAULT_CLKSPQTR/2));
+		// Beat 1 final: extra kick
+		if(finalBar)
+			{
+			notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+				0 + MIDIGen.DEFAULT_CLKSPQTR/2,
+					new NoteAndVelocity(DRUM, vDRUM),
+					MIDIGen.DEFAULT_CLKSPQTR/2));
+			}
 
 		// Beat 2: drum, clap
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
@@ -92,7 +103,7 @@ public final class SupportBarGen
 		// Beat 4 off: hi-hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			3 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
-					new NoteAndVelocity(HAT, vHAT),
+					new NoteAndVelocity(HAT, finalBar ? 127 : vHAT), // Max volume at end of final bar.
 					MIDIGen.DEFAULT_CLKSPQTR/2));
 
 		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));

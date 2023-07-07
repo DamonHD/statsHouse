@@ -15,6 +15,7 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
 
 DHD20230704: house: now adding chorus after every verse.
+DHD20230707: adjusting final percussion bar in each section.
 
 
 

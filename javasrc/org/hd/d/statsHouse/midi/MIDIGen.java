@@ -235,9 +235,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            // Default simple floor-to-the-floor.
                 default:
 	                {
-            		final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar();
+            		final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar(false);
+            		final MIDIPlayableBar barFinal = SupportBarGen.makeBasicHousePercussionBar(true);
             		final int barCount = ts.bars();
-            		percTrack.bars().addAll(Collections.nCopies(barCount, bar));
+            		if(barCount > 1) { percTrack.bars().addAll(Collections.nCopies(barCount-1, bar)); }
+            		percTrack.bars().add(barFinal);
 	                break;
 	                }
 	            }
