@@ -50,7 +50,7 @@ public final class SupportBarGen
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			0,
 				new NoteAndVelocity(DRUM, vDRUM),
-				MIDIGen.DEFAULT_CLKSPQTR-1));
+				MIDIGen.DEFAULT_CLKSPQTR/2-1));
 		// Beat 1 off: hi-hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			0 + MIDIGen.DEFAULT_CLKSPQTR/2,
@@ -69,7 +69,7 @@ public final class SupportBarGen
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			1 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
+					MIDIGen.DEFAULT_CLKSPQTR/2-1));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			1 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(CLAP, vCLAP),
@@ -84,7 +84,7 @@ public final class SupportBarGen
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			2 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
+					MIDIGen.DEFAULT_CLKSPQTR/2-1));
 		// Beat 3 off: hi-hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			2 * MIDIGen.DEFAULT_CLKSPQTR + MIDIGen.DEFAULT_CLKSPQTR/2,
@@ -95,7 +95,7 @@ public final class SupportBarGen
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			3 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(DRUM, vDRUM),
-					MIDIGen.DEFAULT_CLKSPQTR-1));
+					MIDIGen.DEFAULT_CLKSPQTR/2-1));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			3 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(CLAP, vCLAP),
