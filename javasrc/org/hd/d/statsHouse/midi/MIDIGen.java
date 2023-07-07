@@ -83,6 +83,14 @@ public final class MIDIGen
      */
     public static final int DEFAULT_MAX_VERSE_SECTIONS = 4;
 
+    /**Default target tune (~120bpm) bars for 'radio' version (no DJ intro/outro).
+     * This is intended to keep the full tune length to a ~4 minutes
+     * (ie ~4*32 bars).
+     * <p>
+     * This is entirely a stylistic 'limit' guideline!
+     */
+    public static final int DEFAULT_TYPICAL_RADIO_TUNE_BARS = DEFAULT_MAX_VERSE_SECTIONS * 32;
+
     /**Default scale to use for house tracks. */
     public static final Scale DEFAULT_HOUSE_SCALE = Scale.MAJOR;
 
