@@ -1078,8 +1078,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 				for(final NoteAndVelocity nv : b.notes())
 				    {
-					// Rest for null/missing note.
-					if(null != nv)
+					// Rest for null/missing/silent note.
+					if((null != nv) && (0 != nv.velocity()))
 						{
 						// Adjust expression level just before each note as needed.
 						if(expression != targetExpression)
@@ -1106,14 +1106,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					subClock += clocksPerNote;
 					}
 
-				// Adjust expression level at end of bar as needed.
-				if(expression != b.expressionEnd())
-					{
-					expression = b.expressionEnd();
-					final ShortMessage exp = new ShortMessage();
-					exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, expression);
-					trackMelody.add(new MidiEvent(exp, subClock-1));
-					}
+//				// Adjust expression level at end of bar as needed.
+//				if(expression != b.expressionEnd())
+//					{
+//					expression = b.expressionEnd();
+//					final ShortMessage exp = new ShortMessage();
+//					exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, expression);
+//					trackMelody.add(new MidiEvent(exp, subClock-1));
+//					}
 
 				clock += barClocks; // Ensure correct clocks per bar.
 				}
