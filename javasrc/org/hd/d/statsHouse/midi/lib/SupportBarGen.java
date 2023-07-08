@@ -19,7 +19,7 @@ public final class SupportBarGen
     private SupportBarGen() { }
 
 
-	/**Get fixed gentle percussion bar: one hand clap at the start. */
+	/**Create a fixed gentle percussion bar: one hand clap at the start. */
 	public static MIDIPlayableBar makeBasicGentlePercussionBar() {
 		final MIDIPlayableBar.StartNoteVelocityDuration snvd =
 			new MIDIPlayableBar.StartNoteVelocityDuration(0,
@@ -31,9 +31,9 @@ public final class SupportBarGen
 		return bar;
 	}
 
-	/**Get basic house percussion bar: four on the floor.
-	 * @param finalBar  if true, is the final bar in a longish section
-	 * @return
+	/**Create a basic house percussion bar: four on the floor.
+	 * @param finalBar  if true, is the final bar of a (usually longish) section
+	 * @return one bar; never null
 	 */
 	public static MIDIPlayableBar makeBasicHousePercussionBar(final boolean finalBar)
 		{
@@ -110,7 +110,7 @@ public final class SupportBarGen
 		return(bar);
 		}
 
-	/**Get the basic house bass bar.
+	/**Create a basic house bass bar.
 	 * Modulate slightly based on (eg) section type.
 	 * @return
 	 */
