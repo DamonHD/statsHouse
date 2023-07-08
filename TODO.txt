@@ -1,34 +1,32 @@
 Items TO DO in some way, and nice-to-haves
 ==========================================
 
+Entries should be deleted when substantially implemented.
 
-2023-07-08 DM from A8:
 
-  * ... put a mastering plugin on it though. Even if it's just a basic limiter.
+2023-07-08:
+
+  * DM from A8 "... put a mastering plugin on it though. Even if it's just a basic limiter."
+  * Auto-select section length depending on main data bars available.
+  * Auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
+  * Auto fade out final chorus.
+  * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more
 
 
 2023-06-13 thoughts:
 
   * Possible processing stages:
-      * Parse/collect generation parameters.
       * Align (ls part of date to position in bar; may involve inserting nulls/padding)
-      * Populate with basic notes from data.
       * Extend to full bars, phrases, sections.
       * Add filler notes on data melody tracks.
       * Add decoration notes on data melody tracks.
       * Add dependent aux tracks such as pad notes.
-      * Add independent aux tracks (though maybe changes at sections): percussion, bass.
-      * Save as .csv/.mid/.wav/etc to stdout or file, or play.
 
 
 2023-06-04 copied from a private TODO list:
   
-  * Make mkaudio able to deal with some data gaps (such as at 2023-05-13).
   * Sonify hourly data (such as import profile) as 24/bar, 7 bars + one pause.
   * Notes:
-    *** Add 'house' version without intro using V1.0 awk perc lib.
-      * Generate test set of input data and expected outputs, and also listen to.
-      * Consolidation preprocessor (upstream of sonfication) to insert blanks for missing dates, initially obvious ones at points where least significant part of date does not simply increment.
       * Normalise to kWh/d figure for M data and maybe Y data, maybe allowing for missing data points.
     *** Do daily boost vs divert Thermino (left vs right, flute vs oboe) over year.
     *** Add (het) comparisons to energy series, eg ^^^ and imp/exp, etc.
@@ -47,8 +45,7 @@ Items TO DO in some way, and nice-to-haves
       * DE: adjust filter cut off and resonance.
       * DE: supercollider audio coding.
 
-      * C: produce in scales (8 per octave).
       * C: bass off-beat 4 per bar 1 octave below lowest/root.  Sharpish attack.
       * C: pad with common notes from current 4 bars...
       * C: ramp the cutoff filter (w/ main channel rolling mean?)
-      * Try MAX: https://cycling74.com/products/max
+      * A8: Try MAX: https://cycling74.com/products/max
