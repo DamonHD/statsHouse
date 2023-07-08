@@ -68,6 +68,8 @@ public final class MIDIGen
 	public static final int DEFAULT_CLOCKS_PER_BAR = DEFAULT_CLKSPQTR * 4;
     /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM. */
     public static final int DEFAULT_SECTION_BARS = 16;
+    /**Default minimum section length in bars. */
+    public static final int DEFAULT_MIN_SECTION_BARS = 4;
     /**Default note velocity. */
     public static final byte DEFAULT_MELODY_VELOCITY = 63;
     /**Default root/lowest melody note (middle C). */
@@ -75,13 +77,20 @@ public final class MIDIGen
     /**Default range of a data melody in octaves. */
     public static final int DEFAULT_RANGE_OCTAVES = 2;
 
-    /**Default max verse sections of ~30s each.
+    /**Default maximum number of verse sections of ~30s each.
      * This is intended to keep the full tune length to a few minutes
      * even when interspersed with other sections such as chorus.
      * <p>
      * This is entirely a stylistic 'limit' guideline!
      */
     public static final int DEFAULT_MAX_VERSE_SECTIONS = 4;
+
+    /**Default minimum number of verse sections
+     * This is intended to allow at least one chorus repeat.
+     * <p>
+     * This is entirely a stylistic 'limit' guideline!
+     */
+    public static final int DEFAULT_MIN_VERSE_SECTIONS = 2;
 
     /**Default target tune (~120bpm) bars for 'radio' version (no DJ intro/outro).
      * This is intended to keep the full tune length to a ~4 minutes
