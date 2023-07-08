@@ -1081,7 +1081,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					// Rest for null/missing/silent note.
 					if((null != nv) && (0 != nv.velocity()))
 						{
-						// Adjust expression level just before each note as needed.
+						// Adjust expression level just before each played note as needed.
 						if(expression != targetExpression)
 							{
 							expression = targetExpression;
