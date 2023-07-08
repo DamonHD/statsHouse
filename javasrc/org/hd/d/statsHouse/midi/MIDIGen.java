@@ -367,8 +367,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     /**Apply optional fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
+     * <p>
+     * The default is to fade out over
+     * the last half of the section or ~4 bars,
+     * whichever is shorter.
+     *
      * @param mpmBars  unfaded bars; never null
-     * @param fadeOut
+     * @param fadeOut  if true, do a fade out
      * @return  same-length List of bars; never null
      */
 	private static List<MIDIPlayableMonophonicDataBar> optionalFadeOut(
@@ -1028,17 +1033,33 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte channel = ts.channel();
 			_setupMIDITrack(trackMelody, ts);
 
+			// All data melody tracks start at the default expression level.
+			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
+
 			int clock = 0;
 			for(final MIDIPlayableMonophonicDataBar b : mt.bars())
 				{
 				final int noteCount = b.notes().size();
 				final int clocksPerNote = barClocks / noteCount;
 				int subClock = clock;
+
+				byte targetExpression = b.expressionStart();
+				// Change in expression per note.
+				final int expressionDelta = (b.expressionEnd() - b.expressionStart()) / noteCount;
+
 				for(final NoteAndVelocity nv : b.notes())
-					{
+				    {
 					// Rest for null/missing note.
 					if(null != nv)
 						{
+						if((0 != expressionDelta) && (expression != targetExpression))
+							{
+							expression = targetExpression;
+							final ShortMessage exp = new ShortMessage();
+							exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, expression);
+							trackMelody.add(new MidiEvent(exp, subClock));
+							}
+
 						// Add a note-on event to the track.
 					    final ShortMessage noteOn = new ShortMessage();
 					    noteOn.setMessage(ShortMessage.NOTE_ON, channel, nv.note(), nv.velocity());
@@ -1050,8 +1071,20 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					    final MidiEvent noteOffEvent = new MidiEvent(noteOff, subClock+clocksPerNote-1);
 					    trackMelody.add(noteOffEvent);
 						}
+
+					targetExpression += expressionDelta;
 					subClock += clocksPerNote;
 					}
+
+				// Adjust expression level at end of bar.
+				if(expression != b.expressionEnd())
+					{
+					expression = b.expressionEnd();
+					final ShortMessage exp = new ShortMessage();
+					exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, expression);
+					trackMelody.add(new MidiEvent(exp, subClock-1));
+					}
+
 				clock += barClocks; // Ensure correct clocks per bar.
 				}
 			}
