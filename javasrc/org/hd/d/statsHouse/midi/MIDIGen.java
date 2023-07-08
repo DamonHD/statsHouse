@@ -249,7 +249,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     		_generateHousePercussionBySection(percTrack, ts);
 
-            _generateHouseBassBySection(params, bassTrack, ts);
+            _generateHouseBassBySection(bassTrack, ts, params);
 
             // Inject relatively-vanilla data melody for verse.
             switch(ts.sectionType())
@@ -332,10 +332,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            		final List<MIDIPlayableMonophonicDataBar> mpmBars =
     						DataChorusGen.makeHouseDataChorusBars(
     							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
-								chorusCount, s, ts, params, db, data,
-								fadeOut);
+								chorusCount, s, ts, params, db, data);
 //	        			assert(mpmBars.size() == ts.bars());
-	            		tracks[s - 1].bars().addAll(mpmBars);
+	            		tracks[s - 1].bars().addAll(optionalFade(mpmBars, fadeOut));
 	            		}
 	        		break;
 	        		}
@@ -366,8 +365,26 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-	public static void _generateHouseBassBySection(final GenerationParameters params, final MIDISupportTrack bassTrack,
-			final TuneSectionMetadata ts) {
+    /**Apply optional fade to the list of bars, to hit silent at the end.
+     * The default behaviour is to return the input Lust unchanged.
+     * @param mpmBars  unfaded bars; never null
+     * @param fadeOut
+     * @return  same-length List of bars; never null
+     */
+	private static List<MIDIPlayableMonophonicDataBar> optionalFade(
+			final List<MIDIPlayableMonophonicDataBar> mpmBars,
+			final boolean fadeOut)
+		{
+		Objects.requireNonNull(mpmBars);
+		return(mpmBars);
+		}
+
+	/**Generate a single house tune section of bass. */
+	public static void _generateHouseBassBySection(
+			final MIDISupportTrack bassTrack,
+			final TuneSectionMetadata ts,
+			final GenerationParameters params)
+		{
 		// Inject normal bass for verse and chorus only,
 		// though possibly varying between types and instances.
 		switch(ts.sectionType())
@@ -386,10 +403,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
 		    	break;
 			}
-	}
+		}
 
-	public static void _generateHousePercussionBySection(final MIDISupportTrack percTrack,
-			final TuneSectionMetadata ts) {
+	/**Generate a single house tune section of percussion. */
+	public static void _generateHousePercussionBySection(
+			final MIDISupportTrack percTrack,
+			final TuneSectionMetadata ts)
+	    {
 		// Inject percussion for most section types,
 		// though possibly varying between types and instances.
 		switch(ts.sectionType())
@@ -410,7 +430,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		        break;
 		        }
 		    }
-	}
+	    }
 
     /**Convert datum to note/velocity without a scale; may be null.
      *
