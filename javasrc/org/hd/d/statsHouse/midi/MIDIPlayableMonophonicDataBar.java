@@ -33,7 +33,7 @@ import org.hd.d.statsHouse.NoteAndVelocity;
  * @param notes  notes from the above stream in neutral MIDI-like form; null slots are empty/silent;
  *     never null, same length as the dpr
  * @param expressionStart  expression level (CC 11) at the start of the bar [0,127]
- * @param expressionEnd expression level (CC 11) at the end of the bar [0,127]
+ * @param expressionEnd  expression level (CC 11) at the end of the bar [0,127]
  */
 public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dpr, int stream, List<NoteAndVelocity> notes,
 		byte expressionStart, byte expressionEnd)
@@ -47,6 +47,8 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
 	    if((null == dpr) && (0 != stream)) { throw new IllegalArgumentException(); }
 	    Objects.requireNonNull(notes);
 	    if((null != dpr) && (dpr.dataNotesPerBar() != notes.size())) { throw new IllegalArgumentException(); }
+	    if(expressionStart < 0) { throw new IllegalArgumentException(); }
+	    if(expressionEnd < 0) { throw new IllegalArgumentException(); }
 	    }
 
     /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
