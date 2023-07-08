@@ -72,7 +72,7 @@ public record Datum(String source, Float coverage, Float value)
 	/**Single empty instance to reduce GC load. */
 	private static final Datum EMPTY = new Datum();
 
-	/**Returns true if this represents and empty or missing datum. */
+	/**Returns true if this represents an empty or missing datum. */
 	public boolean isEmpty()
 		{ return((null == source) && (null == coverage) && (null == value)); }
 	}

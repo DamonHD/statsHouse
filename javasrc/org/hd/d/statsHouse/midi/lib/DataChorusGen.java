@@ -63,6 +63,39 @@ public final class DataChorusGen
 
 	    switch(style) {
 	        default:
+	        case FirstFullDataBar:
+	        nextBar: for(final DataProtoBar dbp : verseProtoBars)
+		        {
+				final int dnpb = dbp.dataNotesPerBar();
+				final List<List<String>> rows = dbp.dataRows().data();
+                if(rows.isEmpty()) { continue; }
+                final List<NoteAndVelocity> notes = new ArrayList<>(dnpb);
+    			for(final List<String> row : rows)
+    				{
+    				// Skip this bar for missing (or no-coverage) data.
+    				final Datum d = Datum.extractDatum(stream, row);
+    				if(null == d.value()) { continue nextBar; }
+					if(null == d.coverage()) { continue nextBar; }
+					if(0 == d.coverage()) { continue nextBar; }
+    				// Skip this bar if the note is silent.
+        			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
+    					d,
+    					true, // isNotSecondaryDataStream,
+    					MIDIGen.DEFAULT_HOUSE_SCALE,
+    					octaves,
+    					db.maxVal());
+        			if(0 == n.velocity()) { continue nextBar; }
+    				notes.add(n);
+    				}
+
+    			// A full bar has been located.
+    			// Construct repeated MIDI-playable bar for this stream.
+    			final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
+    					dnpb, dbp, stream, Collections.unmodifiableList(notes));
+    			return(Collections.nCopies(ts.bars(), mpmb));
+		        }
+        	// Fall back to FirstDataBar if no full bar found.
+
 	    	case FirstDataBar:
 	        final DataProtoBar dbp = verseProtoBars.get(0);
 			final List<List<String>> rows = dbp.dataRows().data();
