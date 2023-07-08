@@ -7,6 +7,8 @@ public enum ChorusStyleFromData
 	FirstDataBar,
 	/**More robust for aligned data and/or on non-primary stream; such a full bar may not exist so will need fallback. */
     FirstFullDataBar,
+    /**Use the first bar with the most notes; more robust for sparser data; may be partially or entirely empty. */
+    FirstFullestDataBar,
 
     /**Can capture means and max/min or 90/10 percentile points; hopes for periodicity on ls date component. */
     SyntheticRepresentativeDataBar,
