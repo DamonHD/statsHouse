@@ -1046,13 +1046,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				byte targetExpression = b.expressionStart();
 				// Change in expression per note.
 				final int expressionDelta = (b.expressionEnd() - b.expressionStart()) / noteCount;
+				// FIXME: better handle case where noteCount > change in expression.
 
 				for(final NoteAndVelocity nv : b.notes())
 				    {
 					// Rest for null/missing note.
 					if(null != nv)
 						{
-						if((0 != expressionDelta) && (expression != targetExpression))
+						// Adjust expression level just before each note as needed.
+						if(expression != targetExpression)
 							{
 							expression = targetExpression;
 							final ShortMessage exp = new ShortMessage();
@@ -1076,7 +1078,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 					subClock += clocksPerNote;
 					}
 
-				// Adjust expression level at end of bar.
+				// Adjust expression level at end of bar as needed.
 				if(expression != b.expressionEnd())
 					{
 					expression = b.expressionEnd();
