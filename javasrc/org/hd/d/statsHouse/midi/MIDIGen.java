@@ -911,9 +911,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final ShortMessage vol = new ShortMessage();
 		vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
 		trackMelody.add(new MidiEvent(vol, 0));
-//		final ShortMessage exp = new ShortMessage();
-//		vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, MIDIConstant.DEFAULT_EXPRESSION);
-//		trackMelody.add(new MidiEvent(exp, 0));
+		final ShortMessage exp = new ShortMessage();
+		exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, MIDIConstant.DEFAULT_EXPRESSION);
+		trackMelody.add(new MidiEvent(exp, 0));
 		// Pan (if not default).
 		if(MIDIConstant.DEFAULT_PAN != ts.pan())
 			{
