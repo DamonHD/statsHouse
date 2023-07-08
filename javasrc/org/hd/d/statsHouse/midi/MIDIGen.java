@@ -180,10 +180,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 //		final int range = 12 * octaves;
 //		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
-    	// First establish how many sections worth of 'verse' data there is.
+    	// Establish how many sections worth of 'verse' data there is.
     	// Always at least one.
     	// Prepared to stretch a bit (25%) else truncate as needed.
 		// TODO: allow verse repeats when only original material for one.
+		// TODO: auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
     	final int defaultSectionBars = params.sectionBars();
     	final int sectionBars = (verseProtoBars.size() >= defaultSectionBars) ?
 			defaultSectionBars : MIDIGen.DEFAULT_MIN_SECTION_BARS;
