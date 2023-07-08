@@ -78,7 +78,7 @@ public final class MIDIGen
     public static final int DEFAULT_RANGE_OCTAVES = 2;
 
     /**Default maximum number of verse sections of ~30s each.
-     * This is intended to keep the full tune length to a few minutes
+     * This is intended to keep the full danceable tune length to a few minutes
      * even when interspersed with other sections such as chorus.
      * <p>
      * This is entirely a stylistic 'limit' guideline!
@@ -86,7 +86,7 @@ public final class MIDIGen
     public static final int DEFAULT_MAX_VERSE_SECTIONS = 4;
 
     /**Default minimum number of verse sections
-     * This is intended to allow at least one chorus repeat.
+     * This is intended to allow at least one danceable chorus repeat.
      * <p>
      * This is entirely a stylistic 'limit' guideline!
      */
