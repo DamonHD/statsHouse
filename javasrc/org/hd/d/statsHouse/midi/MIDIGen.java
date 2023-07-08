@@ -334,7 +334,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
 								chorusCount, s, ts, params, db, data);
 //	        			assert(mpmBars.size() == ts.bars());
-	            		tracks[s - 1].bars().addAll(optionalFade(mpmBars, fadeOut));
+	            		tracks[s - 1].bars().addAll(optionalFadeOut(mpmBars, fadeOut));
 	            		}
 	        		break;
 	        		}
@@ -365,13 +365,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-    /**Apply optional fade to the list of bars, to hit silent at the end.
-     * The default behaviour is to return the input Lust unchanged.
+    /**Apply optional fade-out to the List of bars, to hit silent at the end.
+     * The default behaviour is to return the input List unchanged.
      * @param mpmBars  unfaded bars; never null
      * @param fadeOut
      * @return  same-length List of bars; never null
      */
-	private static List<MIDIPlayableMonophonicDataBar> optionalFade(
+	private static List<MIDIPlayableMonophonicDataBar> optionalFadeOut(
 			final List<MIDIPlayableMonophonicDataBar> mpmBars,
 			final boolean fadeOut)
 		{
