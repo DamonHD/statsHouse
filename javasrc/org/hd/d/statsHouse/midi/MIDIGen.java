@@ -66,7 +66,10 @@ public final class MIDIGen
 	public static final int DEFAULT_BEATS_PER_BAR = 4;
 	/**Default clock pulses per bar, eg for empty bars. */
 	public static final int DEFAULT_CLOCKS_PER_BAR = DEFAULT_CLKSPQTR * 4;
-    /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM. */
+    /**Standard-ish section (eg intro/outro, chorus) length for house and related EDM.
+     * Note that other section lengths may make sense,
+     * eg 12 bars with a bar per month of data.
+     */
     public static final int DEFAULT_SECTION_BARS = 16;
     /**Default minimum section length in bars. */
     public static final int DEFAULT_MIN_SECTION_BARS = 4;
