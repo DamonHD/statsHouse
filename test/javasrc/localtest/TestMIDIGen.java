@@ -274,7 +274,7 @@ public final class TestMIDIGen extends TestCase
         assertNotNull(result1.dataMelody().get(0).bars());
         assertFalse("expect bars non-empty", result1.dataMelody().get(0).bars().isEmpty());
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
-        assertEquals("expect exactly 8 melody bars", 8, result1.dataMelody().get(0).bars().size());
+        assertEquals("expect exactly 8 melody bars (section=4b, v,c)", 2*MIDIGen.DEFAULT_MIN_SECTION_BARS, result1.dataMelody().get(0).bars().size());
         assertNotNull("expect 1st note non-null", result1.dataMelody().get(0).bars().get(0).notes().get(0));
         assertNull("expect 2nd note null", result1.dataMelody().get(0).bars().get(0).notes().get(1));
         assertTrue("expect a support track", result1.supportTracks().size() > 0);
@@ -489,7 +489,7 @@ public final class TestMIDIGen extends TestCase
         assertNotNull(result1.dataMelody().get(0).bars());
         assertFalse("expect bars non-empty", result1.dataMelody().get(0).bars().isEmpty());
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
-        assertEquals("expect exactly 40 melody bars (section=4b, i,v,c,v,c,v,c,v,c,o)", 40, result1.dataMelody().get(0).bars().size());
+        assertEquals("expect exactly 40 melody bars (section=4b, i,v,c,v,c,v,c,v,c,o)", MIDIGen.DEFAULT_MIN_SECTION_BARS*(1+4*2+1), result1.dataMelody().get(0).bars().size());
         assertTrue("expect a support track", result1.supportTracks().size() > 0);
         assertTrue("expect a percussion support track",
     		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
