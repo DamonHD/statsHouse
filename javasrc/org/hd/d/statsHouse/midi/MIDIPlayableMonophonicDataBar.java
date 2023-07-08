@@ -97,12 +97,28 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
      * @param note  new note for given index or null for no note
      * @return  immutable clone of original with the specified change
      */
-    public MIDIPlayableMonophonicDataBar cloneAndSet(final int index, final NoteAndVelocity note)
+    public MIDIPlayableMonophonicDataBar cloneAndSetNote(
+    		final int index, final NoteAndVelocity note)
 	    {
     	final List<NoteAndVelocity> l = new ArrayList<>(notes);
     	l.set(index, note);
     	return(new MIDIPlayableMonophonicDataBar(dataNotesPerBar, dpr, stream,
             Collections.unmodifiableList(new ArrayList<>(l)),
             expressionStart, expressionEnd));
+	    }
+
+    /**Make an immutable copy/clone expression levels changed.
+	 *
+     * @param newExpressionStart  expression level (CC 11) at the start of the bar [0,127]
+     * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
+	 * @return  immutable clone of original with the specified change
+	 */
+    public MIDIPlayableMonophonicDataBar cloneAndSetExpression(
+    		final byte newExpressionStart, final byte newExpressionEnd)
+	    {
+		final List<NoteAndVelocity> l = new ArrayList<>(notes);
+		return(new MIDIPlayableMonophonicDataBar(dataNotesPerBar, dpr, stream,
+	        Collections.unmodifiableList(new ArrayList<>(l)),
+	        newExpressionStart, newExpressionEnd));
 	    }
     }

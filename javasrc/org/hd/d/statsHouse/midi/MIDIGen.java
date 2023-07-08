@@ -578,7 +578,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 	if(null == oldNote) { continue; }
                     // Have found a non-null note to borrow from.
                 	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), (byte) Math.min(ghostVelocity, oldNote.velocity()));
-                	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
+                	mpmBars.set(i, mpmBars.get(i).cloneAndSetNote(noteIndexInBar, newNote));
 //                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
 	                }
@@ -590,7 +590,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 	if(null == oldNote) { continue; }
                     // Have found a non-null note to borrow from.
                 	final NoteAndVelocity newNote = new NoteAndVelocity(oldNote.note(), (byte) Math.min(ghostVelocity, oldNote.velocity()));
-                	mpmBars.set(i, mpmBars.get(i).cloneAndSet(noteIndexInBar, newNote));
+                	mpmBars.set(i, mpmBars.get(i).cloneAndSetNote(noteIndexInBar, newNote));
 //                	assert(null != mpmBars.get(i).notes().get(noteIndexInBar)) ;
                 	continue nextNote;
 	                }
