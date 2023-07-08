@@ -220,7 +220,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
     					(byte) 0,
     					(byte) 127, // max
-    					MIDITrackSetup.DEFAULT_PAN,
+    					MIDIConstant.DEFAULT_PAN,
     					"percussion: house"),
     			new ArrayList<>());
     	final MIDISupportTrack bassTrack =
@@ -228,8 +228,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel after percussion.
     					//MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary eg SYNTH_BASE_1, SYNTH_BASE_2
     					MIDIInstrument.SYNTH_BASE_1.instrument0, // Alt: vary
-    					(byte) (2*(MIDITrackSetup.DEFAULT_VOLUME/3)),
-    					(byte) (MIDITrackSetup.DEFAULT_PAN+1), // Slightly off to side.
+    					(byte) (2*(MIDIConstant.DEFAULT_VOLUME/3)),
+    					(byte) (MIDIConstant.DEFAULT_PAN+1), // Slightly off to side.
     					"bass: house"),
     			new ArrayList<>());
     	final MIDISupportTrack support[] = { percTrack, bassTrack };
@@ -614,8 +614,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			new MIDISupportTrack(
     			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
     					(byte) 0,
-    					MIDITrackSetup.DEFAULT_VOLUME,
-    					MIDITrackSetup.DEFAULT_PAN,
+    					MIDIConstant.DEFAULT_VOLUME,
+    					MIDIConstant.DEFAULT_PAN,
     					"percussion: gentle"),
     			new ArrayList<>());
 
@@ -726,7 +726,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		// Use default volume for main data stream, with the rest quieter.
     	// If the style is Danceable then turn down all the data melody volume!
-		final byte rawVolume = isMajorStream ? MIDITrackSetup.DEFAULT_VOLUME : (byte) ((2*MIDITrackSetup.DEFAULT_VOLUME)/3);
+		final byte rawVolume = isMajorStream ? MIDIConstant.DEFAULT_VOLUME : (byte) ((2*MIDIConstant.DEFAULT_VOLUME)/3);
 		final byte volume = (ProductionLevel.Danceable == params.style().level) ?
 				((byte) ((2*rawVolume) / 3)) : rawVolume;
 
@@ -906,12 +906,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			pc.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
 			trackMelody.add(new MidiEvent(pc, 0));
 			}
-		// Volume setting; do not assume a consistent synthesiser default.
+		// Volume setting (CC 7); do not assume a consistent synthesiser default.
+		// Also set expression to something sensible.
 		final ShortMessage vol = new ShortMessage();
 		vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 7, ts.volume());
 		trackMelody.add(new MidiEvent(vol, 0));
+//		final ShortMessage exp = new ShortMessage();
+//		vol.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, MIDIConstant.DEFAULT_EXPRESSION);
+//		trackMelody.add(new MidiEvent(exp, 0));
 		// Pan (if not default).
-		if(MIDITrackSetup.DEFAULT_PAN != ts.pan())
+		if(MIDIConstant.DEFAULT_PAN != ts.pan())
 			{
 			final ShortMessage pan = new ShortMessage();
 			pan.setMessage(ShortMessage.CONTROL_CHANGE, channel, 10, ts.pan());

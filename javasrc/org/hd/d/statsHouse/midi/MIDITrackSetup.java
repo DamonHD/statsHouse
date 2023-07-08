@@ -17,18 +17,13 @@ public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pa
 	    if(pan < 0) { throw new IllegalArgumentException(); }
 	    }
 
-    /**The default volume is a little below max for some headroom; GM 2 apparently has 100. */
-    public static final byte DEFAULT_VOLUME = 100;
-    /**The default is centred, ie 64. */
-    public static final byte DEFAULT_PAN = 64;
-
     /**The name is null. */
     public MIDITrackSetup(final byte channel, final byte instrument, final byte volume, final byte pan)
     	{ this(channel, instrument, volume, pan, null); }
     /**The pan is set to the default centre position. */
     public MIDITrackSetup(final byte channel, final byte instrument, final byte volume)
-    	{ this(channel, instrument, volume, DEFAULT_PAN); }
+    	{ this(channel, instrument, volume, MIDIConstant.DEFAULT_PAN); }
     /**The volume is set to its default and pan is set to the default centre position. */
     public MIDITrackSetup(final byte channel, final byte instrument)
-		{ this(channel, instrument, DEFAULT_VOLUME); }
+		{ this(channel, instrument, MIDIConstant.DEFAULT_VOLUME); }
 	}

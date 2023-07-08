@@ -3,7 +3,7 @@ package org.hd.d.statsHouse.midi;
 /**Various MIDI constants. */
 public final class MIDIConstant
 	{
-    /**Prevent creation of an instance. */
+	/**Prevent creation of an instance. */
     private MIDIConstant() { }
 
     /**GM1 generators must support at least 16 melodic voices at once. */
@@ -22,4 +22,14 @@ public final class MIDIConstant
 
     /**MIDI track title meta message number. */
     public static final byte METAMESSAGE_TITLE = 3;
+
+    /**The default is centred, ie 64. */
+	public static final byte DEFAULT_PAN = 64;
+
+    /**The default volume is a little below max for some headroom; GM 2 apparently has 100.
+     * Setting to a non-default value may imply setting expression (CC 11) also.
+     */
+    public static final byte DEFAULT_VOLUME = 100;
+    /**The default expression is mid-way for some headroom. */
+    public static final byte DEFAULT_EXPRESSION = 63;
 	}
