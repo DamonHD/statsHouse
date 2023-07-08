@@ -30,7 +30,8 @@ public final class MIDIConstant
      * Setting to a non-default value may imply setting expression (CC 11) also.
      */
     public static final byte DEFAULT_VOLUME = 100;
-    /**The default expression is max to leave overall volume unchanged.
+
+    /**The default expression is maximum to leave overall volume unchanged.
      * GM Level 1 Developer Guidelines and the DLS specification use L(dB) = 40 log (volume × expression / 127).
      * See: https://sound.stackexchange.com/questions/41549/is-midi-volume-scale-logarithmic
      */
