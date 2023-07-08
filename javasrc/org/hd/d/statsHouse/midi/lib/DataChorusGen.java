@@ -32,7 +32,7 @@ public final class DataChorusGen
 	 * @param params  generation parameters; never null
 	 * @param db  data bounds; never null
 	 * @param data  full input data set; never null
-	 * @return  chorus section data melody track segment of correct section length; never null
+	 * @return chorus section data melody track segment of correct section length; never null
 	 */
 	public static List<MIDIPlayableMonophonicDataBar> makeHouseDataChorusBars(
 			final ChorusStyleFromData style,
@@ -54,8 +54,8 @@ public final class DataChorusGen
 
 		// Parameterisation of melody play without scales.
 		final int octaves = MIDIGen.DEFAULT_RANGE_OCTAVES; // Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-		final int range = 12 * octaves;
-		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+//		final int range = 12 * octaves;
+//		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 		final List<DataProtoBar> verseProtoBars = MIDIGen.splitAndAlignData(TuneSection.verse, params, data);
 		// If there are no data bars, return empty section.
 		if(verseProtoBars.isEmpty())
@@ -76,7 +76,7 @@ public final class DataChorusGen
 				// or where coverage is not strictly positive.
     			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
 					d,
-					true, /// isNotSecondaryDataStream,
+					true, // isNotSecondaryDataStream,
 					MIDIGen.DEFAULT_HOUSE_SCALE,
 					octaves,
 					db.maxVal());
