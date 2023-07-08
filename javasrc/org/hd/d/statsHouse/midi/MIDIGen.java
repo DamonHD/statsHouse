@@ -177,13 +177,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Parameterisation of melody play without scales.
     	// Have a more muted tonal range for house, to let percussion/base stand out.
 		final int octaves = Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-		final int range = 12 * octaves;
-		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+//		final int range = 12 * octaves;
+//		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 
     	// First establish how many sections worth of 'verse' data there is.
     	// Always at least one.
     	// Prepared to stretch a bit (25%) else truncate as needed.
-    	final int sectionBars = params.sectionBars();
+		// TODO: allow verse repeats when only original material for one.
+    	final int defaultSectionBars = params.sectionBars();
+    	final int sectionBars = (verseProtoBars.size() >= defaultSectionBars) ?
+			defaultSectionBars : MIDIGen.DEFAULT_MIN_SECTION_BARS;
         final int availableVerseSections =
         	Math.max(1, (verseProtoBars.size() + (sectionBars/4)) / sectionBars);
         final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);
