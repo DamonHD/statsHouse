@@ -238,50 +238,18 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// inserting the full data melody and support as needed.
     	int verseCount = 0;
     	int chorusCount = 0;
-    	for(final TuneSectionMetadata ts : plan)
+    	for(int sectionNumber = 0; sectionNumber < plan.size(); ++sectionNumber)
 	    	{
+    		final TuneSectionMetadata ts = plan.get(sectionNumber);
+    		// Next section (null if none) to help with transitions.
+    		final TuneSectionMetadata tsNext = (sectionNumber+1 < plan.size()) ? plan.get(sectionNumber+1) : null;
+
             // Verify that section size is correct.
             assert(ts.bars() == sectionBars);
 
-    		// Inject percussion for most section types,
-    		// though possibly varying between types and instances.
-            switch(ts.sectionType())
-	            {
-	            case drop, breakdown:
-	            	// Skip this section type for percussion.
-	        		percTrack.bars().addAll(
-	    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
-	            	break;
-	            // Default simple floor-to-the-floor.
-                default:
-	                {
-            		final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar(false);
-            		final MIDIPlayableBar barFinal = SupportBarGen.makeBasicHousePercussionBar(true);
-            		final int barCount = ts.bars();
-            		if(barCount > 1) { percTrack.bars().addAll(Collections.nCopies(barCount-1, bar)); }
-            		percTrack.bars().add(barFinal);
-	                break;
-	                }
-	            }
+    		_generateHousePercussionBySection(percTrack, ts);
 
-            // Inject normal bass for verse and chorus only,
-    		// though possibly varying between types and instances.
-            switch(ts.sectionType())
-            	{
-            	case verse, chorus:
-            		{
-            		final MIDIPlayableBar bar = SupportBarGen.makeBasicHouseBassBar(
-        				params, ts.sectionType());
-            		final int barCount = ts.bars();
-            		bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
-	                break;
-	                }
-            	default:
-            		// Skip this section type for bass.
-	        		bassTrack.bars().addAll(
-	    				Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
-	            	break;
-            	}
+            _generateHouseBassBySection(params, bassTrack, ts);
 
             // Inject relatively-vanilla data melody for verse.
             switch(ts.sectionType())
@@ -348,20 +316,27 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         			++verseCount;
 	                break;
 	                }
+
 	        	case chorus:
 	        		{
         			++chorusCount;
 	            	for(int s = 1; s <= streams; ++s)
 	            		{
-        				final List<MIDIPlayableMonophonicDataBar> mpmBars =
+	            		// If the following section is outro (or there isn't another section)
+	            		// then set this chorus to fade out.
+	            		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
+        				// Make the bars!
+	            		final List<MIDIPlayableMonophonicDataBar> mpmBars =
     						DataChorusGen.makeHouseDataChorusBars(
     							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
-								chorusCount, s, ts, params, db, data);
-	        			assert(mpmBars.size() == ts.bars());
+								chorusCount, s, ts, params, db, data,
+								fadeOut);
+//	        			assert(mpmBars.size() == ts.bars());
 	            		tracks[s - 1].bars().addAll(mpmBars);
 	            		}
 	        		break;
 	        		}
+
 	        	default:
 	                // Skip over this section silently,
 	            	// inserting empty bars for all streams.
@@ -387,6 +362,52 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
+
+	public static void _generateHouseBassBySection(final GenerationParameters params, final MIDISupportTrack bassTrack,
+			final TuneSectionMetadata ts) {
+		// Inject normal bass for verse and chorus only,
+		// though possibly varying between types and instances.
+		switch(ts.sectionType())
+			{
+			case verse, chorus:
+				{
+				final MIDIPlayableBar bar = SupportBarGen.makeBasicHouseBassBar(
+					params, ts.sectionType());
+				final int barCount = ts.bars();
+				bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
+		        break;
+		        }
+			default:
+				// Skip this section type for bass.
+				bassTrack.bars().addAll(
+					Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
+		    	break;
+			}
+	}
+
+	public static void _generateHousePercussionBySection(final MIDISupportTrack percTrack,
+			final TuneSectionMetadata ts) {
+		// Inject percussion for most section types,
+		// though possibly varying between types and instances.
+		switch(ts.sectionType())
+		    {
+		    case drop, breakdown:
+		    	// Skip this section type for percussion.
+				percTrack.bars().addAll(
+					Collections.nCopies(ts.bars(), MIDIPlayableBar.EMPTY_DEFAULT_CLOCKS));
+		    	break;
+		    // Default simple floor-to-the-floor.
+		    default:
+		        {
+				final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar(false);
+				final MIDIPlayableBar barFinal = SupportBarGen.makeBasicHousePercussionBar(true);
+				final int barCount = ts.bars();
+				if(barCount > 1) { percTrack.bars().addAll(Collections.nCopies(barCount-1, bar)); }
+				percTrack.bars().add(barFinal);
+		        break;
+		        }
+		    }
+	}
 
     /**Convert datum to note/velocity without a scale; may be null.
      *

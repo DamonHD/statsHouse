@@ -32,6 +32,7 @@ public final class DataChorusGen
 	 * @param params  generation parameters; never null
 	 * @param db  data bounds; never null
 	 * @param data  full input data set; never null
+	 * @param fadeOut  if true then fade this chorus out, eg because end of tune
 	 * @return chorus section data melody track segment of correct section length; never null
 	 */
 	public static List<MIDIPlayableMonophonicDataBar> makeHouseDataChorusBars(
@@ -39,7 +40,8 @@ public final class DataChorusGen
 			final int chorusCount,
 			final int stream,
 			final TuneSectionMetadata ts,
-			final GenerationParameters params, final DataBounds db, final EOUDataCSV data)
+			final GenerationParameters params, final DataBounds db, final EOUDataCSV data,
+			final boolean fadeOut)
 		{
 		if(chorusCount < 1) { throw new IllegalArgumentException(); }
 		if(stream < 1) { throw new IllegalArgumentException(); }
