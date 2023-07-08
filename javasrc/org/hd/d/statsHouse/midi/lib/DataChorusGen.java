@@ -89,7 +89,7 @@ public final class DataChorusGen
     				}
 
     			// A full bar has been located.
-    			// Construct repeated MIDI-playable bar for this stream.
+    			// Return repeated MIDI-playable bar for this stream.
     			final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
     					dnpb, dbp, stream, Collections.unmodifiableList(notes));
     			return(Collections.nCopies(ts.bars(), mpmb));
@@ -116,7 +116,7 @@ public final class DataChorusGen
 				notes.add(n);
 				}
 
-			// Construct repeated MIDI-playable bar for this stream.
+			// Return repeated MIDI-playable bar for this stream.
 			final MIDIPlayableMonophonicDataBar mpmb = new MIDIPlayableMonophonicDataBar(
 					dnpb, dbp, stream, Collections.unmodifiableList(notes));
 			return(Collections.nCopies(ts.bars(), mpmb));
