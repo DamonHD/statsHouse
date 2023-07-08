@@ -322,9 +322,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         			++chorusCount;
 	            	for(int s = 1; s <= streams; ++s)
 	            		{
+	            		// Maybe do not want this type of logic hardwired in.
+	            		// TODO: sometimes omit fade out depending on the seed.
 	            		// If the following section is outro (or there isn't another section)
 	            		// then set this chorus to fade out.
 	            		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
+
         				// Make the bars!
 	            		final List<MIDIPlayableMonophonicDataBar> mpmBars =
     						DataChorusGen.makeHouseDataChorusBars(
