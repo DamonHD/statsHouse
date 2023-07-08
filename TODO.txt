@@ -2,6 +2,10 @@ Items TO DO in some way, and nice-to-haves
 ==========================================
 
 
+2023-07-08 DM from A8:
+
+  * ... put a mastering plugin on it though. Even if it's just a basic limiter.
+
 
 2023-06-13 thoughts:
 
