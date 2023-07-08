@@ -368,7 +368,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     /**Apply optional fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
      * <p>
-     * The default is to fade out over
+     * The default fade out is to fade out over
      * the last half of the section or ~4 bars,
      * whichever is shorter.
      *
