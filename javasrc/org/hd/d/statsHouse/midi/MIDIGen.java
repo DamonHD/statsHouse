@@ -368,7 +368,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     /**Apply optional fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
      * <p>
-     * The default fade out is to fade out over
+     * This assumes that the incoming bars are all at default (maximum) expression.
+     * <p>
+     * The default behaviour is to fade out over
      * the last half of the section or ~4 bars,
      * whichever is shorter.
      *
@@ -381,6 +383,32 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final boolean fadeOut)
 		{
 		Objects.requireNonNull(mpmBars);
+
+		if(fadeOut && !mpmBars.isEmpty())
+			{
+			final int barCount = mpmBars.size();
+            final int fadeBarCount = Math.max(1, Math.min(4, barCount/2));
+            final int firstFadeBarIndex = barCount - fadeBarCount;
+            final int fadePerBar = (MIDIConstant.DEFAULT_EXPRESSION + 1) / fadeBarCount;
+
+            final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
+
+            // Preserve the/any initial unfaded portion.
+			updatedBars.addAll(mpmBars.subList(0, firstFadeBarIndex));
+
+			// Reduce the expression on the remaining bars, ending at 0.
+			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
+            for(int i = firstFadeBarIndex; i < barCount; ++i)
+	            {
+            	final byte newExpression = (byte) Math.max(0, expression - fadePerBar);
+                updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+                expression = newExpression;
+	            }
+            assert(0 == expression);
+
+            return(Collections.unmodifiableList(updatedBars));
+			}
+
 		return(mpmBars);
 		}
 
