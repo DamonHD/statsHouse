@@ -6,7 +6,7 @@ Entries should be deleted when substantially implemented.
 
 2023-07-08:
 
-  * DM from A8 "... put a mastering plugin on it though. Even if it's just a basic limiter."
+  * A8: in response to V5.1.0 imp-M dc sample: "... put a mastering plugin on it though. Even if it's just a basic limiter."
   * Auto-select section length depending on main data bars available.
   * Auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
   * Auto fade out final chorus.
