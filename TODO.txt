@@ -5,6 +5,7 @@ Entries should be deleted when substantially implemented.
 
 Priorities:
   * Alignment
+  * Make sound reasonable at all cadences, build JAR, install and run for makefile/server
   * Chorus bar synthesis
   * Mastering/limiting
 
