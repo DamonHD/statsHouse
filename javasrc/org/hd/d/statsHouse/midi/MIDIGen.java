@@ -208,11 +208,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        }
 
         // Top and tail with intro/outro if specified, eg to be mix-friendly.
-    	final boolean hasIntroOutro = (params.introBars() > 0);
+    	final boolean hasIntroOutro = (params.introRequested());
         if(hasIntroOutro)
 	        {
-        	plan.add(0, new TuneSectionMetadata(params.introBars(), TuneSection.intro));
-        	plan.add(new TuneSectionMetadata(params.introBars(), TuneSection.outro));
+        	plan.add(0, new TuneSectionMetadata(sectionBars, TuneSection.intro));
+        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.outro));
 	        }
 
     	// Create melody tracks with extendable (within this method) bars.
