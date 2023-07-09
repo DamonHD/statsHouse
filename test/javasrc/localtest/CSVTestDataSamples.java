@@ -1,10 +1,10 @@
 package localtest;
 
 /**Significant built-in test CSV data, shareable across all test cases. */
-public final class CSVDataSamples
+public final class CSVTestDataSamples
 	{
 	/**Prevent creation of instances. */
-	private CSVDataSamples() { }
+	private CSVTestDataSamples() { }
 
 	/**Single data point, yearly cadence. */
 	public static final String minimal_sample_Y = """

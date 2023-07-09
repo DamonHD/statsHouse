@@ -50,7 +50,7 @@ public final class TestDataCSVRead extends TestCase
     /**Verify that parse of real-life sample CSV works. */
     public static void testReadSample() throws IOException
 	    {
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVDataSamples.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
         assertEquals("Sample should have 6 data rows", 6, result1.data().size());
 
         // Sample some fields.
@@ -59,7 +59,7 @@ public final class TestDataCSVRead extends TestCase
         assertEquals("", result1.data().get(4).get(2));
         assertEquals("2008-07", result1.data().get(5).get(0));
 
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVDataSamples.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
         assertEquals("Sample should have 16 data rows", 16, result2.data().size());
 	    }
 
@@ -69,7 +69,7 @@ public final class TestDataCSVRead extends TestCase
     public static void testChopDataIntoProtoBars() throws IOException
 	    {
     	// Expecting 2 bars, the first of 4 notes, the second of 2 notes plus 2 nulls.
-        final EOUDataCSV edc1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVDataSamples.sample_gen_M));
+        final EOUDataCSV edc1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
         final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBarsSimple(4, edc1);
         assertNotNull(result1);
         assertEquals(2, result1.size());
@@ -84,7 +84,7 @@ public final class TestDataCSVRead extends TestCase
         assertNull(result1.get(1).dataRows().data().get(2));
         assertNull(result1.get(1).dataRows().data().get(3));
 
-        final EOUDataCSV edc2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVDataSamples.sample_gen_Y));
+        final EOUDataCSV edc2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
         final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBarsSimple(4, edc2);
         assertEquals(4, result2.size());
 	    }
