@@ -41,7 +41,8 @@ import junit.framework.TestCase;
 public final class TestMIDIGen extends TestCase
     {
     /**Test minimal data MIDICSV and Sequence generation.
-     * @throws InvalidMidiDataException */
+     * @throws InvalidMidiDataException
+     */
     public static void testGenMinimalMelodyMIDISCV() throws IOException, InvalidMidiDataException
 	    {
         final EOUDataCSV csv1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y));
@@ -216,7 +217,7 @@ public final class TestMIDIGen extends TestCase
     		result1.supportTracks().stream().anyMatch(st -> !st.bars().isEmpty()));
 	    }
 
-    /**Single-source multi-year monthly-cadence sample (electricity consumption minus DHW) to mid-2023. */
+    /**Single-source multi-year year-aligned monthly-cadence sample (electricity consumption minus DHW) to mid-2023. */
     private static final String conexDHW_M_to_202305 = """
 #YYYY-MM,device,coverage,conexDHW
 #synth,"meter.con-Eddi.h1"
@@ -413,7 +414,9 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodylHouseMIDITune() throws IOException
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 4, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(conexDHW_M_to_202305)));
+    	final EOUDataCSV data = EOUDataCSV.parseEOUDataCSV(new StringReader(conexDHW_M_to_202305));
+        assertEquals("expect exactly 185 data rows", 185, data.data().size());
+		final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 4, false, null), data);
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
     	assertFalse(result1.dataMelody().isEmpty());
