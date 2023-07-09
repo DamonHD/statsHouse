@@ -26,6 +26,9 @@ public record ExternalFile(String name, int recordsExpected, DataCadence cadence
 	/**Path of data sample (top) directory relative to the project root; not null. */
 	public final static File DATA_SAMPLE_DIR = new File("dataSample");
 
+	/**Path of test output (top) directory relative to the project root; not null. */
+	public final static File TEST_OUTPUT_DIR = new File("test/out");
+
 	/**Get full File path for sample; never null. */
 	public File getFullPath() { return(new File(DATA_SAMPLE_DIR, name)); }
 
