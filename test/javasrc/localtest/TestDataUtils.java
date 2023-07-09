@@ -18,7 +18,6 @@ package localtest;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
@@ -36,9 +35,9 @@ public final class TestDataUtils extends TestCase
     public static void testCountDataStreamsQuick()
 		throws IOException
     	{
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_M));
         assertEquals(3, DataUtils.countDataStreamsQuick(result1));
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_Y));
         assertEquals(3, DataUtils.countDataStreamsQuick(result2));
 	    }
 
@@ -48,9 +47,9 @@ public final class TestDataUtils extends TestCase
     public static void testMaxVal()
 		throws IOException
     	{
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_M));
         assertEquals(161f, DataUtils.maxVal(result1), 0.001f);
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_Y));
         assertEquals(4084.42f, DataUtils.maxVal(result2), 0.001f);
 	    }
 
@@ -60,9 +59,9 @@ public final class TestDataUtils extends TestCase
     public static void testMaxNVal()
 		throws IOException
     	{
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_M));
         assertEquals(2, DataUtils.maxNVal(result1));
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_Y));
         assertEquals(2, DataUtils.maxNVal(result2));
 	    }
 
@@ -72,29 +71,9 @@ public final class TestDataUtils extends TestCase
     public static void testExtractDataCadenceQuick()
 		throws IOException
     	{
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_M));
+        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_M));
         assertEquals(DataCadence.M, DataUtils.extractDataCadenceQuick(result1));
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
+        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_Y));
         assertEquals(DataCadence.Y, DataUtils.extractDataCadenceQuick(result2));
 	    }
-
-	/**Validate external data files for presence and that they match simple expected metrics.
-	 * Mainly a sanity check of the test system,
-	 * given the relative fragility of using data from the filesystem.
-	 *
-	 * @throws IOException
-	 */
-    public static void testThatExternalCSVDataSamplesAreIntact() throws IOException
-		{
-    	final List<CSVTestDataSamples.ExternalFile> samples = CSVTestDataSamples.mainFileDataSamples();
-    	assertNotNull(samples);
-    	assertFalse(samples.isEmpty());
-    	for(final CSVTestDataSamples.ExternalFile sample : samples)
-	    	{
-    		assertTrue(sample.getFullPath().canRead());
-    		final EOUDataCSV data = sample.loadEOUDataCSV();
-    		assertEquals("expecting listed number of data records for "+sample.name(), sample.recordsExpected(), data.data().size());
-    		assertEquals("expecting listed cadence for "+sample.name(), sample.cadenceExpected(), DataUtils.extractDataCadenceQuick(data));
-	    	}
-		}
     }

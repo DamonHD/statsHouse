@@ -7,16 +7,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
 
+import junit.framework.TestCase;
+
 /**Significant built-in test CSV data, shareable across all test cases. */
-public final class CSVTestDataSamples
+public final class TestCSVDataSamples extends TestCase
 	{
-	/**Prevent creation of instances. */
-	private CSVTestDataSamples() { }
-
-
 	/**External data in files.
 	 * Such data tends to be more fragile.
 	 *
@@ -55,6 +54,26 @@ public final class CSVTestDataSamples
 			new ExternalFile("gen-M.csv", 186, DataCadence.M),
 			new ExternalFile("gen-Y.csv", 16, DataCadence.Y)
 			)));
+		}
+
+	/**Validate external data files for presence and that they match simple expected metrics.
+	 * Mainly a sanity check of the test system,
+	 * given the relative fragility of using data from the file system.
+	 *
+	 * @throws IOException
+	 */
+    public static void testThatExternalCSVDataSamplesAreIntact() throws IOException
+		{
+    	final List<TestCSVDataSamples.ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
+    	assertNotNull(samples);
+    	assertFalse(samples.isEmpty());
+    	for(final TestCSVDataSamples.ExternalFile sample : samples)
+	    	{
+    		assertTrue(sample.getFullPath().canRead());
+    		final EOUDataCSV data = sample.loadEOUDataCSV();
+    		assertEquals("expecting listed number of data records for "+sample.name(), sample.recordsExpected(), data.data().size());
+    		assertEquals("expecting listed cadence for "+sample.name(), sample.cadenceExpected(), DataUtils.extractDataCadenceQuick(data));
+	    	}
 		}
 
 
