@@ -23,7 +23,7 @@ public final class TestCSVDataSamples extends TestCase
 	 * @param recordsExpected  count of data records expected; non-negative
 	 * @param cadenceExpected  data cadence expected; non-negative
 	 */
-	public record ExternalFile(String name, int recordsExpected, DataCadence cadenceExpected)
+	public static record ExternalFile(String name, int recordsExpected, DataCadence cadenceExpected)
 		{
 		public ExternalFile
 			{
