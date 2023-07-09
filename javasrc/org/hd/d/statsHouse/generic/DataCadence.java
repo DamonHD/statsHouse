@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**Cadence of input data: daily, monthly, yearly. */
 public enum DataCadence

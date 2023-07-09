@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**Possible finished tune/track sections. */
 public enum TuneSection {

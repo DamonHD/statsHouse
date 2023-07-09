@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.hd.d.statsHouse.TuneSectionPlan;
+import org.hd.d.statsHouse.generic.TuneSectionPlan;
 
 /**A representation of a full MIDI 'tune' created from data.
  * Is immutable if the bar List items are.

@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
-import org.hd.d.statsHouse.DataProtoBar;
-import org.hd.d.statsHouse.DataUtils;
-import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.data.DataProtoBar;
+import org.hd.d.statsHouse.data.DataUtils;
+import org.hd.d.statsHouse.data.EOUDataCSV;
 
 import junit.framework.TestCase;
 

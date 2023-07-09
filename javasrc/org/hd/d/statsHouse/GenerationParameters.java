@@ -2,6 +2,7 @@ package org.hd.d.statsHouse;
 
 import java.util.Objects;
 
+import org.hd.d.statsHouse.generic.Style;
 import org.hd.d.statsHouse.midi.MIDIGen;
 
 /**Parameters for music generation from data.

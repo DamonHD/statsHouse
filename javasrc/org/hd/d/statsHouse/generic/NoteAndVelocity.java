@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**Simple MIDI-style note with note number (60 = middle C) and velocity. */
 public record NoteAndVelocity(byte note, byte velocity)

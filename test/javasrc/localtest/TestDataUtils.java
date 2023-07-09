@@ -19,9 +19,9 @@ package localtest;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.hd.d.statsHouse.DataCadence;
-import org.hd.d.statsHouse.DataUtils;
-import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.data.DataUtils;
+import org.hd.d.statsHouse.data.EOUDataCSV;
+import org.hd.d.statsHouse.generic.DataCadence;
 
 import junit.framework.TestCase;
 

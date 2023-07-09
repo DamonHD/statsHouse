@@ -6,8 +6,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.hd.d.statsHouse.GenerationParameters;
-import org.hd.d.statsHouse.NoteAndVelocity;
-import org.hd.d.statsHouse.TuneSection;
+import org.hd.d.statsHouse.generic.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDIPercusssionInstrument;
 import org.hd.d.statsHouse.midi.MIDIPlayableBar;

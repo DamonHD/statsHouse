@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**How 'produced' the output is as (danceable) music.
  * Low ordinal values such as for None retain more fidelity to the source,

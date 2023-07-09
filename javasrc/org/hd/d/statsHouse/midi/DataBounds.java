@@ -1,7 +1,7 @@
 package org.hd.d.statsHouse.midi;
 
-import org.hd.d.statsHouse.DataUtils;
-import org.hd.d.statsHouse.EOUDataCSV;
+import org.hd.d.statsHouse.data.DataUtils;
+import org.hd.d.statsHouse.data.EOUDataCSV;
 
 /**Discovered bounds for input data.
  *

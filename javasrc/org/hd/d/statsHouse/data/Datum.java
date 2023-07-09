@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.data;
 
 import java.util.List;
 

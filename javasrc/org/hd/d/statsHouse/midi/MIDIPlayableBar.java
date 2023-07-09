@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.SortedSet;
 
-import org.hd.d.statsHouse.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.NoteAndVelocity;
 
 /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
  * Represents non-data melody or other sound for one playable bar.

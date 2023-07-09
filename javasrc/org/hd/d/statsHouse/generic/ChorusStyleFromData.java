@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**This enumerates some possible algorithmic styles of data melody chorus generation. */
 public enum ChorusStyleFromData

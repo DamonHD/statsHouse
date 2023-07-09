@@ -14,7 +14,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
    limitations under the License.
 */
 
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.data;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -14,13 +14,15 @@ Licensed under the Apache License, Version 2.0 (the "License");
    limitations under the License.
 */
 
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import org.hd.d.statsHouse.generic.DataCadence;
 
 
 /**Data utilities.

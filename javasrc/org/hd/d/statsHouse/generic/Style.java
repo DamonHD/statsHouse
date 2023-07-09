@@ -1,4 +1,4 @@
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.generic;
 
 /**Music/percussion style.
  * Implies a level of production/'art' also.
