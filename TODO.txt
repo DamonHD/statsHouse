@@ -7,7 +7,6 @@ Priorities:
   * Alignment
   * Chorus bar synthesis
   * Mastering/limiting
-  * Seeding and extra generation params / hints
 
 
 2023-07-08:
@@ -15,6 +14,7 @@ Priorities:
   * A8: in response to V5.1.0 imp-M dc sample: "... put a mastering plugin on it though. Even if it's just a basic limiter."
   * Auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
   * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more
+  * Seeding and extra generation params / hints (eg cycle on W not M for daily data, use date range)
 
 
 2023-06-13 thoughts:
