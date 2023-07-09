@@ -1,11 +1,13 @@
 package localtest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.Main;
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
@@ -79,6 +81,46 @@ public final class TestCSVDataSamples extends TestCase
 	        			}
 	    			}
 	    		}
+	    	}
+	    }
+
+    /**Write MIDI files for core versions of main samples.
+     * Ensure that no error occurs, files are updated, etc.
+     * <p>
+     * Uses the command runner in Main.
+     * <p>
+     * These files can also be listened to,
+     * to check that all styles and cadences are reasonably handled,
+     * so are not deleted after running the test.
+     */
+    public static void testKeyMIDIFilesGeneration() throws Exception
+	    {
+		assertTrue("expecting test output directoty to be present", ExternalFile.TEST_OUTPUT_DIR.isDirectory());
+    	final List<ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
+    	assertNotNull(samples);
+    	assertFalse(samples.isEmpty());
+    	for(final ExternalFile sample : samples)
+	    	{
+    		assertTrue(sample.getFullPath().canRead());
+    		final File outputPath = new File(ExternalFile.TEST_OUTPUT_DIR, sample.name());
+    		for(final Style style : Style.values())
+    			{
+    			final String styleName = style.name();
+    			final File outputName = new File(ExternalFile.TEST_OUTPUT_DIR,
+					sample.name() + "-" + styleName + ".mid");
+    			final long oldTimestamp = outputName.lastModified();
+    			final List<String> cmd = Arrays.asList(
+    					sample.getFullPath().toString(),
+    					outputName.toString(),
+    					"-seed", "-1",
+    					"-intro", "auto",
+    					"-style", styleName
+    					);
+    			Main.runCommands(Collections.singletonList(cmd), true);
+    			final long newTimestamp = outputName.lastModified();
+    			assertTrue("output file timestamp muct have updated", newTimestamp > oldTimestamp);
+    			assertTrue("output file must not be empty", outputName.length() > 0);
+    			}
 	    	}
 	    }
 	}

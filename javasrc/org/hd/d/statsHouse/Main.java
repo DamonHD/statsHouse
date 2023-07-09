@@ -123,7 +123,7 @@ public final class Main
             if(null == cmdlines)
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
-            runCommands(cmdlines);
+            runCommands(cmdlines, false);
 
             // Done, no errors.
             System.exit(0);
@@ -141,14 +141,31 @@ public final class Main
         System.exit(1);
         }
 
-	public static void runCommands(final List<List<String>> cmdlines) throws IOException,
-			InvalidMidiDataException, UnsupportedAudioFileException, MidiUnavailableException, InterruptedException {
+    /**Run zero or more command lines, aborting with an exception in case of error.
+     *
+     * @param cmdlines  zero or more command lines each consisting of arguments pre-parsed into separate Strings; never null
+     * @param quiet  if true, minimise output such as progress indication
+     *
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     * @throws UnsupportedAudioFileException
+     * @throws MidiUnavailableException
+     * @throws InterruptedException
+     */
+	public static void runCommands(final List<List<String>> cmdlines, final boolean quiet)
+		throws IOException,
+			InvalidMidiDataException,
+			UnsupportedAudioFileException,
+			MidiUnavailableException,
+			InterruptedException
+		{
 		// Execute command line(s) sequentially, aborting at any exception.
 		int cmdCount = 0;
 		for(final List<String> cmdline : cmdlines)
 			{
 			final int argCount = cmdline.size();
-			System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(cmdline.toArray()));
+			if(!quiet)
+			    { System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(cmdline.toArray())); }
 			if(argCount < 2)
 			    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
 
@@ -231,5 +248,5 @@ public final class Main
 		        	}
 		        }
 			}
-	}
+		}
     }
