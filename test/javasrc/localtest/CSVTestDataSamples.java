@@ -1,11 +1,13 @@
 package localtest;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
 
 /**Significant built-in test CSV data, shareable across all test cases. */
@@ -22,7 +24,7 @@ public final class CSVTestDataSamples
 	 * @param recordsExpected  count of data records expected; non-negative
 	 * @param cadenceExpected  data cadence expected; non-negative
 	 */
-	public record ExternalFile(File name, int recordsExpected, DataCadence cadenceExpected)
+	public record ExternalFile(String name, int recordsExpected, DataCadence cadenceExpected)
 		{
 		public ExternalFile
 			{
@@ -31,23 +33,27 @@ public final class CSVTestDataSamples
 			Objects.requireNonNull(cadenceExpected);
 			}
 
-		/**Allow construction with String file name. */
-		public ExternalFile(final String name, final int recordsExpected, final DataCadence cadenceExpected)
-			{ this(new File(name), recordsExpected, cadenceExpected); }
+		/**Path of data sample (top) directory relative to the project root; not null. */
+		public final static File DATA_SAMPLE_DIR = new File("dataSample");
+
+		/**Get full File path for sample; never null. */
+		public File getFullPath() { return(new File(DATA_SAMPLE_DIR, name)); }
+
+		/**Load EOU CSV data; never null but may be empty.
+		 * @throws IOException
+		 */
+		public EOUDataCSV loadEOUDataCSV() throws IOException
+		    { return(EOUDataCSV.loadEOUDataCSV(getFullPath())); }
 		}
 
-
-	/**Path of data sample (top) directory relative to the project root; not null. */
-	public final static File DATA_SAMPLE_DIR = new File("dataSample");
-
-	/**Main external data samples provided; non-null and immutable. */
+	/**Main external data samples that are available; non-null, non-empty and immutable. */
 	public static List<ExternalFile> mainFileDataSamples()
 		{
 		return(Collections.unmodifiableList(Arrays.asList(
-			new ExternalFile("imp-M.csv", 169, DataCadence.M),
-			new ExternalFile("gen-D.csv", 169, DataCadence.D),
-			new ExternalFile("gen-M.csv", 169, DataCadence.M),
-			new ExternalFile("gen-Y.csv", 169, DataCadence.Y)
+			new ExternalFile("imp-M.csv", 163, DataCadence.M),
+			new ExternalFile("gen-D.csv", 5611, DataCadence.D),
+			new ExternalFile("gen-M.csv", 186, DataCadence.M),
+			new ExternalFile("gen-Y.csv", 16, DataCadence.Y)
 			)));
 		}
 

@@ -18,6 +18,7 @@ package localtest;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
@@ -76,4 +77,24 @@ public final class TestDataUtils extends TestCase
         final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(CSVTestDataSamples.sample_gen_Y));
         assertEquals(DataCadence.Y, DataUtils.extractDataCadenceQuick(result2));
 	    }
+
+	/**Validate external data files for presence and that they match simple expected metrics.
+	 * Mainly a sanity check of the test system,
+	 * given the relative fragility of using data from the filesystem.
+	 *
+	 * @throws IOException
+	 */
+    public static void testThatExternalCSVDataSamplesAreIntact() throws IOException
+		{
+    	final List<CSVTestDataSamples.ExternalFile> samples = CSVTestDataSamples.mainFileDataSamples();
+    	assertNotNull(samples);
+    	assertFalse(samples.isEmpty());
+    	for(final CSVTestDataSamples.ExternalFile sample : samples)
+	    	{
+    		assertTrue(sample.getFullPath().canRead());
+    		final EOUDataCSV data = sample.loadEOUDataCSV();
+    		assertEquals("expecting listed number of data records for "+sample.name(), sample.recordsExpected(), data.data().size());
+    		assertEquals("expecting listed cadence for "+sample.name(), sample.cadenceExpected(), DataUtils.extractDataCadenceQuick(data));
+	    	}
+		}
     }
