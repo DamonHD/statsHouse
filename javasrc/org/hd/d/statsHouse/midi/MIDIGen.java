@@ -186,11 +186,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Establish how many sections worth of 'verse' data there is.
     	// Always at least one.
     	// Prepared to stretch a bit (25%) else truncate as needed.
+		// If intro bar count is specified then it wins.
 		// TODO: allow verse repeats when only original material for one.
 		// TODO: auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
     	final int defaultSectionBars = params.sectionBars();
-    	final int sectionBars = (verseProtoBars.size() >= defaultSectionBars) ?
-			defaultSectionBars : MIDIGen.DEFAULT_MIN_SECTION_BARS;
+    	final int sectionBars =
+			(0 != params.introBars() ? params.introBars() :
+				((0 != cadence.defaultBarsCycle) ? cadence.defaultBarsCycle :
+				    ((verseProtoBars.size() >= defaultSectionBars)) ?
+			    		defaultSectionBars :
+			    			MIDIGen.DEFAULT_MIN_SECTION_BARS));
         final int availableVerseSections =
         	Math.max(1, (verseProtoBars.size() + (sectionBars/4)) / sectionBars);
         final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);
