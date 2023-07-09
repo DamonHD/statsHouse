@@ -64,10 +64,10 @@ public record EOUDataCSV(List<List<String>> data)
 	        String row;
 	        while(null != (row = br.readLine()))
 	            {
-	        	// Skip comments.
-	        	if(row.startsWith("#")) { continue; }
 	        	// Skip empty rows.
 	        	if("".equals(row)) { continue; }
+	        	// Skip comments.
+	        	if(row.startsWith("#")) { continue; }
 	            final String fields[] = delimCSV.split(row);
 	            if(fields.length < 1) { continue; }
 
