@@ -63,11 +63,12 @@ public final class TestCSVDataSamples extends TestCase
     	for(final ExternalFile sample : samples)
 	    	{
     		final EOUDataCSV data = sample.loadEOUDataCSV();
-    		for(final Style style : Style.values())
+			for(final int introBars : new int[] {-1, 0, 1, 4, 12, 13, 16})
 	    		{
-    			for(final int introBars : new int[] {-1, 0, 4, 12, 16})
+    			// Testing against conventional and strange intro bar (and thus section bar) counts.
+    			for(final int seed : new int[] {-1, 0, 42})
 	    			{
-        			for(final int seed : new int[] {-1, 0, 1})
+    	    		for(final Style style : Style.values())
 	        			{
 	    				final GenerationParameters params =
 							new GenerationParameters(seed, style, introBars, false, sample.name());
