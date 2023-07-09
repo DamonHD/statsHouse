@@ -117,7 +117,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     	return(new GenerationParameters(seed, style, introBars, hetero, name));
 	    }
 
-    /**True if intro/outro is requested. */
+    /**True if some sort of intro/outro is requested. */
     public boolean introRequested() { return(0 != introBars); }
 
     /**True if fixed-length intro/outro is requested. */
