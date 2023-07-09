@@ -3,6 +3,11 @@ Items TO DO in some way, and nice-to-haves
 
 Entries should be deleted when substantially implemented.
 
+Priorities:
+  * Alignment
+  * Chorus bar synthesis
+  * Mastering/limiting
+
 
 2023-07-08:
 
