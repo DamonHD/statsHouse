@@ -14,16 +14,22 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
 
-DHD20230704: house: now adding chorus after every verse.
-DHD20230707: adjusting final percussion bar in each section.
-DHD20230708: fade-out on final house chorus using expression (MIDI CC 11).
-DHD20230709: added sample data files usable by unit tests.
-DHD20230709: "-intro auto" allows intro/outro without forcing section length.
 
 
 
 RELEASES
 ========
+
+20230709:
+    freezepoint name: V5.2.0 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    Previous significant freezepoint: V5.1.0
+	DHD20230704: house: now adding chorus after every verse.
+	DHD20230707: adjusting final percussion bar in each section.
+	DHD20230708: fade-out on final house chorus using expression (MIDI CC 11).
+	DHD20230709: added sample data files usable by unit tests.
+	DHD20230709: "-intro auto" allows intro/outro without forcing section length.
+
 
 20230704:
     freezepoint name: V5.1.0 (main)
