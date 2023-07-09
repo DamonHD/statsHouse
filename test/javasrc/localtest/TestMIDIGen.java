@@ -143,7 +143,9 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodyMinimalPlainMIDITune() throws IOException
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y)));
+    	final EOUDataCSV data = EOUDataCSV.parseEOUDataCSV(new StringReader(minimal_sample_Y));
+        assertEquals("expect exactly 1 data row", 1, data.data().size());
+		final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), data);
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
