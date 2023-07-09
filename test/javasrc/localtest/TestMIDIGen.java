@@ -172,7 +172,6 @@ public final class TestMIDIGen extends TestCase
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
-    	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
         assertNotNull(result1.dataMelody().get(0).bars());
         assertFalse("expect bars non-empty", result1.dataMelody().get(0).bars().isEmpty());
@@ -197,7 +196,6 @@ public final class TestMIDIGen extends TestCase
         assertEquals("expect exactly 185 data rows", 185, data.data().size());
 		final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 4, false, null), data);
     	MIDIGen.validateMIDITune(result1);
-    	assertFalse(result1.dataMelody().isEmpty());
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
         assertNotNull(result1.dataMelody().get(0).bars());

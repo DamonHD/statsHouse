@@ -5,9 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
+import org.hd.d.statsHouse.generic.Style;
+import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDITune;
 
 import junit.framework.TestCase;
 import localtest.support.ExternalFile;
@@ -32,7 +36,7 @@ public final class TestCSVDataSamples extends TestCase
 	 *
 	 * @throws IOException
 	 */
-    public static void testThatExternalCSVDataSamplesAreIntact() throws IOException
+    public static void testExternalCSVDataSamplesAreIntact() throws IOException
 		{
     	final List<ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
     	assertNotNull(samples);
@@ -45,4 +49,33 @@ public final class TestCSVDataSamples extends TestCase
     		assertEquals("expecting listed cadence for "+sample.name(), sample.cadenceExpected(), DataUtils.extractDataCadenceQuick(data));
 	    	}
 		}
+
+	/**Check that external data files can be built with a variety of generation parameters without failing.
+	 *
+	 * @throws IOException
+	 */
+    public static void testAllExternalCSVDataSamplesCanMakeTunes() throws IOException
+	    {
+    	final List<ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
+    	assertNotNull(samples);
+    	assertFalse(samples.isEmpty());
+    	for(final ExternalFile sample : samples)
+	    	{
+    		final EOUDataCSV data = sample.loadEOUDataCSV();
+    		for(final Style style : Style.values())
+	    		{
+    			for(final int introBars : new int[] {-1, 0, 4, 12, 16})
+	    			{
+        			for(final int seed : new int[] {-1, 0, 1})
+	        			{
+	    				final GenerationParameters params =
+							new GenerationParameters(seed, style, introBars, false, sample.name());
+	    				final MIDITune result = MIDIGen.genMelody(params, data);
+	    		    	MIDIGen.validateMIDITune(result);
+	    		    	assertFalse(result.dataMelody().isEmpty());
+	        			}
+	    			}
+	    		}
+	    	}
+	    }
 	}
