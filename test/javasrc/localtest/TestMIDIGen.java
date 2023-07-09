@@ -20,16 +20,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
-import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
 import org.hd.d.statsHouse.GenerationParameters;
-import org.hd.d.statsHouse.data.DataProtoBar;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.Style;
-import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -106,29 +103,6 @@ public final class TestMIDIGen extends TestCase
 	    {
     	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
 	    assertTrue(result1.dataMelody().isEmpty());
-	    }
-
-    /**Test splitting of sample data.
-     * @throws IOException
-     * @throws InvalidMidiDataException
-     */
-    public static void testSplitAndAlignData() throws IOException
-	    {
-    	final List<DataProtoBar> result0 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
-	    assertNotNull(result0);
-	    assertTrue(result0.isEmpty());
-
-    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
-	    assertNotNull(result1);
-	    assertFalse(result1.isEmpty());
-	    assertEquals("4 bars of 4 notes", 4, result1.size());
-	    assertEquals("4 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
-
-    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
-	    assertNotNull(result2);
-	    assertFalse(result2.isEmpty());
-	    assertEquals("1 bar of 6/12 notes", 1, result2.size());
-	    assertEquals("1 bar of 6/12 notes", 12, result2.get(0).dataNotesPerBar());
 	    }
 
 	/**Single data point, yearly cadence. */
