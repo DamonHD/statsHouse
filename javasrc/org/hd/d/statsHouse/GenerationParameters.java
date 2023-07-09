@@ -120,8 +120,11 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     /**True if intro/outro is requested. */
     public boolean introRequested() { return(0 != introBars); }
 
-    /**True if specific-length intro/outro is requested. */
+    /**True if fixed-length intro/outro is requested. */
     public boolean introRequestedFixedLength() { return(introBars > 0); }
+
+    /**True if automatic-length intro/outro is requested. */
+    public boolean introRequestedAutoLength() { return(AUTO_INTRO_BARS == introBars); }
 
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
