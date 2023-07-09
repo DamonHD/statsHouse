@@ -101,6 +101,7 @@ public final class Main
     	        final String cmdfilename = args[1].substring(2);
     	        try(Reader cmdStreamReader = switch(cmdfilename) {
 	    	        case "-" -> new InputStreamReader(System.in);
+	    	        case "" -> throw new IllegalArgumentException("missing command file name");
 	    	        default -> new FileReader(cmdfilename);
 	    	        })
 	    	        {
