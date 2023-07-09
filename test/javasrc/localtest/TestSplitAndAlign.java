@@ -30,6 +30,7 @@ import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIGen;
 
 import junit.framework.TestCase;
+import localtest.support.BuiltInCSVDataSamples;
 
 /**Test split and align of input data into (proto) bars.
  */
@@ -45,19 +46,19 @@ public final class TestSplitAndAlign extends TestCase
 	    assertNotNull(result0);
 	    assertTrue(result0.isEmpty());
 
-    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.minimal_sample_Y)));
+    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
 	    assertNotNull(result1);
 	    assertFalse(result1.isEmpty());
 	    assertEquals("1 bars of 4 notes", 1, result1.size());
 	    assertEquals("1 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
 
-    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_Y)));
+    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_Y)));
 	    assertNotNull(result2);
 	    assertFalse(result2.isEmpty());
 	    assertEquals("4 bars of 4 notes", 4, result2.size());
 	    assertEquals("4 bars of 4 notes", 4, result2.get(0).dataNotesPerBar());
 
-    	final List<DataProtoBar> result3 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestCSVDataSamples.sample_gen_M)));
+    	final List<DataProtoBar> result3 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_M)));
 	    assertNotNull(result3);
 	    assertFalse(result3.isEmpty());
 	    assertEquals("1 bar of 6/12 notes", 1, result3.size());
