@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -33,12 +34,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.data.FileUtils;
@@ -119,94 +123,8 @@ public final class Main
             if(null == cmdlines)
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
-            // Execute command line(s) sequentially, aborting at any exception.
-            int cmdCount = 0;
-            for(final List<String> cmdline : cmdlines)
-            	{
-            	final int argCount = cmdline.size();
-            	System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(args));
-            	if(argCount < 2)
-            	    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
+            runCommands(cmdlines);
 
-                final String inputFileName = cmdline.get(0);
-                final String outputFileName = cmdline.get(1);
-
-                // Remaining optional args determine GenerationParameters.
-                final GenerationParameters params =
-            		GenerationParameters.parseOptionalCommandArguments(args, 2);
-
-                // Generate the abstract MIDI form.
-                final MIDITune mt = MIDIGen.genMelody(params, EOUDataCSV.loadEOUDataCSV(new File (inputFileName)));
-
-                // Choose output type based on suffix, or -play.
-                if(outputFileName.endsWith(".csv"))
-	                {
-	                // Generate and publish MIDICSV file.
-                	try (
-            			ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
-                		Writer w = new OutputStreamWriter(baos)
-                		)
-	                	{
-	                	MIDIGen.genFromTuneMIDICSV(w, mt);
-                        FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
-	                	}
-	                }
-                else
-	                {
-                	// MIDI output to play immediately or to save.
-                	final Sequence s = MIDIGen.genFromTuneSequence(mt);
-                	final boolean isMid = outputFileName.endsWith(".mid");
-                	if(isMid || outputFileName.endsWith(".wav"))
-	                	{
-    	                // Generate MIDI binary file.
-                    	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
-    	                	{
-    	                	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
-    	                	if(isMid)
-                                {
-    	                		// Publish binary MIDI file.
-    	                		FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
-    	                		}
-    	                	else
-	    	                	{
-    	                		// Generate and publish WAV.
-	                    	    final AudioInputStream stream = AudioSystem.getAudioInputStream(
-                    	    		new ByteArrayInputStream(baos.toByteArray()));
-	                    	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(16384))
-		                    	    {
-		                            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, baosWAV);
-		                            FileUtils.replacePublishedFile(outputFileName, baosWAV.toByteArray(), true);
-		                    	    }
-	    	                	}
-    	                	}
-	                	}
-                	else if("-play".equals(outputFileName))
-	                	{
-                    	// Get default sequencer.
-                    	try(final Sequencer sequencer = MidiSystem.getSequencer())
-                	    	{
-                	    	if(null == sequencer)
-                	    	    {
-                	    		throw new UnsupportedOperationException("MIDI sequencer not available.");
-                	    	    }
-
-                    	    // Acquire resources and make operational.
-                    	    sequencer.open();
-
-                            sequencer.setSequence(s);
-                            final long usLength = sequencer.getMicrosecondLength();
-                        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
-                            sequencer.start();
-                            while(sequencer.isRunning()) { Thread.sleep(1000); }
-                            Thread.sleep(1000); // Allow for some graceful decay of the sound!
-                	    	}
-	                	}
-                	else
-	                	{
-	                	throw new IllegalArgumentException("unrecognised output type/suffix: " + outputFileName);
-	                	}
-	                }
-            	}
             // Done, no errors.
             System.exit(0);
             }
@@ -222,4 +140,96 @@ public final class Main
         printOptions();
         System.exit(1);
         }
+
+	public static void runCommands(final List<List<String>> cmdlines) throws IOException,
+			InvalidMidiDataException, UnsupportedAudioFileException, MidiUnavailableException, InterruptedException {
+		// Execute command line(s) sequentially, aborting at any exception.
+		int cmdCount = 0;
+		for(final List<String> cmdline : cmdlines)
+			{
+			final int argCount = cmdline.size();
+			System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(cmdline.toArray()));
+			if(argCount < 2)
+			    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
+
+		    final String inputFileName = cmdline.get(0);
+		    final String outputFileName = cmdline.get(1);
+
+		    // Remaining optional args determine GenerationParameters.
+		    final GenerationParameters params =
+				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()));
+
+		    // Generate the abstract MIDI form.
+		    final MIDITune mt = MIDIGen.genMelody(params, EOUDataCSV.loadEOUDataCSV(new File (inputFileName)));
+
+		    // Choose output type based on suffix, or -play.
+		    if(outputFileName.endsWith(".csv"))
+		        {
+		        // Generate and publish MIDICSV file.
+		    	try (
+					ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
+		    		Writer w = new OutputStreamWriter(baos)
+		    		)
+		        	{
+		        	MIDIGen.genFromTuneMIDICSV(w, mt);
+		            FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
+		        	}
+		        }
+		    else
+		        {
+		    	// MIDI output to play immediately or to save.
+		    	final Sequence s = MIDIGen.genFromTuneSequence(mt);
+		    	final boolean isMid = outputFileName.endsWith(".mid");
+		    	if(isMid || outputFileName.endsWith(".wav"))
+		        	{
+		            // Generate MIDI binary file.
+		        	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
+		            	{
+		            	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
+		            	if(isMid)
+		                    {
+		            		// Publish binary MIDI file.
+		            		FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
+		            		}
+		            	else
+		                	{
+		            		// Generate and publish WAV.
+		            	    final AudioInputStream stream = AudioSystem.getAudioInputStream(
+		        	    		new ByteArrayInputStream(baos.toByteArray()));
+		            	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(16384))
+		                	    {
+		                        AudioSystem.write(stream, AudioFileFormat.Type.WAVE, baosWAV);
+		                        FileUtils.replacePublishedFile(outputFileName, baosWAV.toByteArray(), true);
+		                	    }
+		                	}
+		            	}
+		        	}
+		    	else if("-play".equals(outputFileName))
+		        	{
+		        	// Get default sequencer.
+		        	try(final Sequencer sequencer = MidiSystem.getSequencer())
+		    	    	{
+		    	    	if(null == sequencer)
+		    	    	    {
+		    	    		throw new UnsupportedOperationException("MIDI sequencer not available.");
+		    	    	    }
+
+		        	    // Acquire resources and make operational.
+		        	    sequencer.open();
+
+		                sequencer.setSequence(s);
+		                final long usLength = sequencer.getMicrosecondLength();
+		            	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
+		                sequencer.start();
+		                while(sequencer.isRunning()) { Thread.sleep(1000); }
+		                Thread.sleep(1000); // Allow for some graceful decay of the sound!
+		    	    	}
+		        	}
+		    	else
+		        	{
+		        	throw new IllegalArgumentException("unrecognised output type/suffix: " + outputFileName);
+		        	}
+		        }
+			}
+	}
     }

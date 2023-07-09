@@ -1,5 +1,6 @@
 package org.hd.d.statsHouse;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.generic.Style;
@@ -42,7 +43,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Default sensible (sciency) defaults for homogeneous data. */
     public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_SYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
 
-    /**Parse optional arguments from command-line starting at the given index (usually 2).
+    /**Parse optional arguments from command-line starting at the start of the given List.
      * <pre>
 infilename.csv (-play|outfilename.(csv|mid|wav)))
   [-seed n] [-het] [-intro bars]
@@ -52,7 +53,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
      * <p>
      * TODO: unit tests
      */
-    public static GenerationParameters parseOptionalCommandArguments(final String args[], final int firstIndex)
+    public static GenerationParameters parseOptionalCommandArguments(final List<String> args)
 	    {
     	int seed = DEFAULT_SEED;
     	boolean hetero = DEFAULT_HETERO;
@@ -60,35 +61,37 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     	int introBars = DEFAULT_INTRO_BARS;
     	final String name = DEFAULT_NAME;
 
-    	for(int i = firstIndex; i < args.length; )
+    	for(int i = 0; i < args.size(); )
 	    	{
+    		// Current first argument.
+	    	final String arg = args.get(i);
 
 	    	// FIXME: parse remaining flag and argument types
 
-	    	if((i+1 < args.length) && "-seed".equals(args[i]))
+			if((i+1 < args.size()) && "-seed".equals(arg))
 				{
-	    		seed = Integer.parseInt(args[i+1]);
+	    		seed = Integer.parseInt(args.get(i+1));
 	            i += 2;
 	            continue;
 				}
 
-	    	if("-het".equals(args[i]))
+	    	if("-het".equals(arg))
 		    	{
 				hetero = true;
 				++i;
 				continue;
 		    	}
 
-	    	if((i+1 < args.length) && "-intro".equals(args[i]))
+	    	if((i+1 < args.size()) && "-intro".equals(arg))
 				{
-	    		introBars = Integer.parseInt(args[i+1]);
+	    		introBars = Integer.parseInt(args.get(i+1));
 	            i += 2;
 	            continue;
 				}
 
-	    	if((i+1 < args.length) && "-style".equals(args[i]))
+	    	if((i+1 < args.size()) && "-style".equals(arg))
 		    	{
-	            final String styleType = args[i+1];
+	            final String styleType = args.get(i+1);
 	            style = (switch(styleType) {
 		            // Accept "none" as synonym for "plain" for backward compatibility with V4.x.
 		            case "none", "plain" -> Style.plain;
@@ -100,7 +103,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
 	            continue;
 		    	}
 
-    		throw new IllegalArgumentException("unknown argument '"+ args[i] + "'");
+    		throw new IllegalArgumentException("unknown argument '"+ arg + "'");
 	    	}
 
     	return(new GenerationParameters(seed, style, introBars, hetero, name));
