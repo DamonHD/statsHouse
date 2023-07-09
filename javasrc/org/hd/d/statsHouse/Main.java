@@ -70,7 +70,6 @@ public final class Main
         System.err.println("    This format may be used, one per line, in the command file.");
         }
 
-
 	/**Charset for command list (ASCII 7-bit). */
 	public static final Charset CMD_STREAM_CHARSET = StandardCharsets.US_ASCII;
 
@@ -101,7 +100,7 @@ public final class Main
             	cmdlines = new ArrayList<>();
     	        final String cmdfilename = args[1].substring(2);
     	        try(Reader cmdStreamReader = switch(cmdfilename) {
-	    	        case "" -> new InputStreamReader(System.in);
+	    	        case "-" -> new InputStreamReader(System.in);
 	    	        default -> new FileReader(cmdfilename);
 	    	        })
 	    	        {
