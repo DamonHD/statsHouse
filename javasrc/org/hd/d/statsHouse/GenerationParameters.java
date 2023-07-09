@@ -91,7 +91,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
 
 	    	if((i+1 < args.size()) && "-intro".equals(arg))
 				{
-	    		if("auto".equals(arg)) { introBars = AUTO_INTRO_BARS; }
+	    		if("auto".equals(args.get(i+1))) { introBars = AUTO_INTRO_BARS; }
 	    		else { introBars = Integer.parseInt(args.get(i+1)); }
 	            i += 2;
 	            continue;
