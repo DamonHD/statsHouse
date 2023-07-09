@@ -216,6 +216,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
   		    -keep public class org.hd.d.statsHouse.Main {
   		        public *;
       	    }
+    		<!-- Makes the enum handling a little simpler! -->
+  		    -keep public class org.hd.d.statsHouse.generic.Style {
+  		        public *;
+      	    }
     		<!-- Build a few times, run many: thus worth extra optimisation effort here... -->
     		-optimizationpasses 5
     		-allowaccessmodification

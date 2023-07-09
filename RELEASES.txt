@@ -13,6 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
+DHD20230709: keeping org.hd.d.statsHouse.generic.Style unobfuscated for simplicity.
 
 
 
