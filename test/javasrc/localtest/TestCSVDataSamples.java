@@ -9,6 +9,7 @@ import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
+import org.hd.d.statsHouse.generic.ProductionLevel;
 import org.hd.d.statsHouse.generic.Style;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -73,6 +74,7 @@ public final class TestCSVDataSamples extends TestCase
 	    				final MIDITune result = MIDIGen.genMelody(params, data);
 	    		    	MIDIGen.validateMIDITune(result);
 	    		    	assertFalse(result.dataMelody().isEmpty());
+	    		    	assertTrue("expect support tracks unless 'plain' style / no production", (ProductionLevel.None == params.style().level) || !result.supportTracks().isEmpty());
 	        			}
 	    			}
 	    		}
