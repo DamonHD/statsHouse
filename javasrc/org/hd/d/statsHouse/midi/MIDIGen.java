@@ -165,6 +165,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(data);
 
+    	// TODO: drive various items explicitly from cadence, eg voice choice, section length.
+    	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
+
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
