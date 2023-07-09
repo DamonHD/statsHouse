@@ -1,10 +1,56 @@
 package localtest;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import org.hd.d.statsHouse.generic.DataCadence;
+
 /**Significant built-in test CSV data, shareable across all test cases. */
 public final class CSVTestDataSamples
 	{
 	/**Prevent creation of instances. */
 	private CSVTestDataSamples() { }
+
+
+	/**External data in files.
+	 * Such data tends to be more fragile.
+	 *
+	 * @param name  relative path within data sample directory; never null
+	 * @param recordsExpected  count of data records expected; non-negative
+	 * @param cadenceExpected  data cadence expected; non-negative
+	 */
+	public record ExternalFile(File name, int recordsExpected, DataCadence cadenceExpected)
+		{
+		public ExternalFile
+			{
+			Objects.requireNonNull(name);
+			if(recordsExpected < 0) { throw new IllegalArgumentException(); }
+			Objects.requireNonNull(cadenceExpected);
+			}
+
+		/**Allow construction with String file name. */
+		public ExternalFile(final String name, final int recordsExpected, final DataCadence cadenceExpected)
+			{ this(new File(name), recordsExpected, cadenceExpected); }
+		}
+
+
+	/**Path of data sample (top) directory relative to the project root; not null. */
+	public final static File DATA_SAMPLE_DIR = new File("dataSample");
+
+	/**Main external data samples provided; non-null and immutable. */
+	public static List<ExternalFile> mainFileDataSamples()
+		{
+		return(Collections.unmodifiableList(Arrays.asList(
+			new ExternalFile("imp-M.csv", 169, DataCadence.M),
+			new ExternalFile("gen-D.csv", 169, DataCadence.D),
+			new ExternalFile("gen-M.csv", 169, DataCadence.M),
+			new ExternalFile("gen-Y.csv", 169, DataCadence.Y)
+			)));
+		}
+
 
 	/**Single data point, yearly cadence. */
 	public static final String minimal_sample_Y = """
