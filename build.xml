@@ -269,7 +269,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
     	    <batchtest fork="yes" todir="${build.dir.opt}/testResults">
     	        <fileset dir="${build.dir.opt}/${tmp.workdir}/test">
-    	            <include name="localtest/*.class"/>
+    	            <include name="localtest/Test*.class"/>
     	        </fileset>
     	    </batchtest>
     		

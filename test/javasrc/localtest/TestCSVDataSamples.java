@@ -1,50 +1,20 @@
 package localtest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.DataCadence;
 
 import junit.framework.TestCase;
+import localtest.support.ExternalFile;
 
-/**Significant built-in test CSV data, shareable across all test cases. */
+/**Significant built-in test and external CSV data, shareable across all test cases. */
 public final class TestCSVDataSamples extends TestCase
 	{
-	/**External data in files.
-	 * Such data tends to be more fragile.
-	 *
-	 * @param name  relative path within data sample directory; never null
-	 * @param recordsExpected  count of data records expected; non-negative
-	 * @param cadenceExpected  data cadence expected; non-negative
-	 */
-	public static record ExternalFile(String name, int recordsExpected, DataCadence cadenceExpected)
-		{
-		public ExternalFile
-			{
-			Objects.requireNonNull(name);
-			if(recordsExpected < 0) { throw new IllegalArgumentException(); }
-			Objects.requireNonNull(cadenceExpected);
-			}
-
-		/**Path of data sample (top) directory relative to the project root; not null. */
-		public final static File DATA_SAMPLE_DIR = new File("dataSample");
-
-		/**Get full File path for sample; never null. */
-		public File getFullPath() { return(new File(DATA_SAMPLE_DIR, name)); }
-
-		/**Load EOU CSV data; never null but may be empty.
-		 * @throws IOException
-		 */
-		public EOUDataCSV loadEOUDataCSV() throws IOException
-		    { return(EOUDataCSV.loadEOUDataCSV(getFullPath())); }
-		}
-
 	/**Main external data samples that are available; non-null, non-empty and immutable. */
 	public static List<ExternalFile> mainFileDataSamples()
 		{
@@ -64,10 +34,10 @@ public final class TestCSVDataSamples extends TestCase
 	 */
     public static void testThatExternalCSVDataSamplesAreIntact() throws IOException
 		{
-    	final List<TestCSVDataSamples.ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
+    	final List<ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
     	assertNotNull(samples);
     	assertFalse(samples.isEmpty());
-    	for(final TestCSVDataSamples.ExternalFile sample : samples)
+    	for(final ExternalFile sample : samples)
 	    	{
     		assertTrue(sample.getFullPath().canRead());
     		final EOUDataCSV data = sample.loadEOUDataCSV();
