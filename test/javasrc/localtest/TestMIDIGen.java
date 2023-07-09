@@ -106,7 +106,7 @@ public final class TestMIDIGen extends TestCase
 	    }
 
 	/**Single data point, yearly cadence. */
-	private static final String minimal_sample_Y = """
+	public static final String minimal_sample_Y = """
 #YYYY,device,coverage,gen
 2009,meter,1,2956.1
 			""";
@@ -194,7 +194,7 @@ public final class TestMIDIGen extends TestCase
 	    }
 
     /**Single-source multi-year year-aligned monthly-cadence sample (electricity consumption minus DHW) to mid-2023. */
-    private static final String conexDHW_M_to_202305 = """
+    public static final String conexDHW_M_to_202305 = """
 #YYYY-MM,device,coverage,conexDHW
 #synth,"meter.con-Eddi.h1"
 2008-01,synth,1,214

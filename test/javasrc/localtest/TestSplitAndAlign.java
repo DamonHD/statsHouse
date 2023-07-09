@@ -31,7 +31,7 @@ import org.hd.d.statsHouse.midi.MIDIGen;
 
 import junit.framework.TestCase;
 
-/**Test spliy and align of input data into (proto) bars.
+/**Test split and align of input data into (proto) bars.
  */
 public final class TestSplitAndAlign extends TestCase
     {
@@ -45,16 +45,22 @@ public final class TestSplitAndAlign extends TestCase
 	    assertNotNull(result0);
 	    assertTrue(result0.isEmpty());
 
-    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
+    	final List<DataProtoBar> result1 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestMIDIGen.minimal_sample_Y)));
 	    assertNotNull(result1);
 	    assertFalse(result1.isEmpty());
-	    assertEquals("4 bars of 4 notes", 4, result1.size());
-	    assertEquals("4 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
+	    assertEquals("1 bars of 4 notes", 1, result1.size());
+	    assertEquals("1 bars of 4 notes", 4, result1.get(0).dataNotesPerBar());
 
-    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
+    	final List<DataProtoBar> result2 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_Y)));
 	    assertNotNull(result2);
 	    assertFalse(result2.isEmpty());
-	    assertEquals("1 bar of 6/12 notes", 1, result2.size());
-	    assertEquals("1 bar of 6/12 notes", 12, result2.get(0).dataNotesPerBar());
+	    assertEquals("4 bars of 4 notes", 4, result2.size());
+	    assertEquals("4 bars of 4 notes", 4, result2.get(0).dataNotesPerBar());
+
+    	final List<DataProtoBar> result3 = MIDIGen.splitAndAlignData(TuneSection.verse, new GenerationParameters(), EOUDataCSV.parseEOUDataCSV(new StringReader(TestDataCSVRead.sample_gen_M)));
+	    assertNotNull(result3);
+	    assertFalse(result3.isEmpty());
+	    assertEquals("1 bar of 6/12 notes", 1, result3.size());
+	    assertEquals("1 bar of 6/12 notes", 12, result3.get(0).dataNotesPerBar());
 	    }
     }
