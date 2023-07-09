@@ -189,13 +189,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		// If intro bar count is specified then it wins.
 		// TODO: allow verse repeats when only original material for one.
 		// TODO: auto-select section length for some cadences, eg 12 for bar-per-month daily cadence.
-    	final int defaultSectionBars = params.sectionBars();
     	final int sectionBars =
-			(0 != params.introBars() ? params.introBars() :
+			(params.introRequestedFixedLength() ? params.introBars() :
 				((0 != cadence.defaultBarsCycle) ? cadence.defaultBarsCycle :
-				    ((verseProtoBars.size() >= defaultSectionBars)) ?
-			    		defaultSectionBars :
-			    			MIDIGen.DEFAULT_MIN_SECTION_BARS));
+				    ((verseProtoBars.size() >= MIDIGen.DEFAULT_SECTION_BARS)) ?
+			    		MIDIGen.DEFAULT_SECTION_BARS : MIDIGen.DEFAULT_MIN_SECTION_BARS));
         final int availableVerseSections =
         	Math.max(1, (verseProtoBars.size() + (sectionBars/4)) / sectionBars);
         final int verseSectionCount = Math.min(DEFAULT_MAX_VERSE_SECTIONS, availableVerseSections);

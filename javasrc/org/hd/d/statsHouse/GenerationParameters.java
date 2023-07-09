@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.generic.Style;
-import org.hd.d.statsHouse.midi.MIDIGen;
 
 /**Parameters for music generation from data.
  * May be extracted from a command-line or elsewhere.
@@ -22,7 +21,7 @@ import org.hd.d.statsHouse.midi.MIDIGen;
  *
  * @param seed  randomisation seed; 0 for no randomness (use 'best') choices
  * @param style  the style of music to generate; never null
- * @param introBars  intro/outro length in bars, also section length if +ve; non-negative
+ * @param introBars  intro/outro length in bars, also section length if +ve, -1 if auto, else non-negative
  * @param hetero  true if heterogeneous data rather than different sources of the same data
  * @param name  short ASCII name of track or source, eg "gen-M"; can be null
  */
@@ -31,22 +30,30 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     public GenerationParameters
 	    {
 	    Objects.requireNonNull(style);
-	    if(introBars < 0) { throw new IllegalArgumentException(); }
+	    if(introBars < AUTO_INTRO_BARS) { throw new IllegalArgumentException(); }
 	    }
 
+    /**Default seed is for no randomness. */
     public static final int DEFAULT_SEED = 0;
-    public static final Style DEFAULT_SYLE = Style.plain;
+    /**Default style is 'plain', ie the least-produced and highest fidelity to the source data. */
+    public static final Style DEFAULT_STYLE = Style.plain;
+    /**Default intro length is 0, ie no intro/outro. */
     public static final int DEFAULT_INTRO_BARS = 0;
+    /**Default heterogeneity is false, ie the data is homogeneous and for a single variable. */
     public static final boolean DEFAULT_HETERO = false;
+    /**Dfault name is absent, ie null. */
     public static final String DEFAULT_NAME = null;
 
-    /**Default sensible (sciency) defaults for homogeneous data. */
-    public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_SYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
+    /**Used to request an intro/outro of length automatically selected to suit the data. */
+    public static final int AUTO_INTRO_BARS = -1;
 
-    /**Parse optional arguments from command-line starting at the start of the given List.
+    /**Default sensible (sciency) defaults for homogeneous data. */
+    public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_STYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
+
+    /**Parse optional arguments from command-line after fixed parameters.
      * <pre>
 infilename.csv (-play|outfilename.(csv|mid|wav)))
-  [-seed n] [-het] [-intro bars]
+  [-seed n] [-het] [-intro (auto|<bars>)]
   [-style (plain|gentle|house)]
   [-highWorse] [OFFSET [INSTRUMENT]]
      * </pre>
@@ -57,7 +64,7 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
 	    {
     	int seed = DEFAULT_SEED;
     	boolean hetero = DEFAULT_HETERO;
-    	Style style = DEFAULT_SYLE;
+    	Style style = DEFAULT_STYLE;
     	int introBars = DEFAULT_INTRO_BARS;
     	final String name = DEFAULT_NAME;
 
@@ -84,7 +91,8 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
 
 	    	if((i+1 < args.size()) && "-intro".equals(arg))
 				{
-	    		introBars = Integer.parseInt(args.get(i+1));
+	    		if("auto".equals(arg)) { introBars = AUTO_INTRO_BARS; }
+	    		else { introBars = Integer.parseInt(args.get(i+1)); }
 	            i += 2;
 	            continue;
 				}
@@ -109,9 +117,12 @@ infilename.csv (-play|outfilename.(csv|mid|wav)))
     	return(new GenerationParameters(seed, style, introBars, hetero, name));
 	    }
 
+    /**True if intro/outro is requested. */
+    public boolean introRequested() { return(0 != introBars); }
+
+    /**True if specific-length intro/outro is requested. */
+    public boolean introRequestedFixedLength() { return(introBars > 0); }
+
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean noRandomness() { return(0 == seed); }
-
-    /**Get section length in bars - uses intro length if non-zero; strictly positive */
-    public int sectionBars() { return((0 != introBars) ? introBars : MIDIGen.DEFAULT_SECTION_BARS); }
 	}

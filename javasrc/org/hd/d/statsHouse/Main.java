@@ -63,8 +63,8 @@ public final class Main
         System.err.println("  -@(cmdfilename|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
-        System.err.println("  infilename.csv (-play|outfilename.(csv|mid|wav)))");
-        System.err.println("      [-seed n] [-het] [-intro bars]");
+        System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
+        System.err.println("      [-seed n] [-het] [-intro (auto|<bars>)]");
         System.err.println("      [-style (plain|gentle|house)]");
 		System.err.println("      [-highWorse] [OFFSET [INSTRUMENT]]");
         System.err.println("    This format may be used, one per line, in the command file.");
