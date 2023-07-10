@@ -11,11 +11,13 @@ Current priorities:
   * Expand to full ~4 min track for house (not counting any intro/outro).
 
 
-2023-07-08:
+2023-07:
 
   * A8: in response to V5.1.0 imp-M dc sample: "... put a mastering plugin on it though. Even if it's just a basic limiter."
   * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
   * Seeding and extra generation params / hints (eg cycle on W not M for daily data, use date range).
+  * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
+  * Turn up lead "brightness" (CC 71/74?) at end of verse leading into chorus?
 
 
 2023-06-13 thoughts:
