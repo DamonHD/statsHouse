@@ -138,28 +138,37 @@ public final class SupportBarGen
 //		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
 		final byte vBASS = MIDIGen.DEFAULT_MELODY_VELOCITY;
 
+		final int offset = 2 * 12; // Alt: vary eg 1 or 2 octaves down from root.
+
 		// Much around with first note each chorus bar.
-		final byte defaultNote = (byte) (MIDIGen.DEFAULT_ROOT_NOTE-12);
+		final byte defaultNote = (byte) (MIDIGen.DEFAULT_ROOT_NOTE-offset);
 		final byte firstNote = (TuneSection.chorus != section) ? defaultNote :
-			(byte) (MIDIGen.DEFAULT_ROOT_NOTE);
+			(byte) (MIDIGen.DEFAULT_ROOT_NOTE-offset+12);
+
+//		final int delay = 0;
+		final int delay = MIDIGen.DEFAULT_CLKSPQTR/8; // Alt: vary (eg 0).
+//		final int delay = MIDIGen.DEFAULT_CLKSPQTR/4; // Alt: vary (eg 0).
+
+//		final int duration = MIDIGen.DEFAULT_CLKSPQTR/4;
+		final int duration = MIDIGen.DEFAULT_CLKSPQTR/2; // Alt: vary
 
 		// Beat 1, 2, 3, 4.
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			0,
+			0 + delay,
 				new NoteAndVelocity(firstNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
+				duration));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			1 * MIDIGen.DEFAULT_CLKSPQTR,
+			1 * MIDIGen.DEFAULT_CLKSPQTR + delay,
 				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
+				duration));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			2 * MIDIGen.DEFAULT_CLKSPQTR,
+			2 * MIDIGen.DEFAULT_CLKSPQTR + delay,
 				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
+				duration));
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-			3 * MIDIGen.DEFAULT_CLKSPQTR,
+			3 * MIDIGen.DEFAULT_CLKSPQTR + delay,
 				new NoteAndVelocity(defaultNote, vBASS),
-				MIDIGen.DEFAULT_CLKSPQTR/4));
+				duration));
 
 		final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
 		return(bar);

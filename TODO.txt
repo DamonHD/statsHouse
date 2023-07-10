@@ -9,6 +9,7 @@ Current priorities:
   * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
   * Chorus bar synthesis.
   * Work in some progression especially for repeat verse/chorus.
+  * Seeding/variations...
 
 
 2023-07:
