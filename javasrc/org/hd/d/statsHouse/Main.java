@@ -128,7 +128,7 @@ public final class Main
             runCommands(cmdlines, false);
 
         	final long end = System.currentTimeMillis();
-            System.out.println(String.format("INFO: sonification time %.2fs", (end - start) / 1000f));
+            System.out.println(String.format("INFO: runtime %.2fs", (end - start) / 1000f));
 
             // Done, no errors.
             System.exit(0);
