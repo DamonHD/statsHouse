@@ -18,6 +18,7 @@ Current priorities:
   * Seeding and extra generation params / hints (eg cycle on W not M for daily data, use date range).
   * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
   * Turn up lead "brightness" (CC 71/74?) at end of verse leading into chorus?
+  * For some cadences, have notes transition rather than be abrupt, using MIDI CC (legato?).
 
 
 2023-06-13 thoughts:
