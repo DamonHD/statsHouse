@@ -38,6 +38,7 @@ public final class Scale
 
 	public static final Scale NATURAL_MINOR = new Scale(2, 1, 2, 2, 1, 2, 2);
 	public static final Scale HARMONIC_MINOR = new Scale(2, 1, 2, 2, 1, 3, 1);
+	public static final Scale MELODIC_MINOR = new Scale(2, 1, 2, 2, 2, 2, 1);
 
 	public static final Scale DORIAN = new Scale(2,1,2,2,2,1,2);
 
