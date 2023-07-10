@@ -13,6 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
+    DHD20230710: reporting success runtime in Main.
 
 
 

@@ -82,6 +82,8 @@ public final class Main
     /**Accepts command-line invocation. */
     public static void main(final String[] args)
         {
+    	final long start = System.currentTimeMillis();
+
         // List of command lines split at spaces.
         List<List<String>> cmdlines = null;
 
@@ -124,6 +126,9 @@ public final class Main
 	            { cmdlines = Collections.singletonList(Arrays.asList(args)); }
 
             runCommands(cmdlines, false);
+
+        	final long end = System.currentTimeMillis();
+            System.out.println(String.format("INFO: sonification time %.2fs", (end - start) / 1000f));
 
             // Done, no errors.
             System.exit(0);
