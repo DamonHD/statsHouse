@@ -97,7 +97,7 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
     public MIDIPlayableMonophonicDataBar(final int dataNotesPerBar, final DataProtoBar dpr, final int stream, final List<NoteAndVelocity> notes)
     	{ this(dataNotesPerBar, dpr, stream, notes, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
 
-    /**Empty/rest immutable 1-note bar. */
+    /**Empty/rest (null note) immutable 1-note bar. */
     public static final MIDIPlayableMonophonicDataBar EMPTY_1_NOTE_BAR =
 		new MIDIPlayableMonophonicDataBar(1, null, 0, Collections.singletonList(null), MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION);
 
