@@ -13,13 +13,21 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-DHD20230709: keeping org.hd.d.statsHouse.generic.Style unobfuscated for simplicity.
 
 
 
 
 RELEASES
 ========
+
+20230710:
+    freezepoint name: V5.2.1 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    Previous significant freezepoint: V5.2.0
+	DHD20230709: keeping org.hd.d.statsHouse.generic.Style unobfuscated for simplicity.
+	DHD20230710: bug fix processing -@ switch.
+	DHD20230710: turning off proguard obfuscation to help with bug fixes!
+
 
 20230709:
     freezepoint name: V5.2.0 (main)

@@ -100,6 +100,7 @@ public final class DataChorusGen
     					MIDIGen.DEFAULT_HOUSE_SCALE,
     					octaves,
     					db.maxVal());
+        			if(null == n) { continue nextBar; }
         			if(0 == n.velocity()) { continue nextBar; }
     				notes.add(n);
     				}

@@ -224,7 +224,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     		-optimizationpasses 5
     		-allowaccessmodification
 
-    		<!-- -dontobfuscate - leave all class/method names etc for easiest debugging -->
+    		-dontobfuscate <!-- leave all class/method names etc for easiest debugging -->
             -keepattributes SourceFile,LineNumberTable <!-- Keep minimum for exception debugging. -->
     	</proguard>
         <echo message="Release org.hd.d.statsHouse.Main JAR now at ${build.dir.opt}/statsHouseMain.${dist.jar} ..." />   

@@ -30,6 +30,14 @@ public final class TestNoteAndVelocity extends TestCase
     /**Test generation of notes on Scale. */
     public static void testDatumToNoteAndVelocity()
 	    {
+    	final NoteAndVelocity result0 = MIDIGen.datumToNoteAndVelocity(
+    			new Datum(null, 1f, -1f),
+    			true, // isNotSecondaryDataStream,
+    			Scale.NO_SCALE,
+    			1,
+    			0f);
+    	assertNull("should not (yet) generate a note with negative value", result0);
+
     	final NoteAndVelocity result1 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, 0f),
     			true, // isNotSecondaryDataStream,

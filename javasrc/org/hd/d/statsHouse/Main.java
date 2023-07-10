@@ -98,7 +98,7 @@ public final class Main
             if((null != args[0]) && args[0].startsWith("-@"))
     	        {
             	cmdlines = new ArrayList<>();
-    	        final String cmdfilename = args[1].substring(2);
+    	        final String cmdfilename = args[0].substring(2);
     	        try(Reader cmdStreamReader = switch(cmdfilename) {
 	    	        case "-" -> new InputStreamReader(System.in);
 	    	        case "" -> throw new IllegalArgumentException("missing command file name");
