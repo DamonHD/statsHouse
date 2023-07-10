@@ -34,6 +34,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.Main;
 import org.hd.d.statsHouse.data.DataBounds;
 import org.hd.d.statsHouse.data.DataProtoBar;
 import org.hd.d.statsHouse.data.DataUtils;
@@ -1061,7 +1062,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        final MetaMessage textMM = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
 	        tempoTrack.add(new MidiEvent(textMM, 0));
 			}
-		// TODO: indicate the program version.
+		// Indicate this program version, if available.
+    	final String version = Main.getManifestVersion();
+        if(null != version)
+	        {
+			final byte[] text = ("statsHouse version: " + version).getBytes(StandardCharsets.US_ASCII);
+	        final MetaMessage textMM = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
+	        tempoTrack.add(new MidiEvent(textMM, 0));
+	        }
 		// TODO: markers
 		// TODO: other tempo track!
 

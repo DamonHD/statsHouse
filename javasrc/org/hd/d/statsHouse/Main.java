@@ -58,7 +58,10 @@ public final class Main
     /**Print a summary of command options to stderr. */
     private static void printOptions()
         {
-        System.err.println("Commands/options");
+    	final String version = getManifestVersion();
+    	System.err.println("statsHouse" + ((null == version) ? "" : (" V" + version)));
+    	System.err.println();
+        System.err.println("Commands/options:");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
         System.err.println("  -@(<cmdfilename>|-)");
@@ -259,4 +262,8 @@ public final class Main
 		        }
 			}
 		}
+
+	/**Get version number as a.b.c String, else null if not available. */
+	public static final String getManifestVersion()
+		{ return(Main.class.getPackage().getImplementationVersion()); }
     }
