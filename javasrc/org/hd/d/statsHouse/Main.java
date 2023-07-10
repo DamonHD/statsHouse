@@ -78,10 +78,9 @@ public final class Main
 	public static final Charset CMD_STREAM_CHARSET = StandardCharsets.US_ASCII;
 
 	/**Immutable regex pattern used to split command line into arguments; never null.
-	 * This is basically just a simple " "
-	 * which with split() should preserve empty fields.
+	 * This is one or more spaces or tabs.
 	 */
-	public static final Pattern delimCmdStream = Pattern.compile(" ");
+	public static final Pattern delimCmdStream = Pattern.compile("[ \t]+");
 
     /**Accepts command-line invocation. */
     public static void main(final String[] args)
