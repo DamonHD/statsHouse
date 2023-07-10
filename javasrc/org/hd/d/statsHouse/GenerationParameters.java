@@ -68,7 +68,6 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 
     /**Parse optional arguments from command-line after fixed parameters.
      * <pre>
-infilename.csv (-play|outfilename.(csv|mid|wav)))
   [-seed n] [-het] [-intro (auto|<bars>)]
   [-style (plain|gentle|house)]
   [-highWorse] [OFFSET [INSTRUMENT]]

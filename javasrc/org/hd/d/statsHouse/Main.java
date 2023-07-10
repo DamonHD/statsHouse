@@ -60,7 +60,7 @@ public final class Main
         System.err.println("Commands/options");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
-        System.err.println("  -@(cmdfilename|-)");
+        System.err.println("  -@(<cmdfilename>|-)");
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
