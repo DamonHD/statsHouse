@@ -200,7 +200,7 @@ public final class Main
 		    else
 		        {
 		    	// MIDI output to play immediately or to save.
-		    	final Sequence s = MIDIGen.genFromTuneSequence(mt);
+		    	final Sequence s = MIDIGen.genFromTuneSequence(params, mt);
 		    	final boolean isMid = outputFileName.endsWith(".mid");
 		    	if(isMid || outputFileName.endsWith(".wav"))
 		        	{
