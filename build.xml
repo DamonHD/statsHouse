@@ -178,6 +178,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <manifest>
                 <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
+            	<attribute name="Implementation-Title" value="${app.name}"/>
+            	<attribute name="Implementation-Version" value="${app.version}"/>
             </manifest>   
         </jar>
     </target>
@@ -193,6 +195,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
             <manifest>
                 <attribute name="Main-Class" value="org.hd.d.statsHouse.Main"/>
                 <!-- <attribute name="Class-Path" value="${cp.common.basic}"/> -->
+            	<attribute name="Implementation-Title" value="${app.name}"/>
+            	<attribute name="Implementation-Version" value="${app.version}"/>
             </manifest>
         </jar>
      <echo message="Release JAR now at ${build.dir.opt}/${dist.jar} ..." />   
@@ -206,7 +210,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     		verbose="true">
 		    <!-- -printconfiguration -->
 		    -injars      ${build.dir.opt}/${dist.jar}
-		    -outjars     ${build.dir.opt}/statsHouseMain.${dist.jar}
+		    -outjars     ${build.dir.opt}/${app.name}Main.${dist.jar}
 		    -libraryjars ${java.home}/jmods/java.base.jmod(!**.jar;!module-info.class)
 		    -libraryjars ${java.home}/jmods/java.desktop.jmod(!**.jar;!module-info.class)
     		<!--
