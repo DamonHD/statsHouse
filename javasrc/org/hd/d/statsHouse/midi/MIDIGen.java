@@ -1017,12 +1017,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    }
 
     /**Generate a MIDI Sequence from a MIDITune; never null.
-     * @param params  generation params; may be null
      * @param tune  abstract tune with zero or more tracks and an optional plan; never null
+     * @param params  generation params; may be null
+     * @param db  data bounds; may be null
      * @return internal MIDI representation of the tune
      * @throws InvalidMidiDataException
      */
-    public static Sequence genFromTuneSequence(final GenerationParameters params, final MIDITune tune)
+    public static Sequence genFromTuneSequence(
+    		final MIDITune tune,
+    		final GenerationParameters params,
+    		final DataBounds db)
 		throws InvalidMidiDataException
 	    {
     	// Validate, including that argument is non-null.
@@ -1051,9 +1055,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        final MetaMessage textMM = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
 	        tempoTrack.add(new MidiEvent(textMM, 0));
 			}
-
+		if(null != db)
+			{
+			final byte[] text = ("date range: " + db.firstDate() +"/"+ db.lastDate()).getBytes(StandardCharsets.US_ASCII);
+	        final MetaMessage textMM = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
+	        tempoTrack.add(new MidiEvent(textMM, 0));
+			}
 		// TODO: indicate the program version.
-		// TODO: markers or data date range
+		// TODO: markers
 		// TODO: other tempo track!
 
 		// Generate from support tracks, eg including percussion.

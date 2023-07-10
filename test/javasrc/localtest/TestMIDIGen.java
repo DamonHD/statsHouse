@@ -135,7 +135,7 @@ public final class TestMIDIGen extends TestCase
     	MIDIGen.validateMIDITune(mt1);
         assertTrue("do not expect any percussion track",
     		mt1.supportTracks().stream().noneMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
-    	final Sequence result1 = MIDIGen.genFromTuneSequence(null, mt1);
+    	final Sequence result1 = MIDIGen.genFromTuneSequence(mt1, null, null);
 	    assertNotNull(result1);
         assertEquals(500_000, result1.getMicrosecondLength(), 10_000);
         assertTrue(result1.getTracks().length > 0);

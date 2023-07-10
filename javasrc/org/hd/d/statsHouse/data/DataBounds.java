@@ -23,8 +23,10 @@ package org.hd.d.statsHouse.data;
  * @param mainDataStream  1-based index of 'main' data stream (often with most data points);
  *     0 for no such main stream, 1+ for stream, possibly larger than streams
  * @param maxVal  maximum (non-zero) value in the data; non-negative.
+ * @param firstDate  first data row date as raw String; can be null
+ * @param lkastDate  last data row date as raw String; can be null
  */
-public record DataBounds(int streams, int mainDataStream, float maxVal)
+public record DataBounds(int streams, int mainDataStream, float maxVal, String firstDate, String lastDate)
 	{
     public DataBounds
 	    {
@@ -43,12 +45,14 @@ public record DataBounds(int streams, int mainDataStream, float maxVal)
      */
     public static final int MAX_DATA_STREAMS = 4;
 
-    /**Construct and instance from the raw data. */
+    /**Construct an instance from the raw data. */
     public DataBounds(final EOUDataCSV data)
 	    {
 	    this(Math.min(DataUtils.countDataStreamsQuick(data), MAX_DATA_STREAMS),
 	    		DataUtils.maxNVal(data),
-	    		DataUtils.maxVal(data));
+	    		DataUtils.maxVal(data),
+	    		(data.data().isEmpty() ? null : data.data().get(0).get(0)),
+	    		(data.data().isEmpty() ? null : data.data().get(data.data().size()-1).get(0)));
 	    }
 
     /**True if the specified stream is the main stream (of homogeneous data).

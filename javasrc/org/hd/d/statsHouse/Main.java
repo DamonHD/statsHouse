@@ -44,6 +44,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.hd.d.statsHouse.data.DataBounds;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.data.FileUtils;
 import org.hd.d.statsHouse.midi.MIDIConstant;
@@ -183,8 +184,10 @@ public final class Main
 				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
 						(new File(inputFileName)).getName());
 
-		    // Generate the abstract MIDI form.
-		    final MIDITune mt = MIDIGen.genMelody(params, EOUDataCSV.loadEOUDataCSV(new File (inputFileName)));
+			// Generate the abstract MIDI form.
+		    final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));
+		    final DataBounds db = new DataBounds(data);
+		    final MIDITune mt = MIDIGen.genMelody(params, data);
 
 		    // Choose output type based on suffix, or -play.
 		    if(outputFileName.endsWith(".csv"))
@@ -202,7 +205,7 @@ public final class Main
 		    else
 		        {
 		    	// MIDI output to play immediately or to save.
-		    	final Sequence s = MIDIGen.genFromTuneSequence(params, mt);
+		    	final Sequence s = MIDIGen.genFromTuneSequence(mt, params, db);
 		    	final boolean isMid = outputFileName.endsWith(".mid");
 		    	if(isMid || outputFileName.endsWith(".wav"))
 		        	{
