@@ -105,8 +105,8 @@ public final class MIDIGen
      */
     public static final int DEFAULT_TYPICAL_RADIO_TUNE_BARS = DEFAULT_MAX_VERSE_SECTIONS * 32;
 
-    /**Default scale to use for house tracks. */
-    public static final Scale DEFAULT_HOUSE_SCALE = Scale.MAJOR;
+    /**Default scale to use for house tracks; minor is common for most sub-genres. */
+    public static final Scale DEFAULT_HOUSE_SCALE = Scale.NATURAL_MINOR; // Scale.MAJOR;
 
 
     /**Framework MIDI generation from data; never null.

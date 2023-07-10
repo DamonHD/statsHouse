@@ -18,7 +18,7 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
     DHD20230710: repeating verse/chorus as needed to bring tune up to at least half target length.
     DHD20230710: adding date range to DataBounds and MIDI metadata.
     DHD20230710: added Implementation-Title and Implementation-Version to JARs; can extract version at runtime.
-
+    DHD20230710: switched to minor scale for house default.
 
 
 
