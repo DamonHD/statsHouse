@@ -39,6 +39,7 @@ public final class DataChorusGen
     /**Prevent creation of an instance. */
     private DataChorusGen() { }
 
+
 	/**Generate a house chorus data melody track section.
 	 * TODO: implement other types
 	 *
@@ -139,7 +140,4 @@ public final class DataChorusGen
 			return(Collections.nCopies(ts.bars(), mpmb));
 	        }
 		}
-
-
-
 	}
