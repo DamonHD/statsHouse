@@ -14,7 +14,7 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
     DHD20230710: reporting success runtime in Main.
-    DHD20230710: adding copyright disclaimer for MIDI output.
+    DHD20230710: adding copyright disclaimer and other for MIDI Sequence/file output.
 
 
 
