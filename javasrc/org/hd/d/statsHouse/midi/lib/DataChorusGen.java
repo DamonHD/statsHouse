@@ -69,10 +69,8 @@ public final class DataChorusGen
 		if(!db.isMainDataStream(stream) && !params.hetro())
 		    { return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
 
-		// Parameterisation of melody play without scales.
+		// Parameterisation of melody play with scales.
 		final int octaves = MIDIGen.DEFAULT_RANGE_OCTAVES; // Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-//		final int range = 12 * octaves;
-//		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
 		final List<DataProtoBar> verseProtoBars = MIDIGen.splitAndAlignData(TuneSection.verse, params, data);
 		// If there are no data bars, return empty section.
 		if(verseProtoBars.isEmpty())
@@ -98,7 +96,7 @@ public final class DataChorusGen
         			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
     					d,
     					true, // isNotSecondaryDataStream,
-    					MIDIGen.DEFAULT_HOUSE_SCALE,
+    					MIDIGen.DEFAULT_HOUSE_SCALE, // Alt: randomise
     					octaves,
     					db.maxVal());
         			if(null == n) { continue nextBar; }
