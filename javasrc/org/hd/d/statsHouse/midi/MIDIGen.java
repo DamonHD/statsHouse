@@ -34,6 +34,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.data.DataBounds;
 import org.hd.d.statsHouse.data.DataProtoBar;
 import org.hd.d.statsHouse.data.DataUtils;
 import org.hd.d.statsHouse.data.Datum;
@@ -200,12 +201,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
         // Section plan based on available data and song structure...
         // TODO: breakdown, drop, etc.
-        for(int i = 0; i < verseSectionCount; ++i)
-	        {
-        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.verse));
-        	// Chorus after every verse.
-        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus));
-	        }
+        do  {
+	        for(int i = 0; i < verseSectionCount; ++i)
+		        {
+	        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.verse));
+	        	// Chorus after every verse.
+	        	plan.add(new TuneSectionMetadata(sectionBars, TuneSection.chorus));
+		        }
+    		}
+	        // Repeat verse/chorus as needed to bring core tune
+	        // up to at least half target length.
+	        while(plan.size() * sectionBars < DEFAULT_TYPICAL_RADIO_TUNE_BARS/2);
 
         // Top and tail with intro/outro if specified, eg to be mix-friendly.
     	final boolean hasIntroOutro = (params.introRequested());
@@ -268,7 +274,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		{
 	        		// Extract and pad to exactly section size for last one if needed.
 	        		final List<DataProtoBar> sectionProtoBars = new ArrayList<>(sectionBars);
-	        		final int startRow = verseCount * sectionBars;
+	        		final int startRow = (verseCount % verseSectionCount) * sectionBars;
 	        		final int endRow = startRow + sectionBars;
 	        		for(int dr = startRow; dr < endRow; ++dr)
 		        		{

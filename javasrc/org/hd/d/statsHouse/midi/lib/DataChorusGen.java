@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.GenerationParameters;
+import org.hd.d.statsHouse.data.DataBounds;
 import org.hd.d.statsHouse.data.DataProtoBar;
 import org.hd.d.statsHouse.data.Datum;
 import org.hd.d.statsHouse.data.EOUDataCSV;
@@ -29,7 +30,6 @@ import org.hd.d.statsHouse.generic.ChorusStyleFromData;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
 import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.generic.TuneSectionMetadata;
-import org.hd.d.statsHouse.midi.DataBounds;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDIPlayableMonophonicDataBar;
 
