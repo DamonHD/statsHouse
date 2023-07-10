@@ -28,6 +28,7 @@ import org.hd.d.statsHouse.data.Datum;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.ChorusStyleFromData;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.Scale;
 import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.generic.TuneSectionMetadata;
 import org.hd.d.statsHouse.midi.MIDIGen;
@@ -42,13 +43,14 @@ public final class DataChorusGen
 
 	/**Generate a house chorus data melody track section.
 	 * TODO: implement other types
-	 *
-	 * @param chorusIndex  chorus index, first is 1; strictly positive
 	 * @param stream  data stream index, first is 1; strictly positive
 	 * @param ts  tune section; never null
 	 * @param params  generation parameters; never null
 	 * @param db  data bounds; never null
 	 * @param data  full input data set; never null
+	 * @param scale scale to use; never null
+	 * @param chorusIndex  chorus index, first is 1; strictly positive
+	 *
 	 * @return chorus section data melody track segment of correct section length; never null
 	 */
 	public static List<MIDIPlayableMonophonicDataBar> makeHouseDataChorusBars(
@@ -56,7 +58,8 @@ public final class DataChorusGen
 			final int chorusCount,
 			final int stream,
 			final TuneSectionMetadata ts,
-			final GenerationParameters params, final DataBounds db, final EOUDataCSV data)
+			final GenerationParameters params, final DataBounds db, final EOUDataCSV data,
+			final Scale scale)
 		{
 		if(chorusCount < 1) { throw new IllegalArgumentException(); }
 		if(stream < 1) { throw new IllegalArgumentException(); }
@@ -64,6 +67,7 @@ public final class DataChorusGen
 		Objects.requireNonNull(params);
 		Objects.requireNonNull(db);
 		Objects.requireNonNull(data);
+		Objects.requireNonNull(scale);
 
 		// Skip any secondary data stream by returning empty bars.
 		if(!db.isMainDataStream(stream) && !params.hetro())
@@ -96,7 +100,7 @@ public final class DataChorusGen
         			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
     					d,
     					true, // isNotSecondaryDataStream,
-    					MIDIGen.DEFAULT_HOUSE_SCALE, // Alt: randomise
+    					scale,
     					octaves,
     					db.maxVal());
         			if(null == n) { continue nextBar; }
@@ -126,7 +130,7 @@ public final class DataChorusGen
     			final NoteAndVelocity n = MIDIGen.datumToNoteAndVelocity(
 					d,
 					true, // isNotSecondaryDataStream,
-					MIDIGen.DEFAULT_HOUSE_SCALE,
+					scale,
 					octaves,
 					db.maxVal());
 				notes.add(n);

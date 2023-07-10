@@ -349,7 +349,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	            		final List<MIDIPlayableMonophonicDataBar> mpmBars =
     						DataChorusGen.makeHouseDataChorusBars(
     							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
-								chorusCount, s, ts, params, db, data);
+								chorusCount, s, ts, params, db, data,
+								MIDIGen.DEFAULT_HOUSE_SCALE);
 //	        			assert(mpmBars.size() == ts.bars());
 	            		tracks[s - 1].bars().addAll(optionalFadeOut(mpmBars, fadeOut));
 	            		}

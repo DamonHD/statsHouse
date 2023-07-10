@@ -36,6 +36,12 @@ public final class Scale
 	/**Major scale. */
 	public static final Scale MAJOR = new Scale(2,2,1,2,2,2,1);
 
+	public static final Scale NATURAL_MINOR = new Scale(2, 1, 2, 2, 1, 2, 2);
+	public static final Scale HARMONIC_MINOR = new Scale(2, 1, 2, 2, 1, 3, 1);
+
+	public static final Scale DORIAN = new Scale(2,1,2,2,2,1,2);
+
+
 	/**Equivalent to no scale at all, ie all notes in the octave. */
 	public static final Scale NO_SCALE = new Scale(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
