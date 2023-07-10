@@ -167,23 +167,22 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(data);
 
-    	// TODO: drive various items explicitly from cadence, eg voice choice, section length.
-    	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
-
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);
 
     	// Return empty tune if no bars (though in principle cannot happen).
     	if(verseProtoBars.isEmpty()) { return(new MIDITune()); }
 
+    	// TODO: drive various items explicitly from cadence, eg voice choice, section length.
+    	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
+
         // Construct tune plan/structure...
     	final List<TuneSectionMetadata> plan = new ArrayList<>();
 
-    	// Parameterisation of melody play without scales.
+    	// Parameterisation of melody play with scales.
     	// Have a more muted tonal range for house, to let percussion/base stand out.
 		final int octaves = Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-//		final int range = 12 * octaves;
-//		final float multScaling = (db.maxVal() > 0) ? ((range-1)/db.maxVal()) : 1;
+        final Scale scale = MIDIGen.DEFAULT_HOUSE_SCALE; // Alt: vary with seed
 
     	// Establish how many sections worth of 'verse' data there is.
     	// Always at least one.
@@ -308,7 +307,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                			final NoteAndVelocity n = datumToNoteAndVelocity(
                 					d,
                 					isNotSecondaryDataStream,
-                					DEFAULT_HOUSE_SCALE,
+                					scale,
                 					octaves,
                 					db.maxVal());
 	                			notes.add(n);
@@ -350,7 +349,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     						DataChorusGen.makeHouseDataChorusBars(
     							ChorusStyleFromData.SyntheticRepresentativeDataBar, // Alt: randomise
 								chorusCount, s, ts, params, db, data,
-								MIDIGen.DEFAULT_HOUSE_SCALE);
+								scale);
 //	        			assert(mpmBars.size() == ts.bars());
 	            		tracks[s - 1].bars().addAll(optionalFadeOut(mpmBars, fadeOut));
 	            		}
