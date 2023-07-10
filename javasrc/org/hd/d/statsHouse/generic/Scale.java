@@ -60,8 +60,8 @@ public final class Scale
 		{
 		Objects.requireNonNull(semitones);
 		final List<Integer> copied = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(semitones)));
-		if(!copied.stream().mapToInt(Integer::intValue).noneMatch(i -> i <= 0)) { throw new IllegalArgumentException(); }
-		if(12 != copied.stream().mapToInt(Integer::intValue).sum()) { throw new IllegalArgumentException(); }
+		if(!copied.stream().mapToInt(Integer::intValue).noneMatch(i -> i <= 0)) { throw new IllegalArgumentException("non-positive interval"); }
+		if(12 != copied.stream().mapToInt(Integer::intValue).sum()) { throw new IllegalArgumentException("intervals do not add to octave"); }
 		this.semitones = copied;
 		}
 	}
