@@ -36,9 +36,10 @@ public final class MIDIConstant
     /**Preferred MIDI filestype to write. */
     public static final int PREFERRED_MIDI_FILETYPE = 1;
 
+    /**MIDI generic text meta message number. */
+    public static final byte METAMESSAGE_TEXT = 1;
     /**MIDI tune copyright meta message number. */
     public static final byte METAMESSAGE_COPYRIGHT = 2;
-
     /**MIDI track title meta message number. */
     public static final byte METAMESSAGE_TITLE = 3;
 

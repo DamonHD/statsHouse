@@ -57,7 +57,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     public static final int DEFAULT_INTRO_BARS = 0;
     /**Default heterogeneity is false, ie the data is homogeneous and for a single variable. */
     public static final boolean DEFAULT_HETERO = false;
-    /**Dfault name is absent, ie null. */
+    /**Default name is absent (though the input filename can be used), ie null. */
     public static final String DEFAULT_NAME = null;
 
     /**Used to request an intro/outro of length automatically selected to suit the data. */
@@ -74,14 +74,19 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
      * </pre>
      * <p>
      * TODO: unit tests
+     *
+     * @param args  optional arguments; never null
+     * @param inputFileName  input name or null
      */
-    public static GenerationParameters parseOptionalCommandArguments(final List<String> args)
+    public static GenerationParameters parseOptionalCommandArguments(
+    		final List<String> args,
+    		final String inputFileName)
 	    {
     	int seed = DEFAULT_SEED;
     	boolean hetero = DEFAULT_HETERO;
     	Style style = DEFAULT_STYLE;
     	int introBars = DEFAULT_INTRO_BARS;
-    	final String name = DEFAULT_NAME;
+    	final String name = inputFileName;
 
     	for(int i = 0; i < args.size(); )
 	    	{

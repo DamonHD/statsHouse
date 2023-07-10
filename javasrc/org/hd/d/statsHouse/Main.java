@@ -178,8 +178,10 @@ public final class Main
 		    final String outputFileName = cmdline.get(1);
 
 		    // Remaining optional args determine GenerationParameters.
+		    // Use the final component of the input file name as the tune name.
 		    final GenerationParameters params =
-				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()));
+				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
+						(new File(inputFileName)).getName());
 
 		    // Generate the abstract MIDI form.
 		    final MIDITune mt = MIDIGen.genMelody(params, EOUDataCSV.loadEOUDataCSV(new File (inputFileName)));

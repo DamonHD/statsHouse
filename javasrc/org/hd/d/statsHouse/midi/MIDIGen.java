@@ -1039,8 +1039,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             final MetaMessage titleMM = new MetaMessage(MIDIConstant.METAMESSAGE_TITLE, title, title.length);
             tempoTrack.add(new MidiEvent(titleMM, 0));
 			}
+		if(null != params)
+			{
+			final byte[] text = ("params: " + params).getBytes(StandardCharsets.US_ASCII);
+	        final MetaMessage textMM = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
+	        tempoTrack.add(new MidiEvent(textMM, 0));
+			}
+
 		// TODO: indicate the program version.
-		// TODO: markers or date range
+		// TODO: markers or data date range
 		// TODO: other tempo track!
 
 		// Generate from support tracks, eg including percussion.
