@@ -182,9 +182,10 @@ public final class Main
 
 		    // Remaining optional args determine GenerationParameters.
 		    // Use the final component of the input file name as the tune name.
+		    // TODO strip extension
 		    final GenerationParameters params =
 				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
-						(new File(inputFileName)).getName());
+					(new File(inputFileName)).getName());
 
 			// Generate the abstract MIDI form.
 		    final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));
