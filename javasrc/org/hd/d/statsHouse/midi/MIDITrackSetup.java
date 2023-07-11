@@ -21,8 +21,9 @@ package org.hd.d.statsHouse.midi;
  * (This the actual raw channel number in messages will be one less.)
  *
  * @param name  track/source name; may be null
+ * @param comment  additional comment if any; may be null
  */
-public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pan, String name)
+public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pan, String name, String comment)
 	{
     public MIDITrackSetup
 	    {
@@ -33,9 +34,12 @@ public record MIDITrackSetup(byte channel, byte instrument, byte volume, byte pa
 	    if(pan < 0) { throw new IllegalArgumentException(); }
 	    }
 
-    /**The name is null. */
+    /**The comment is null. */
+    public MIDITrackSetup(final byte channel, final byte instrument, final byte volume, final byte pan, final String name)
+    	{ this(channel, instrument, volume, pan, name, null); }
+    /**The name and comment are null. */
     public MIDITrackSetup(final byte channel, final byte instrument, final byte volume, final byte pan)
-    	{ this(channel, instrument, volume, pan, null); }
+    	{ this(channel, instrument, volume, pan, null, null); }
     /**The pan is set to the default centre position. */
     public MIDITrackSetup(final byte channel, final byte instrument, final byte volume)
     	{ this(channel, instrument, volume, MIDIConstant.DEFAULT_PAN); }

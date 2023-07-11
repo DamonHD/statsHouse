@@ -992,6 +992,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             final MetaMessage mm = new MetaMessage(MIDIConstant.METAMESSAGE_TITLE, text, text.length);
             trackMelody.add(new MidiEvent(mm, 0));
 			}
+		// Set the track comment, if available.
+		if((null != ts.comment()) && !ts.name().isBlank())
+			{
+			final byte[] text = ("comment: " + ts.comment()).getBytes(StandardCharsets.US_ASCII);
+            final MetaMessage mm = new MetaMessage(MIDIConstant.METAMESSAGE_TEXT, text, text.length);
+            trackMelody.add(new MidiEvent(mm, 0));
+			}
 
 		// Program change (setting the instrument).
 		// Do not do this on the fixed percussion channel.
