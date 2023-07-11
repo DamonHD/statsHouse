@@ -190,7 +190,7 @@ public final class Main
 			// Generate the abstract MIDI form.
 		    final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));
 		    final DataBounds db = new DataBounds(data);
-		    final MIDITune mt = MIDIGen.genMelody(params, data);
+		    final MIDITune mt = MIDIGen.genTune(params, data);
 
 		    // Choose output type based on suffix, or -play.
 		    if(outputFileName.endsWith(".csv"))

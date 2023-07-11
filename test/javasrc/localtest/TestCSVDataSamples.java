@@ -90,7 +90,7 @@ public final class TestCSVDataSamples extends TestCase
 	        			{
 	    				final GenerationParameters params =
 							new GenerationParameters(seed, style, introBars, false, sample.name());
-	    				final MIDITune result = MIDIGen.genMelody(params, data);
+	    				final MIDITune result = MIDIGen.genTune(params, data);
 	    		    	MIDIGen.validateMIDITune(result);
 	    		    	assertFalse(result.dataMelody().isEmpty());
 	    		    	assertTrue("expect support tracks unless 'plain' style / no production", (ProductionLevel.None == params.style().level) || !result.supportTracks().isEmpty());

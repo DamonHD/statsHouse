@@ -129,7 +129,7 @@ public final class MIDIGen
      * <li>(Save as .csv/.mid/.wav/etc to stdout or file, or play, from the returned MIDITune.)
      * </ul>
      */
-    public static MIDITune genMelody(final GenerationParameters params, final EOUDataCSV data)
+    public static MIDITune genTune(final GenerationParameters params, final EOUDataCSV data)
 	    {
     	if(null == params) { throw new IllegalArgumentException(); }
     	if(null == data) { throw new IllegalArgumentException(); }

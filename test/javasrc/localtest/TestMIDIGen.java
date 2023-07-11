@@ -101,7 +101,7 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodyEmpty()
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
+    	final MIDITune result1 = MIDIGen.genTune(new GenerationParameters(), new EOUDataCSV(Collections.emptyList()));
 	    assertTrue(result1.dataMelody().isEmpty());
 	    }
 
@@ -113,7 +113,7 @@ public final class TestMIDIGen extends TestCase
 	    {
     	final EOUDataCSV data = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y));
         assertEquals("expect exactly 1 data row", 1, data.data().size());
-		final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), data);
+		final MIDITune result1 = MIDIGen.genTune(new GenerationParameters(0, Style.plain, 0, false, null), data);
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
@@ -131,7 +131,7 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodyMinimalPlainSequence() throws IOException, InvalidMidiDataException
 	    {
-    	final MIDITune mt1 = MIDIGen.genMelody(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
+    	final MIDITune mt1 = MIDIGen.genTune(new GenerationParameters(0, Style.plain, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
     	MIDIGen.validateMIDITune(mt1);
         assertTrue("do not expect any percussion track",
     		mt1.supportTracks().stream().noneMatch(st -> st.setup().channel() == MIDIConstant.GM1_MIN_PERCUSSIVE_VOICES-1));
@@ -147,7 +147,7 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodyMinimalGentleMIDITune() throws IOException
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.gentle, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
+    	final MIDITune result1 = MIDIGen.genTune(new GenerationParameters(0, Style.gentle, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
@@ -169,7 +169,7 @@ public final class TestMIDIGen extends TestCase
      */
     public static void testGenMelodyMinimalHouseMIDITune() throws IOException
 	    {
-    	final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
+    	final MIDITune result1 = MIDIGen.genTune(new GenerationParameters(0, Style.house, 0, false, null), EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.minimal_sample_Y)));
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
@@ -194,7 +194,7 @@ public final class TestMIDIGen extends TestCase
 	    {
     	final EOUDataCSV data = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.conexDHW_M_to_202305));
         assertEquals("expect exactly 185 data rows", 185, data.data().size());
-		final MIDITune result1 = MIDIGen.genMelody(new GenerationParameters(0, Style.house, 4, false, null), data);
+		final MIDITune result1 = MIDIGen.genTune(new GenerationParameters(0, Style.house, 4, false, null), data);
     	MIDIGen.validateMIDITune(result1);
     	assertFalse(result1.dataMelody().isEmpty());
         assertEquals("expect exactly 1 melody track", 1, result1.dataMelody().size());
