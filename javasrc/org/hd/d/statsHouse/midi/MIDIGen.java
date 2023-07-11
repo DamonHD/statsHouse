@@ -876,8 +876,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final boolean doAlign = canAlign &&
 			(params.style().level == ProductionLevel.Gentle) ||
 			(params.style().level == ProductionLevel.Danceable); // TODO: randomness
-		// FIXME: do alignment where appropriate.
-
+		// TODO: do alignment where appropriate.
 
 	    final int size = data.data().size(); // TODO: allow for alignment
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
@@ -908,7 +907,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <li>The tune is not null.</li>
      * <li>No data melody track is using the reserved (10) percussion channel.</li>
      * <li>No two tracks are using the same channel (at least in their setup).</li>
-     * <li>All tracks have the same length in bars (except possible a stub tempo track).</li>
+     * <li>All tracks have the same length in bars (except possibly a stub tempo track).</li>
      * </ul>
      * <p>
      * TODO: other checks, eg:
@@ -923,7 +922,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      */
     public static void validateMIDITune(final MIDITune tune)
 		{
-    	if(null == tune) { throw new IllegalArgumentException(); }
+    	Objects.requireNonNull(tune);
 
     	// Check that no data melody is using the percussion channel.
     	for(final MIDIDataMelodyTrack t : tune.dataMelody())
@@ -949,7 +948,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        channelsInUse.set(c);
 	    	}
 
-    	// Check tracks for same number of vars.
+    	// Check tracks for same number of bars.
     	// Putative length of all tracks.
     	final int lengthBars =
 			(!tune.dataMelody().isEmpty()) ? tune.dataMelody().get(0).bars().size() :
