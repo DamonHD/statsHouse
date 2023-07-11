@@ -274,9 +274,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	case verse:
 	        		{
 	        		// Extract and pad to exactly section size for last one if needed.
+	        	    // If truncating (ie not using some bars)
+	        		// then on alternate repeats discard early bars rather than later ones
+	        		// for a little taste of progression.
+	        		final boolean discardEarlyBars = (0 != ((verseCount / verseSectionCount) & 1));
+	        		final int excessBars = verseProtoBars.size() - (verseSectionCount * sectionBars);
+	        		final int startOffset = (discardEarlyBars ? Math.max(0, excessBars) : 0);
 	        		final List<DataProtoBar> sectionProtoBars = new ArrayList<>(sectionBars);
-	        		final int startRow = (verseCount % verseSectionCount) * sectionBars;
+	        		final int startRow = ((verseCount % verseSectionCount) * sectionBars) + startOffset;
 	        		final int endRow = startRow + sectionBars;
+//System.err.println(String.format("protobars=%d, verseCount=%d, excessBars=%d, startRow=%d",verseProtoBars.size(), verseCount, excessBars, startRow ));
 	        		for(int dr = startRow; dr < endRow; ++dr)
 		        		{
 	        			final DataProtoBar dpplast = verseProtoBars.get(verseProtoBars.size() - 1);
@@ -875,11 +882,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final boolean canAlign = cadence.canAlign();
 		final boolean doAlign = canAlign &&
 			(params.style().level == ProductionLevel.Gentle) ||
-			(params.style().level == ProductionLevel.Danceable); // TODO: randomness
-		// TODO: do alignment where appropriate.
+			(params.style().level == ProductionLevel.Danceable); // Alt: randomness
 
 	    final int size = data.data().size(); // TODO: allow for alignment
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
+
+		// TODO: do alignment where appropriate.
+
+
+
+
 
 		for(int i = 0; i < size; i += dataNotesPerBar)
 		    {
