@@ -275,9 +275,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		{
 	        		// Extract and pad to exactly section size for last one if needed.
 	        	    // If truncating (ie not using some bars)
-	        		// then on alternate repeats discard early bars rather than later ones
+	        		// then on alternate repeats discard late bars rather than early ones
 	        		// for a little taste of progression.
-	        		final boolean discardEarlyBars = (0 != ((verseCount / verseSectionCount) & 1));
+	        		// This means that the latest data is seen on the first verse set.
+	        		final boolean discardEarlyBars = (0 == ((verseCount / verseSectionCount) & 1));
 	        		final int excessBars = verseProtoBars.size() - (verseSectionCount * sectionBars);
 	        		final int startOffset = (discardEarlyBars ? Math.max(0, excessBars) : 0);
 	        		final List<DataProtoBar> sectionProtoBars = new ArrayList<>(sectionBars);
