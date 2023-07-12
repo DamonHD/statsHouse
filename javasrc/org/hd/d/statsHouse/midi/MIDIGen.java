@@ -277,7 +277,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	    // If truncating (ie not using some bars)
 	        		// then on alternate repeats discard late bars rather than early ones
 	        		// for a little taste of progression.
-	        		// This means that the latest data is seen on the first verse set.
+	        		// This also means that the latest data is heard on the first verse set.
 	        		final boolean discardEarlyBars = (0 == ((verseCount / verseSectionCount) & 1));
 	        		final int excessBars = verseProtoBars.size() - (verseSectionCount * sectionBars);
 	        		final int startOffset = (discardEarlyBars ? Math.max(0, excessBars) : 0);
@@ -285,12 +285,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		final int startRow = ((verseCount % verseSectionCount) * sectionBars) + startOffset;
 	        		final int endRow = startRow + sectionBars;
 //System.err.println(String.format("protobars=%d, verseCount=%d, excessBars=%d, startRow=%d",verseProtoBars.size(), verseCount, excessBars, startRow ));
+        			final DataProtoBar dpplast = verseProtoBars.get(verseProtoBars.size() - 1);
 	        		for(int dr = startRow; dr < endRow; ++dr)
 		        		{
-	        			final DataProtoBar dpplast = verseProtoBars.get(verseProtoBars.size() - 1);
 	        			final DataProtoBar dbp = (dr < verseProtoBars.size()) ? verseProtoBars.get(dr) :
-	        				new DataProtoBar(dpplast.dataNotesPerBar(),
-        						new EOUDataCSV(Collections.nCopies(dpplast.dataNotesPerBar(), Collections.emptyList())));
+	        				(new DataProtoBar(dpplast.dataNotesPerBar(),
+        						new EOUDataCSV(Collections.nCopies(dpplast.dataNotesPerBar(), Collections.emptyList()))));
 	        			sectionProtoBars.add(dbp);
 		        		}
 

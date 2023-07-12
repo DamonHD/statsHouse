@@ -13,7 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20230712: provide some progression and use all data by end-aligning on alternate repeats.
+    DHD20230712: provide some progression and use all data by start-aligning on odd repeats.
 
 
 
