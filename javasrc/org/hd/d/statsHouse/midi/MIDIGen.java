@@ -258,6 +258,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	for(int sectionNumber = 0; sectionNumber < plan.size(); ++sectionNumber)
 	    	{
     		final TuneSectionMetadata ts = plan.get(sectionNumber);
+    		// Previous section (null if none) to help with transitions.
+    		final TuneSectionMetadata tsPrev = (sectionNumber > 0) ? plan.get(sectionNumber-1) : null;
     		// Next section (null if none) to help with transitions.
     		final TuneSectionMetadata tsNext = (sectionNumber+1 < plan.size()) ? plan.get(sectionNumber+1) : null;
 
@@ -267,6 +269,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		_generateHousePercussionBySection(percTrack, ts);
 
             _generateHouseBassBySection(bassTrack, ts, params);
+
+            // Fade in and out first and last verse/chorus.
+            // TODO: also fade in/out each non-primary instrument verse?
+    		// Maybe do not want this type of logic hardwired in.
+    		// TODO: sometimes omit fade out depending on the seed.
+    		// If the following section is outro (or there isn't another section)
+    		// then set this section to fade out.
+    		final boolean fadeIn = (null == tsPrev) || (TuneSection.intro == tsPrev.sectionType());
+    		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
 
             // Inject relatively-vanilla data melody for verse.
             switch(ts.sectionType())
@@ -335,7 +346,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
                 		// TODO: construct padding track?
 
-                		tracks[s - 1].bars().addAll(mpmBars);
+                		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, fadeIn, fadeOut));
 	                	}
 
         			++verseCount;
@@ -347,12 +358,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         			++chorusCount;
 	            	for(int s = 1; s <= streams; ++s)
 	            		{
-	            		// Maybe do not want this type of logic hardwired in.
-	            		// TODO: sometimes omit fade out depending on the seed.
-	            		// If the following section is outro (or there isn't another section)
-	            		// then set this chorus to fade out.
-	            		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
-
         				// Make the bars!
 	            		final List<MIDIPlayableMonophonicDataBar> mpmBars =
     						DataChorusGen.makeHouseDataChorusBars(
@@ -360,7 +365,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 								chorusCount, s, ts, params, db, data,
 								scale);
 //	        			assert(mpmBars.size() == ts.bars());
-	            		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, false, fadeOut));
+	            		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, fadeIn, fadeOut));
 	            		}
 	        		break;
 	        		}
