@@ -13,9 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20230712: provide some progression and use all data by end-aligning on alternate repeats.
-    DHD20230713: first verse now fades in, fast chorus fades out (now over 1/4 section length).
-    DHD20230713: secondary data stream verse sections fade in and out.
 
 
 
@@ -24,6 +21,14 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
 RELEASES
 ========
+
+
+20230710:
+    freezepoint name: V5.2.6 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    DHD20230712: provide some progression and use all data by end-aligning on alternate repeats.
+    DHD20230713: first verse now fades in, last chorus fades out (over 1/4 section length).
+    DHD20230713: secondary data stream verse sections fade in and out.
 
 
 20230710:
