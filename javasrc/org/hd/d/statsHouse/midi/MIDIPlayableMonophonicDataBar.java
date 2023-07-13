@@ -63,8 +63,8 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
 	    if((null == dpr) && (0 != stream)) { throw new IllegalArgumentException(); }
 	    Objects.requireNonNull(notes);
 	    if((null != dpr) && (dpr.dataNotesPerBar() != notes.size())) { throw new IllegalArgumentException(); }
-	    if(expressionStart < 0) { throw new IllegalArgumentException(); }
-	    if(expressionEnd < 0) { throw new IllegalArgumentException(); }
+	    if(expressionStart < 0) { throw new IllegalArgumentException(Byte.toString(expressionStart)); }
+	    if(expressionEnd < 0) { throw new IllegalArgumentException(Byte.toString(expressionEnd)); }
 	    }
 
     /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
