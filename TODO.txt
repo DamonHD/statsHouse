@@ -11,7 +11,7 @@ Current priorities:
   * Seeding/variations...
 
 
-2023-07:
+2023-07 thoughts:
 
   * A8: in response to V5.1.0 imp-M dc sample: "... put a mastering plugin on it though. Even if it's just a basic limiter."
   * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
@@ -22,7 +22,6 @@ Current priorities:
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
   
-
 
 2023-06-13 thoughts:
 
