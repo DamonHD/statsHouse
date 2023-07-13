@@ -19,7 +19,7 @@ package org.hd.d.statsHouse.generic;
 /**Cadence of input data: daily, monthly, yearly. */
 public enum DataCadence
     {
-    D(32, 32, 12),
+    D(32, 32, 12), // Also 7 days, or 28 days with a cycle of 13 plus some kinda 1 or 2 day fudge...
     M(12, 12, 0),
     Y(4, 0, 0);
 
