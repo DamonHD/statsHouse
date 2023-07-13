@@ -6,7 +6,6 @@ Entries should be deleted when substantially implemented.
 
 Current priorities:
   * Alignment.
-  * Fade in/out new/finishing instruments with expression or velocity, over 1 bar or more.
   * Chorus bar synthesis.
   * Work in some progression especially for repeat verse/chorus.
   * Seeding/variations...

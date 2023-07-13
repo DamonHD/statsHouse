@@ -271,12 +271,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             _generateHouseBassBySection(bassTrack, ts, params);
 
             // Fade in and out first and last verse/chorus.
-            // TODO: also fade in/out each non-primary instrument verse?
+            // Also fade in/out each non-primary instrument verse?
     		// Maybe do not want this type of logic hardwired in.
-    		// TODO: sometimes omit fade out depending on the seed.
-    		// If the following section is outro (or there isn't another section)
-    		// then set this section to fade out.
+    		// TODO: sometimes omit (some) fades depending on the seed.
+    		// If the previous section is intro (or there is no previous section)
+    		// then set this section to fade in.
     		final boolean fadeIn = (null == tsPrev) || (TuneSection.intro == tsPrev.sectionType());
+    		// If the following section is outro (or there is no further section)
+    		// then set this section to fade out.
     		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
 
             // Inject relatively-vanilla data melody for verse.
@@ -346,7 +348,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
                 		// TODO: construct padding track?
 
-                		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, fadeIn, fadeOut));
+                		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars,
+                				fadeIn || !isNotSecondaryDataStream,
+                				fadeOut || !isNotSecondaryDataStream));
 	                	}
 
         			++verseCount;
