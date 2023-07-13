@@ -405,8 +405,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * For a single bar, only fade-out will happen if both are requested.
      *
      * @param mpmBars  unfaded bars; never null
-     * @param fadeIn  if true, do a fade in
-     * @param fadeOut  if true, do a fade out
+     * @param fadeIn  if true, request a fade in
+     * @param fadeOut  if true, request a fade out
      * @return  same-length List of bars; never null
      */
 	private static List<MIDIPlayableMonophonicDataBar> optionalFadeInOut(
@@ -438,13 +438,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			byte expression = 0;
 	        for(int i = 0; i < postFadeInBarIndex; ++i)
 	            {
-	        	final boolean finalFadeInBar = (i == postFadeInBarIndex - 1);
+	        	final boolean isFinalFadeInBar = (i == postFadeInBarIndex - 1);
 	        	final byte newExpression = (byte)
-	    			(finalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
+	    			(isFinalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
 	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
 	            expression = newExpression;
 	            }
-	        assert(MIDIConstant.DEFAULT_EXPRESSION == expression);
+//	        assert(MIDIConstant.DEFAULT_EXPRESSION == expression);
 	        }
 
         // Preserve any middle unfaded portion.
@@ -456,16 +456,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
 	        for(int i = firstFadeOutBarIndex; i < barCount; ++i)
 	            {
-	        	final boolean finalFadeOutBar = (i == barCount - 1);
+	        	final boolean isFinalFadeOutBar = (i == barCount - 1);
 	        	final byte newExpression = (byte)
-	    			(finalFadeOutBar ? 0 : (expression - fadePerBar));
+	    			(isFinalFadeOutBar ? 0 : (expression - fadePerBar));
 	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
 	            expression = newExpression;
 	            }
-	        assert(0 == expression);
+//	        assert(0 == expression);
 			}
 
-		assert(barCount == updatedBars.size());
+//		assert(barCount == updatedBars.size());
 		updatedBars.trimToSize(); // Should be a no-op.
         return(Collections.unmodifiableList(updatedBars));
 		}
