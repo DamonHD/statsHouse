@@ -451,6 +451,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
 	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+//	            assert(expression < MIDIConstant.DEFAULT_EXPRESSION); // Last note not quite max.
 	            expression = newExpression;
 	            }
 //	        assert(MIDIConstant.DEFAULT_EXPRESSION == expression);
@@ -469,6 +470,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeOutBar ? 0 : (expression - fadePerBar));
 	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+//	            assert(expression > 0); // Last note not quite silent.
 	            expression = newExpression;
 	            }
 //	        assert(0 == expression);
