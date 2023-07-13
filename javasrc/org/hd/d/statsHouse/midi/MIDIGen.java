@@ -360,7 +360,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 								chorusCount, s, ts, params, db, data,
 								scale);
 //	        			assert(mpmBars.size() == ts.bars());
-	            		tracks[s - 1].bars().addAll(optionalFadeOut(mpmBars, fadeOut));
+	            		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, false, fadeOut));
 	            		}
 	        		break;
 	        		}
@@ -391,37 +391,40 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-    /**Apply optional fade-out to the List of bars, to hit silent at the end.
+    /**Apply optional fade-in/fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
      * <p>
      * This assumes that the incoming bars are all at default (maximum) expression.
      * <p>
-     * The default behaviour is to fade out over
-     * the last half of the section or ~4 bars,
+     * The default behaviour is to fade in/out over
+     * the first/last half of the section or ~4 bars,
      * whichever is shorter.
      *
      * @param mpmBars  unfaded bars; never null
+     * @param fadeIn  if true, do a fade in
      * @param fadeOut  if true, do a fade out
      * @return  same-length List of bars; never null
      */
-	private static List<MIDIPlayableMonophonicDataBar> optionalFadeOut(
+	private static List<MIDIPlayableMonophonicDataBar> optionalFadeInOut(
 			final List<MIDIPlayableMonophonicDataBar> mpmBars,
-			final boolean fadeOut)
+			final boolean fadeIn, final boolean fadeOut)
 		{
 		Objects.requireNonNull(mpmBars);
 
-		if(fadeOut && !mpmBars.isEmpty())
+		if(mpmBars.isEmpty()) { return(mpmBars); }
+
+		final int barCount = mpmBars.size();
+        final int fadeBarCount = Math.max(1, Math.min(4, barCount/2));
+        final int firstFadeBarIndex = barCount - fadeBarCount;
+        final int fadePerBar = (MIDIConstant.DEFAULT_EXPRESSION + 1) / fadeBarCount;
+
+        final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
+
+        // Preserve the/any initial unfaded portion.
+		updatedBars.addAll(mpmBars.subList(0, firstFadeBarIndex));
+
+		if(fadeOut)
 			{
-			final int barCount = mpmBars.size();
-            final int fadeBarCount = Math.max(1, Math.min(4, barCount/2));
-            final int firstFadeBarIndex = barCount - fadeBarCount;
-            final int fadePerBar = (MIDIConstant.DEFAULT_EXPRESSION + 1) / fadeBarCount;
-
-            final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
-
-            // Preserve the/any initial unfaded portion.
-			updatedBars.addAll(mpmBars.subList(0, firstFadeBarIndex));
-
 			// Reduce the expression on the remaining bars, ending at 0.
 			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
             for(int i = firstFadeBarIndex; i < barCount; ++i)
@@ -431,11 +434,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 expression = newExpression;
 	            }
             assert(0 == expression);
-
-            return(Collections.unmodifiableList(updatedBars));
+			}
+		else
+		    {
+			// Tail portion of bars left unchanged.
+			updatedBars.addAll(mpmBars.subList(firstFadeBarIndex, mpmBars.size()));
 			}
 
-		return(mpmBars);
+        return(Collections.unmodifiableList(updatedBars));
 		}
 
 	/**Generate a single house tune section of bass. */
