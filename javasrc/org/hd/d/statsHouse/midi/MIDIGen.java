@@ -397,8 +397,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * This assumes that the incoming bars are all at default (maximum) expression.
      * <p>
      * The default behaviour is to fade in/out over
-     * the first/last half of the section or ~4 bars,
+     * the first/last quarter of the section or ~4 bars,
      * whichever is shorter.
+     * <p>
+     * An empty list of bars is left unchanged.
+     * <p>
+     * For a single bar, only fade-out will happen if both are requested.
      *
      * @param mpmBars  unfaded bars; never null
      * @param fadeIn  if true, do a fade in
@@ -414,33 +418,55 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		if(mpmBars.isEmpty()) { return(mpmBars); }
 
 		final int barCount = mpmBars.size();
-        final int fadeBarCount = Math.max(1, Math.min(4, barCount/2));
-        final int firstFadeBarIndex = barCount - fadeBarCount;
+
+		// Forbid both fade in and fade out on a single bar section.
+		// Block any fade in for this case.
+		final boolean blockFadeIn = fadeOut && (1 == barCount);
+		final boolean doFadeIn = fadeIn && !blockFadeIn;
+		final boolean doFadeOut = fadeOut;
+
+        final int fadeBarCount = Math.max(1, Math.min(4, barCount/4));
+        final int postFadeInBarIndex = doFadeIn ? fadeBarCount : 0;
+        final int firstFadeOutBarIndex = doFadeOut ? (barCount - fadeBarCount) : barCount;
         final int fadePerBar = (MIDIConstant.DEFAULT_EXPRESSION + 1) / fadeBarCount;
 
         final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
 
-        // Preserve the/any initial unfaded portion.
-		updatedBars.addAll(mpmBars.subList(0, firstFadeBarIndex));
-
-		if(fadeOut)
-			{
-			// Reduce the expression on the remaining bars, ending at 0.
-			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
-            for(int i = firstFadeBarIndex; i < barCount; ++i)
+		// Raise expression on the lead bars, ending at max/default.
+        if(doFadeIn)
+	        {
+			byte expression = 0;
+	        for(int i = 0; i < postFadeInBarIndex; ++i)
 	            {
-            	final byte newExpression = (byte) Math.max(0, expression - fadePerBar);
-                updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
-                expression = newExpression;
+	        	final boolean finalFadeInBar = (i == postFadeInBarIndex - 1);
+	        	final byte newExpression = (byte)
+	    			(finalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
+	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+	            expression = newExpression;
 	            }
-            assert(0 == expression);
-			}
-		else
-		    {
-			// Tail portion of bars left unchanged.
-			updatedBars.addAll(mpmBars.subList(firstFadeBarIndex, mpmBars.size()));
+	        assert(MIDIConstant.DEFAULT_EXPRESSION == expression);
+	        }
+
+        // Preserve any middle unfaded portion.
+		updatedBars.addAll(mpmBars.subList(postFadeInBarIndex, firstFadeOutBarIndex));
+
+		// Reduce expression on the tail bars, ending at 0.
+		if(doFadeOut)
+			{
+			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
+	        for(int i = firstFadeOutBarIndex; i < barCount; ++i)
+	            {
+	        	final boolean finalFadeOutBar = (i == barCount - 1);
+	        	final byte newExpression = (byte)
+	    			(finalFadeOutBar ? 0 : (expression - fadePerBar));
+	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+	            expression = newExpression;
+	            }
+	        assert(0 == expression);
 			}
 
+		assert(barCount == updatedBars.size());
+		updatedBars.trimToSize(); // Should be a no-op.
         return(Collections.unmodifiableList(updatedBars));
 		}
 
