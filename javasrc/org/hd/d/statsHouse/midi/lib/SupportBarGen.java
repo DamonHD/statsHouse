@@ -56,11 +56,11 @@ public final class SupportBarGen
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
 		final byte DRUM = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0; // Alt: ELECTRIC_BASE_DRUM
-		final byte vDRUM = MIDIGen.DEFAULT_MELODY_VELOCITY;
+		final byte vDRUM = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 		final byte HAT = MIDIPercusssionInstrument.CLOSED_HI_HAT.instrument0; // OPEN_HI_HAT: OPEN_HI_HAT
-		final byte vHAT = MIDIGen.DEFAULT_MELODY_VELOCITY;
+		final byte vHAT = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 		final byte CLAP = MIDIPercusssionInstrument.HAND_CLAP.instrument0;
-		final byte vCLAP = MIDIGen.DEFAULT_MELODY_VELOCITY;
+		final byte vCLAP = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 
 		// Beat 1: drum
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
@@ -136,7 +136,7 @@ public final class SupportBarGen
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
 //		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
-		final byte vBASS = MIDIGen.DEFAULT_MELODY_VELOCITY;
+		final byte vBASS = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 
 		final int offset = 2 * 12; // Alt: vary eg 1 or 2 octaves down from root.
 

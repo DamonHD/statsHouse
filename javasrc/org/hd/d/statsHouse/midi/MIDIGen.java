@@ -77,6 +77,8 @@ public final class MIDIGen
     public static final int DEFAULT_MIN_SECTION_BARS = 4;
     /**Default note velocity. */
     public static final byte DEFAULT_MELODY_VELOCITY = 63;
+    /**Default maximum note velocity to avoid clipping. */
+    public static final byte DEFAULT_MAX_MELODY_VELOCITY = 100;
     /**Default root/lowest melody note (middle C). */
     public static final byte DEFAULT_ROOT_NOTE = 60;
     /**Default range of a data melody in octaves. */
@@ -235,7 +237,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			new MIDISupportTrack(
     			new MIDITrackSetup((byte)(MIDIConstant.GM1_PERCUSSION_CHANNEL-1),
     					(byte) 0,
-    					(byte) 127, // max
+    					MIDIConstant.DEFAULT_VOLUME,
     					MIDIConstant.DEFAULT_PAN,
     					"percussion: house"),
     			new ArrayList<>());
@@ -617,7 +619,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte note = (byte) Math.max(0, Math.min(127, rawMIDINote));
 			// Velocity/volume lowered for secondary streams and low coverage.
 		    byte velocity = isNotSecondaryDataStream ?
-				DEFAULT_MELODY_VELOCITY : ((2*DEFAULT_MELODY_VELOCITY)/3);
+	    		DEFAULT_MAX_MELODY_VELOCITY : ((2*DEFAULT_MAX_MELODY_VELOCITY)/3);
 		    if(d.coverage() < 1)
 		        {
 		    	// Reduce volume for low coverage / low certainty.
