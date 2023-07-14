@@ -7,6 +7,7 @@ Entries should be deleted when substantially implemented.
 Current priorities:
   * Alignment.
   * Chorus bar synthesis.
+  * Buildup expression.
   * Work in some progression especially for repeat verse/chorus.
   * Seeding/variations...
 
@@ -21,6 +22,7 @@ Current priorities:
   * For some cadences, have notes transition rather than be abrupt, using MIDI CC (legato?).
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
+  * Put slow expression drop then rise at end onto verse to build up to chorus "buildup expression".
   
 
 2023-06-13 thoughts:
