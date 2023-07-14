@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -149,6 +150,18 @@ public final class Main
         System.exit(1);
         }
 
+    /**Convert input filename to tune name; never null.
+     * Discard any path and and trailing ".csv" parts.
+     */
+    public static String filenameToTuneName(final String filename)
+	    {
+	    Objects.requireNonNull(filename);
+	    final String basename = (new File(filename)).getName();
+	    if(basename.endsWith(".csv"))
+	    	{ return(basename.substring(0, basename.length()-4)); }
+	    return(basename);
+	    }
+
     /**Run zero or more command lines, aborting with an exception in case of error.
      *
      * @param cmdlines  zero or more command lines each consisting of arguments pre-parsed into separate Strings; never null
@@ -185,7 +198,7 @@ public final class Main
 		    // TODO strip extension
 		    final GenerationParameters params =
 				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
-					(new File(inputFileName)).getName());
+					filenameToTuneName(inputFileName));
 
 			// Generate the abstract MIDI form.
 		    final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));

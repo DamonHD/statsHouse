@@ -22,7 +22,7 @@ Current priorities:
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
   * Put slow expression drop then rise at end onto verse to build up to chorus "buildup expression".
-  * Do better with -ve values from plain to house.
+  * Do better with -ve values in all styles.
   
 
 2023-06-13 thoughts:
