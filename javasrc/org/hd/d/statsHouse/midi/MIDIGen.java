@@ -215,7 +215,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        // up to at least half target length.
 	        while(plan.size() * sectionBars < DEFAULT_TYPICAL_RADIO_TUNE_BARS/2);
 
-        // Top and tail with intro/outro if specified, eg to be mix-friendly.
+        // Top and tail with intro/outro if specified, eg to be DJ mix-friendly.
     	final boolean hasIntroOutro = (params.introRequested());
         if(hasIntroOutro)
 	        {
@@ -274,7 +274,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
             // Fade in and out first and last verse/chorus.
             // Also fade in/out each non-primary instrument verse?
-    		// Maybe do not want this type of logic hardwired in.
+    		// Maybe do not want this type of logic hard-wired in.
     		// TODO: sometimes omit (some) fades depending on the seed.
     		// If the previous section is intro (or there is no previous section)
     		// then set this section to fade in.
@@ -350,9 +350,24 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
                 		// TODO: construct padding track?
 
-                		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars,
+                		// If this verse is not getting any other fade
+                		// and it is followed by a drop or a (higher-energy) chorus
+                		// then adjust the expression to build up to the drop/chorus.
+                		final boolean followedByDrop = (null != tsNext) &&
+            				(switch(tsNext.sectionType()) {
+            				case drop, chorus -> true;
+            				default -> false;});
+
+                		final List<MIDIPlayableMonophonicDataBar> newBars;
+                		if(!fadeIn && !fadeOut && followedByDrop)
+	                		{
+
+	                		}
+
+                		newBars = optionalFadeInOut(mpmBars,
                 				fadeIn || !isNotSecondaryDataStream,
-                				fadeOut || !isNotSecondaryDataStream));
+                				fadeOut || !isNotSecondaryDataStream);
+						tracks[s - 1].bars().addAll(newBars);
 	                	}
 
         			++verseCount;
