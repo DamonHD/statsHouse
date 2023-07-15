@@ -16,6 +16,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package localtest;
 
+import org.hd.d.statsHouse.generic.DataCadence;
+
 import junit.framework.TestCase;
 
 /**Miscellaneous tests.
@@ -24,4 +26,12 @@ public final class TestMisc extends TestCase
     {
     /**Verify that test harness is sane... */
     public static void testSanity() { }
+
+    /**Test expected cadence alignment. */
+    public static void testDataCadenceAlignment()
+	    {
+	    assertTrue(DataCadence.D.canAlign());
+	    assertTrue(DataCadence.M.canAlign());
+	    assertFalse(DataCadence.Y.canAlign());
+	    }
     }
