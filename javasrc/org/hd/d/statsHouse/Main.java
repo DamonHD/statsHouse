@@ -185,8 +185,6 @@ public final class Main
 		for(final List<String> cmdline : cmdlines)
 			{
 			final int argCount = cmdline.size();
-			if(!quiet)
-			    { System.out.println("INFO: sonifying: " + (++cmdCount) + "/" + (cmdlines.size()) + ": " + Arrays.toString(cmdline.toArray())); }
 			if(argCount < 2)
 			    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
 
@@ -199,6 +197,14 @@ public final class Main
 		    final GenerationParameters params =
 				GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
 					filenameToTuneName(inputFileName));
+			if(!quiet)
+			    {
+				System.out.println("INFO: sonifying: " +
+			        (++cmdCount) + "/" + (cmdlines.size()) + ": " +
+//					params);
+					Arrays.toString(cmdline.toArray()) + ", " +
+					"derivedSeed=" + params.derivedSeed());
+				}
 
 			// Generate the abstract MIDI form.
 		    final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));

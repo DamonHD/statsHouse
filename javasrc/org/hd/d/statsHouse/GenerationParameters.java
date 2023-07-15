@@ -180,17 +180,24 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
      * <li>If seed is RANDOMNESS_NONE then is returned as-is.</li>
      * <li>If seed is RANDOMNESS_NAME then strictly-positive value based on the name if non-null, else RANDOMNESS_NONE.</li>
      * <li>If seed is RANDOMNESS_UNIQUE then strictly-positive value based on time of day.</li>
+     * <li>Another strictly-positive value will be preserved as-is.</li>
      * <li>All other values are coerced into something strictly positive.</li>
      * </ul>
+     * Preserving strictly-positive derived seed values
+     * should allow them to be fed back in
+     * to preserve a good combination found by chance.
      *
      * @return non-negative new seed value, zero if input is zero, else strictly positive,
      *     ie a positive result requests an output varied from standard '0' form
+     *
+     * <p>
+     * TODO: test cazses
      */
     public static int makeDerivedSeed(final int seed, final String name)
 	    {
 	    return(switch(seed) {
 	    case RANDOMNESS_NONE -> RANDOMNESS_NONE;
-	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.min(1, name.hashCode() >>> 1);
+	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.max(1, name.hashCode() >>> 1);
 	    case RANDOMNESS_UNIQUE -> Math.max(1, ((int) System.currentTimeMillis()) >>> 1);
 	    default -> Math.max(1, seed & 0x7fffffff);
 	    });
