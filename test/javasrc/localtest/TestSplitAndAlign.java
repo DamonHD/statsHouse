@@ -121,7 +121,7 @@ public final class TestSplitAndAlign extends TestCase
 	    assertEquals("16 bars", 16, result7.size());
 	    assertEquals("first bar should have nominal 12 notes", DataCadence.M.defaultPerBar, result7.get(0).dataNotesPerBar());
 	    assertEquals("first bar should not be full", 11, result7.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
-	    assertNotNull("first note in unaligned first bar should not be null", result7.get(0).dataRows().data().get(0));
+	    assertNull("first note in unaligned first bar should be null", result7.get(0).dataRows().data().get(0));
 	    assertNull("last note in last bar should be null", result7.get(15).dataRows().data().get(11));
 	    }
     }

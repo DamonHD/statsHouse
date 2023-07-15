@@ -1031,7 +1031,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 	if(1 != lsd) { throw new DateTimeException("malformed date or missing datum: " + date + "; lsd="+lsd+", currentBeatNumber="+currentBeatNumber); }
                     // Pad bar to end, push it out...
         		    while(bar.size() < dataNotesPerBar) { bar.add(null); }
-        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
+        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(new ArrayList<>(bar)))));
                 	// ... and be ready to start new bar with this note.
         		    bar.clear();
 	                }
@@ -1048,7 +1048,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		    assert(bar.size() <= dataNotesPerBar);
     		    if(dataNotesPerBar == bar.size())
 	    		    {
-        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
+        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(new ArrayList<>(bar)))));
                 	// Start new bar with this note.
         		    bar.clear();
 	    		    }
@@ -1056,7 +1056,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		    // Pad the final possibly-partial bar if necessary.
 		    while(bar.size() < dataNotesPerBar) { bar.add(null); }
-		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
+		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(new ArrayList<>(bar)))));
 		    }
 	    else
 		    {
