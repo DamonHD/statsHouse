@@ -1023,6 +1023,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    		final int currentBeatNumber = bar.size() + 1;
 
 	    		final List<String> row = data.data().get(i);
+	    		// TODO: optimisation: avoid parsing the data for each stream.
 	    		final String date = row.get(0);
 	    		final int lastDash = date.lastIndexOf('-');
 	    		if(lastDash < 0) { throw new DateTimeException("malformed date (missing '-'): " + date); }
