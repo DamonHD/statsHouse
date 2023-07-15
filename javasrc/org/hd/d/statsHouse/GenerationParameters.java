@@ -91,13 +91,22 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     			makeDerivedSeed(DEFAULT_SEED, DEFAULT_NAME));
     	}
 
+    /**Print a summary of command options to stderr. */
+    public static void printOptions()
+        {
+        System.err.println("      [-seed n]");
+        System.err.println("         -1 requests different randomness each time");
+        System.err.println("         0 requests no randomness, all best options");
+        System.err.println("         1 requests randomness based on the input name");
+        System.err.println("         other +ve (31-bit) values are used as-is");
+        System.err.println("      [-het]");
+        System.err.println("      [-intro (auto|<bars>)]");
+        System.err.println("      [-style (plain|gentle|house)]");
+		System.err.println("      [-highWorse]");
+		System.err.println("      [OFFSET [INSTRUMENT]]");
+        }
+
     /**Parse optional arguments from command-line after fixed parameters.
-     * <pre>
-  [-seed n] [-het] [-intro (auto|<bars>)]
-  [-style (plain|gentle|house)]
-  [-highWorse] [OFFSET [INSTRUMENT]]
-     * </pre>
-     * <p>
      * TODO: unit tests
      *
      * @param args  optional arguments; never null
