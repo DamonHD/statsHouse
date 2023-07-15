@@ -52,7 +52,10 @@ public enum MIDIInstrument
 	LEAD_1_SQUARE_WAVE(80),
 
 	/**Aka soft saw lead (GB). */
-	LEAD_2_SAWTOOTH_WAVE(81);
+	LEAD_2_SAWTOOTH_WAVE(81),
+
+	/**Aka boutique 808 (GB). */
+	SYNTH_DRUM(120);
 
 
 	/**Raw zero-based instrument number. */
