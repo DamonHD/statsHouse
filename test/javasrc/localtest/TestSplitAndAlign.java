@@ -97,10 +97,11 @@ public final class TestSplitAndAlign extends TestCase
 	    assertNull("first note in unaligned bar should be null", result5.get(0).dataRows().data().get(0));
 	    assertNull("last note in bar should be null", result5.get(0).dataRows().data().get(11));
 
-	    // Testing long M sample with aligned data in a plain style, so should stay unaligned.
+	    // Testing long M sample with aligned data in a gentle style, so should stay aligned.
+	    final EOUDataCSV conexDHW = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.conexDHW_M_to_202305));
     	final List<DataProtoBar> result6 = MIDIGen.splitAndAlignData(TuneSection.verse,
-			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.plain, 0, false, null),
-			EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.conexDHW_M_to_202305)));
+			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.gentle, 0, false, null),
+			conexDHW);
 	    assertNotNull(result6);
 	    assertFalse(result6.isEmpty());
 	    assertEquals("16 bars", 16, result6.size());
@@ -108,5 +109,19 @@ public final class TestSplitAndAlign extends TestCase
 	    assertEquals("first bar should be full", 12, result6.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
 	    assertNotNull("first note in unaligned first bar should not be null", result6.get(0).dataRows().data().get(0));
 	    assertNull("last note in last bar should be null", result6.get(15).dataRows().data().get(11));
+
+	    // Take long M sample with aligned data and remove first sample to make it non-aligned.
+	    // Use gentle style to force alignment.
+	    final EOUDataCSV conexDHWNonAligned = new EOUDataCSV(conexDHW.data().subList(1, conexDHW.data().size()));
+    	final List<DataProtoBar> result7 = MIDIGen.splitAndAlignData(TuneSection.verse,
+			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.gentle, 0, false, null),
+			conexDHWNonAligned);
+	    assertNotNull(result7);
+	    assertFalse(result7.isEmpty());
+	    assertEquals("16 bars", 16, result7.size());
+	    assertEquals("first bar should have nominal 12 notes", DataCadence.M.defaultPerBar, result7.get(0).dataNotesPerBar());
+	    assertEquals("first bar should not be full", 11, result7.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
+	    assertNotNull("first note in unaligned first bar should not be null", result7.get(0).dataRows().data().get(0));
+	    assertNull("last note in last bar should be null", result7.get(15).dataRows().data().get(11));
 	    }
     }
