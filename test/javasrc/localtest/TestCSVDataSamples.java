@@ -43,7 +43,7 @@ public final class TestCSVDataSamples extends TestCase
 		{
 		return(Collections.unmodifiableList(Arrays.asList(
 			new ExternalFile("imp-M.csv", 163, DataCadence.M),
-			new ExternalFile("gen-D.csv", 5611, DataCadence.D),
+			new ExternalFile("gen-D.csv", 5617, DataCadence.D),
 			new ExternalFile("gen-M.csv", 186, DataCadence.M),
 			new ExternalFile("gen-Y.csv", 16, DataCadence.Y)
 			)));
