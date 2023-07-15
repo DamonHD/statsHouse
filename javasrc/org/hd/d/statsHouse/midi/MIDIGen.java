@@ -996,23 +996,40 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    final int size = data.data().size(); // TODO: allow for alignment
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
 
-		// TODO: do alignment where appropriate.
-
-
-
-
-
-		for(int i = 0; i < size; i += dataNotesPerBar)
+		// Do alignment where appropriate.
+	    if(doAlign)
 		    {
-		    final List<List<String>> out = new ArrayList<>(dataNotesPerBar);
-		    // FIXME: wrap leaf List if not already Unmodifiable.
-		    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
-			    { out.add(data.data().get(j)); }
-		    // Pad the final partial bar if necessary.
-		    while(out.size() < dataNotesPerBar) { out.add(null); }
-		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(out))));
+	    	// Do alignment.
+	    	// Assumes all input data is well-formed, well-ordered and dense (no gaps).
+	    	// Any item with least-significant date (lsd) section N should be on beat N
+	    	// (treating both schemes as 1-based).
+	    	//     * If a datum with lsd less than the current beat is encountered
+	    	//       then insert empty notes to get to pad the current bar to the end.
+	    	//       (Nominally the lsd should be 1 (or "01") if no gaps,
+	    	//       but we could drop through to the next rule to cope with some gaps.)
+	    	//     * If a datum with lsd greater than the current beat is encountered
+	    	//       then insert empty notes to get to beat N.
+
+		    	//FIXME
+
+
+		    }
+	    else
+		    {
+	    	// No alignment
+			for(int i = 0; i < size; i += dataNotesPerBar)
+			    {
+			    final List<List<String>> out = new ArrayList<>(dataNotesPerBar);
+			    // FIXME: wrap leaf List if not already Unmodifiable.
+			    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
+				    { out.add(data.data().get(j)); }
+			    // Pad the final partial bar if necessary.
+			    while(out.size() < dataNotesPerBar) { out.add(null); }
+			    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(out))));
+			    }
 		    }
 
+	    assert(data.data().isEmpty() == result.isEmpty());
 		result.trimToSize();
 		return(Collections.unmodifiableList(result));
 	    }
