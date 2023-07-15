@@ -186,6 +186,8 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     public boolean randomnessUnique() { return(RANDOMNESS_UNIQUE == seed); }
     /**True if no randomness should be applied to generation: use only 'best' choices. */
     public boolean randomnessNone() { return(RANDOMNESS_NONE == seed); }
+    /**True if some randomness should be applied based on the (derived) seed. */
+    public boolean randomnessRequested() { return(!randomnessNone()); }
     /**True if name-based (or eg data-based) randomness should be applied to generation. */
     public boolean randomnessName() { return(RANDOMNESS_NAME == seed); }
 
