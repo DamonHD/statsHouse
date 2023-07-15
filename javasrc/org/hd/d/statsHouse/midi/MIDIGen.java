@@ -312,7 +312,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        		// Generate notes from data.
         			for(int s = 1; s <= streams; ++s)
 	                	{
-                		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
+                		final boolean isNotSecondaryDataStream = params.hetero() || db.isMainDataStream(s);
 
                 		// Collect all the bars for this stream (for this section).
                 		final List<MIDIPlayableMonophonicDataBar> mpmBars =
@@ -868,7 +868,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             	{
             	for(int s = 1; s <= streams; ++s)
             		{
-            		final boolean isNotSecondaryDataStream = params.hetro() || db.isMainDataStream(s);
+            		final boolean isNotSecondaryDataStream = params.hetero() || db.isMainDataStream(s);
 
             		final List<List<String>> rows = dbp.dataRows().data(); // Notes in bar.
             		final int dnpb = dbp.dataNotesPerBar();
@@ -924,7 +924,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	Objects.requireNonNull(db);
 
     	// True if a major/main stream, else a minor/secondary stream.
-    	final boolean isMajorStream = params.hetro() || db.isMainDataStream(stream);
+    	final boolean isMajorStream = params.hetero() || db.isMainDataStream(stream);
 
 		// None/gentle: tenor sax for main data stream, ocarina for remainder.  (Alternative: ocarina / synth brass 1.)
 		// House: saw lead for main data stream, synth brass for remainder.
@@ -939,7 +939,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				((byte) ((2*rawVolume) / 3)) : rawVolume;
 
 		final byte pan;
-		if(params.hetro())
+		if(params.hetero())
 			{
 			// Spread heterogeneous-and-equal streams around the L-R axis.
 			pan = (byte) ((127 / Math.max(1, db.streams() - 1)) * (stream - 1));

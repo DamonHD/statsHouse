@@ -31,7 +31,7 @@ import org.hd.d.statsHouse.generic.Style;
  * and the output is MIDI in some form.
  * <p>
  * For the seed, before in configuration before creation of this record, values are:
- * -ve for unique each run, 0 for no randomness, 1 for based on data, other +ve use seed as-is.
+ * -ve for unique each run, 0 for no randomness, 1 for based on name, other +ve use seed as-is.
  * For the -1 and 1 cases the appropriate new seed will be generated
  * before being passed as an argument to this record instance.
  *
@@ -40,17 +40,38 @@ import org.hd.d.statsHouse.generic.Style;
  * @param introBars  intro/outro length in bars, also section length if +ve, -1 if auto, else non-negative
  * @param hetero  true if heterogeneous data rather than different sources of the same data
  * @param name  short ASCII name of track or source, eg "gen-M"; can be null
+ * @param derivedSeed should be 0 (RANDOMNESS_NONE) for no randomness, else strictly positive;
+ *     can automatically be derived from seed and name
  */
-public record GenerationParameters(int seed, Style style, int introBars, boolean hetro, String name)
+public record GenerationParameters(int seed, Style style, int introBars, boolean hetero, String name,
+		int derivedSeed)
 	{
     public GenerationParameters
 	    {
 	    Objects.requireNonNull(style);
 	    if(introBars < AUTO_INTRO_BARS) { throw new IllegalArgumentException(); }
+	    if(derivedSeed < 0) { throw new IllegalArgumentException(); }
 	    }
 
+    /**Generate the derived seed automatically. */
+    public GenerationParameters(final int seed, final Style style, final int introBars, final boolean hetero, final String name)
+	    {
+    	this(seed, style, introBars, hetero, name,
+    			makeDerivedSeed(seed, name));
+	    }
+
+    /**Randomness: unique on each run derived from time of day. */
+    public static final int RANDOMNESS_UNIQUE = -1;
+    /**Randomness: none (though progression may still happen. */
+    public static final int RANDOMNESS_NONE = 0;
+    /**Randomness: from name (or data). */
+    public static final int RANDOMNESS_NAME = 1;
+
+    /**Used to request an intro/outro of length automatically selected to suit the data. */
+    public static final int AUTO_INTRO_BARS = -1;
+
     /**Default seed is for no randomness. */
-    public static final int DEFAULT_SEED = 0;
+    public static final int DEFAULT_SEED = RANDOMNESS_NONE;
     /**Default style is 'plain', ie the least-produced and highest fidelity to the source data. */
     public static final Style DEFAULT_STYLE = Style.plain;
     /**Default intro length is 0, ie no intro/outro. */
@@ -60,11 +81,12 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Default name is absent (though the input filename can be used), ie null. */
     public static final String DEFAULT_NAME = null;
 
-    /**Used to request an intro/outro of length automatically selected to suit the data. */
-    public static final int AUTO_INTRO_BARS = -1;
-
     /**Default sensible (sciency) defaults for homogeneous data. */
-    public GenerationParameters() { this(DEFAULT_SEED, DEFAULT_STYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME); }
+    public GenerationParameters()
+        {
+    	this(DEFAULT_SEED, DEFAULT_STYLE, DEFAULT_INTRO_BARS, DEFAULT_HETERO, DEFAULT_NAME,
+    			makeDerivedSeed(DEFAULT_SEED, DEFAULT_NAME));
+    	}
 
     /**Parse optional arguments from command-line after fixed parameters.
      * <pre>
@@ -146,6 +168,31 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**True if automatic-length intro/outro is requested. */
     public boolean introRequestedAutoLength() { return(AUTO_INTRO_BARS == introBars); }
 
+    /**True if unique-each-time randomness should be applied to the music generation. */
+    public boolean randomnessUnique() { return(RANDOMNESS_UNIQUE == seed); }
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
-    public boolean noRandomness() { return(0 == seed); }
+    public boolean randomnessNone() { return(RANDOMNESS_NONE == seed); }
+    /**True if name-based randomness should be applied to the music generation. */
+    public boolean randomnessName() { return(RANDOMNESS_NAME == seed); }
+
+    /**Make derived seed (ie for when not supplied/overridden); non-negative.
+     * <ul>
+     * <li>If seed is RANDOMNESS_NONE then is returned as-is.</li>
+     * <li>If seed is RANDOMNESS_NAME then strictly-positive value based on the name if non-null, else RANDOMNESS_NONE.</li>
+     * <li>If seed is RANDOMNESS_UNIQUE then strictly-positive value based on time of day.</li>
+     * <li>All other values are coerced into something strictly positive.</li>
+     * </ul>
+     *
+     * @return non-negative new seed value, zero if input is zero, else strictly positive,
+     *     ie a positive result requests an output varied from standard '0' form
+     */
+    public static int makeDerivedSeed(final int seed, final String name)
+	    {
+	    return(switch(seed) {
+	    case RANDOMNESS_NONE -> RANDOMNESS_NONE;
+	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.min(1, name.hashCode() >>> 1);
+	    case RANDOMNESS_UNIQUE -> Math.max(1, ((int) System.currentTimeMillis()) >>> 1);
+	    default -> Math.max(1, seed & 0x7fffffff);
+	    });
+	    }
 	}

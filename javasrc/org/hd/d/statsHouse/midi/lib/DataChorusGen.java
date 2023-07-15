@@ -70,7 +70,7 @@ public final class DataChorusGen
 		Objects.requireNonNull(scale);
 
 		// Skip any secondary data stream by returning empty bars.
-		if(!db.isMainDataStream(stream) && !params.hetro())
+		if(!db.isMainDataStream(stream) && !params.hetero())
 		    { return(Collections.nCopies(ts.bars(), MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR)); }
 
 		// Parameterisation of melody play with scales.
