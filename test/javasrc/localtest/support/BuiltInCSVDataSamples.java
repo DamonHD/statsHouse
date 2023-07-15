@@ -29,6 +29,7 @@ public final class BuiltInCSVDataSamples
 	""";
 
 	/**First 10 lines of monthly-cadence PV generation data CSV, including comment rows.
+	 * This data is not aligned to the start of the year.
      * Sample from:
      * <pre>
 % head data/consolidated/energy/std/gen/M/gen-M.csv

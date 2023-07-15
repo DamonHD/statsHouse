@@ -1007,7 +1007,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    	// Any item with least-significant date (lsd) section N should be on beat N
 	    	// (treating both schemes as 1-based).
 	    	//     * If a datum with lsd less than the current beat is encountered
-	    	//       then insert empty notes to get to pad the current bar to the end.
+	    	//       then insert empty notes to pad the current bar to the end.
 	    	//       (Nominally the lsd should be 1 (or "01") if no gaps,
 	    	//       but we could drop through to the next rule to cope with some gaps.)
 	    	//     * If a datum with lsd greater than the current beat is encountered
@@ -1015,6 +1015,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		    final List<List<String>> bar = new ArrayList<>(dataNotesPerBar);
 	    	for(int i = 0; i < size; ++i)
 		    	{
+	    		final int currentBeatNumber = bar.size() + 1;
+
 	    		final List<String> row = data.data().get(i);
 	    		final String date = row.get(0);
 	    		final int lastDash = date.lastIndexOf('-');
@@ -1024,10 +1026,32 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    		if(lsd <= 0) { throw new DateTimeException("malformed date (lsd <= 0): " + date); }
 	    		if(lsd > dataNotesPerBar) { throw new DateTimeException("malformed date (lsd too high): " + date); }
 
+                if(lsd < currentBeatNumber)
+	                {
+                	if(1 != lsd) { throw new DateTimeException("malformed date or missing datum: " + date + "; lsd="+lsd+", currentBeatNumber="+currentBeatNumber); }
+                    // Pad bar to end, push it out...
+        		    while(bar.size() < dataNotesPerBar) { bar.add(null); }
+        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
+                	// ... and be ready to start new bar with this note.
+        		    bar.clear();
+	                }
+                else if(lsd > currentBeatNumber)
+	                {
+	                // Insert empty notes to get to the right place.
+                	// Should only happen on a partial first bar if data is dense/complete.
+        		    while(bar.size()+1 < lsd) { bar.add(null); }
+	                }
 
+                // Add this note.
+    		    bar.add(row);
 
-			    	//FIXME
-
+    		    assert(bar.size() <= dataNotesPerBar);
+    		    if(dataNotesPerBar == bar.size())
+	    		    {
+        		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
+                	// Start new bar with this note.
+        		    bar.clear();
+	    		    }
 		    	}
 
 		    // Pad the final possibly-partial bar if necessary.
