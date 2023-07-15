@@ -186,12 +186,12 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
      * <li>Another strictly-positive value will be preserved as-is.</li>
      * <li>All other values are coerced into something strictly positive greater than all the RANDOMNESS_xxx values.</li>
      * </ul>
-     * Preserving strictly-positive derived seed values
-     * should allow them to be fed back in
-     * to preserve a good combination found by chance.
+     * Preserves strictly-positive derived seed values
+     * which should allow them to be fed back in
+     * to preserve a good combination (eg) found by chance.
      *
-     * @return non-negative new seed value, zero if input is zero, else strictly positive,
-     *     ie a positive result requests an output varied from standard '0' form
+     * @return non-negative new seed value, zero (RANDOMNESS_NONE) if input is zero, else strictly positive,
+     *     ie a positive result requests an output varied from standard 'RANDOMNESS_NONE' form
      */
     public static int makeDerivedSeed(final int seed, final String name)
 	    {
