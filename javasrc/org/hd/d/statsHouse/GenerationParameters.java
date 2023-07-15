@@ -26,9 +26,9 @@ import org.hd.d.statsHouse.generic.Style;
  * <p>
  * Immutable as all its constituents should be.
  * <p>
- * Independent of particular input or output source,
+ * Independent of particular input source or output,
  * though the expectation is that the input is a consolidated data CSV
- * and the output is MIDI in some form.
+ * and the output is usually MIDI in some form.
  * <p>
  * For the seed, before in configuration before creation of this record, values are:
  * -ve for unique each run, 0 for no randomness, 1 for based on name, other +ve use seed as-is.
