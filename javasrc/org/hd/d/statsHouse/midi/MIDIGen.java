@@ -361,12 +361,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 		final List<MIDIPlayableMonophonicDataBar> newBars;
                 		if(!fadeIn && !fadeOut && followedByDrop)
 	                		{
-
+                			// Warm up to drop...
+                			newBars = warmUpToDrop(mpmBars);
+	                		}
+                		else
+	                		{
+                			// Fade in and/or out for start/finish.
+                    		newBars = optionalFadeInOut(mpmBars,
+                    				fadeIn || !isNotSecondaryDataStream,
+                    				fadeOut || !isNotSecondaryDataStream);
 	                		}
 
-                		newBars = optionalFadeInOut(mpmBars,
-                				fadeIn || !isNotSecondaryDataStream,
-                				fadeOut || !isNotSecondaryDataStream);
 						tracks[s - 1].bars().addAll(newBars);
 	                	}
 
@@ -417,7 +422,27 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-    /**Apply optional fade-in/fade-out to the List of bars, to hit silent at the end.
+    /**Warm up for a following drop (or high-energy section) with a slow fall t
+     * hen sudden rise in expression; never null.
+     * @param mpmBars  unfaded bars; never null
+     * @return  same-length List of bars with new expression set; never null
+     */
+    private static List<MIDIPlayableMonophonicDataBar> warmUpToDrop(final List<MIDIPlayableMonophonicDataBar> mpmBars)
+    	{
+		Objects.requireNonNull(mpmBars);
+
+		if(mpmBars.isEmpty()) { return(mpmBars); }
+
+		final int barCount = mpmBars.size();
+
+
+
+
+    	// TODO Auto-generated method stub
+		return mpmBars;
+		}
+
+	/**Apply optional fade-in/fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
      * <p>
      * This assumes that the incoming bars are all at default (maximum) expression.
@@ -433,7 +458,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @param mpmBars  unfaded bars; never null
      * @param fadeIn  if true, request a fade in
      * @param fadeOut  if true, request a fade out
-     * @return  same-length List of bars; never null
+     * @return  same-length List of bars with new expression set; never null
      */
 	private static List<MIDIPlayableMonophonicDataBar> optionalFadeInOut(
 			final List<MIDIPlayableMonophonicDataBar> mpmBars,
