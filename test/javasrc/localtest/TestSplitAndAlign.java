@@ -123,5 +123,18 @@ public final class TestSplitAndAlign extends TestCase
 	    assertEquals("first bar should not be full", 11, result7.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
 	    assertNull("first note in unaligned first bar should be null", result7.get(0).dataRows().data().get(0));
 	    assertNull("last note in last bar should be null", result7.get(15).dataRows().data().get(11));
+
+	    // Take long M sample with aligned data and remove first sample to make it non-aligned.
+	    // Use house style to force alignment and allow trimming of partial start/end bars.
+    	final List<DataProtoBar> result8 = MIDIGen.splitAndAlignData(TuneSection.verse,
+			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.house, 0, false, null),
+			conexDHWNonAligned);
+	    assertNotNull(result8);
+	    assertFalse(result8.isEmpty());
+	    assertEquals("14 bars (after trimming)", 14, result8.size());
+	    assertEquals("first bar should have nominal 12 notes", DataCadence.M.defaultPerBar, result8.get(0).dataNotesPerBar());
+	    assertEquals("first bar should be full", 12, result8.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
+	    assertNotNull("first note in first bar should not be null", result8.get(0).dataRows().data().get(0));
+	    assertNotNull("last note in last bar should not be null", result8.get(13).dataRows().data().get(11));
 	    }
     }

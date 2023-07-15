@@ -995,9 +995,14 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			(params.style().level == ProductionLevel.Gentle) ||
 			(params.style().level == ProductionLevel.Danceable) // Alt: randomness
 			);
+		// Be prepared to omit partial starting and ending bars,
+		// for Danceable tunes
+		// unless there is very little data left!
+		final boolean maybeOmitPartialStartEndBars = doAlign &&
+			(params.style().level == ProductionLevel.Danceable); // Alt: randomness
 
-	    final int size = data.data().size(); // TODO: allow for alignment
-	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
+	    final int size = data.data().size();
+	    final ArrayList<DataProtoBar> result = new ArrayList<>(2 + (size/dataNotesPerBar));
 
 		// Do alignment where appropriate.
 	    if(doAlign)
@@ -1071,6 +1076,19 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			    while(bar.size() < dataNotesPerBar) { bar.add(null); }
 			    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
 			    }
+		    }
+
+	    // Be prepared to discard partial start/end bars
+	    // for Danceable tunes
+	    // if there is plenty of remaining data.
+	    if(maybeOmitPartialStartEndBars && (result.size() > DEFAULT_MIN_SECTION_BARS+1))
+		    {
+            final DataProtoBar last = result.get(result.size()-1);
+            final long lastNulls = last.dataRows().data().stream().filter(Objects::isNull).count();
+            if(lastNulls > 0) { result.remove(result.size()-1); }
+            final DataProtoBar first = result.get(0);
+            final long firstNulls = first.dataRows().data().stream().filter(Objects::isNull).count();
+            if(firstNulls > 0) { result.remove(0); }
 		    }
 
 	    assert(data.data().isEmpty() == result.isEmpty());
