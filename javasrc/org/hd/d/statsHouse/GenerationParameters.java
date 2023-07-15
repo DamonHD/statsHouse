@@ -198,7 +198,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    return(switch(seed) {
 	    case RANDOMNESS_NONE -> RANDOMNESS_NONE;
 	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.max(GenerationParameters.RANDOMNESS__MAX+1, name.hashCode() >>> 1);
-	    case RANDOMNESS_UNIQUE -> Math.max(GenerationParameters.RANDOMNESS__MAX+1, ((int) System.currentTimeMillis()) >>> 1);
+	    case RANDOMNESS_UNIQUE -> Math.max(GenerationParameters.RANDOMNESS__MAX+1, ((int) (System.currentTimeMillis() ^ System.nanoTime())) >>> 1);
 	    default -> Math.max(GenerationParameters.RANDOMNESS__MAX+1, seed & 0x7fffffff);
 	    });
 	    }
