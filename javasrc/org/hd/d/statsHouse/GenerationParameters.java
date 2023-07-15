@@ -99,11 +99,13 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
         System.err.println("         0 requests no randomness, all best options");
         System.err.println("         1 requests randomness based on the input name");
         System.err.println("         other +ve (31-bit) values are used as-is");
-        System.err.println("      [-het]");
+        System.err.println("      [-hetero]");
+        System.err.println("         if the data streams are heterogenerous,");
+        System.err.println("         ie not the same variable");
         System.err.println("      [-intro (auto|<bars>)]");
         System.err.println("      [-style (plain|gentle|house)]");
-		System.err.println("      [-highWorse]");
-		System.err.println("      [OFFSET [INSTRUMENT]]");
+//		System.err.println("      [-highWorse]");
+//		System.err.println("      [OFFSET [INSTRUMENT]]");
         }
 
     /**Parse optional arguments from command-line after fixed parameters.
@@ -136,7 +138,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	            continue;
 				}
 
-	    	if("-het".equals(arg))
+	    	if("-hetero".equals(arg))
 		    	{
 				hetero = true;
 				++i;
