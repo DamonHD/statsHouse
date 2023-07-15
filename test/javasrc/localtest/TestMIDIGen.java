@@ -37,6 +37,33 @@ import localtest.support.BuiltInCSVDataSamples;
 /**Test MIDIGen. */
 public final class TestMIDIGen extends TestCase
     {
+	/**Test makeDerivedSeed() behaviour. */
+    public static void testGenMakeDerivedSeed()
+	    {
+    	assertTrue(GenerationParameters.RANDOMNESS__MAX > 0);
+    	assertTrue(GenerationParameters.RANDOMNESS__MAX >= GenerationParameters.RANDOMNESS_NONE);
+    	assertTrue(GenerationParameters.RANDOMNESS__MAX >= GenerationParameters.RANDOMNESS_UNIQUE);
+    	assertTrue(GenerationParameters.RANDOMNESS__MAX >= GenerationParameters.RANDOMNESS_NAME);
+
+    	assertEquals(0, GenerationParameters.RANDOMNESS_NONE);
+        assertEquals(0, GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NONE, null));
+        assertEquals(0, GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NONE, "some-name"));
+
+        assertEquals(-1, GenerationParameters.RANDOMNESS_UNIQUE);
+        assertTrue(GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_UNIQUE, null) > GenerationParameters.RANDOMNESS__MAX);
+        assertTrue(GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_UNIQUE, "otherName") > GenerationParameters.RANDOMNESS__MAX);
+
+    	assertEquals(1, GenerationParameters.RANDOMNESS_NAME);
+        assertEquals(GenerationParameters.RANDOMNESS_NONE, GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, null));
+        assertTrue(GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name") > GenerationParameters.RANDOMNESS__MAX);
+        assertEquals("expect two in a row to equal",
+    		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name"),
+    		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name"));
+        assertFalse("expect different name to usually differ",
+    		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name") ==
+    		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "other-name"));
+	    }
+
     /**Test minimal data MIDICSV and Sequence generation.
      * @throws InvalidMidiDataException
      */

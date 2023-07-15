@@ -66,6 +66,9 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     public static final int RANDOMNESS_NONE = 0;
     /**Randomness: from name (or data). */
     public static final int RANDOMNESS_NAME = 1;
+    /**Largest RANDOMNESS_xxx value; positive. */
+    public static final int RANDOMNESS__MAX = RANDOMNESS_NAME;
+
 
     /**Used to request an intro/outro of length automatically selected to suit the data. */
     public static final int AUTO_INTRO_BARS = -1;
@@ -179,9 +182,9 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
      * <ul>
      * <li>If seed is RANDOMNESS_NONE then is returned as-is.</li>
      * <li>If seed is RANDOMNESS_NAME then strictly-positive value based on the name if non-null, else RANDOMNESS_NONE.</li>
-     * <li>If seed is RANDOMNESS_UNIQUE then strictly-positive value based on time of day.</li>
+     * <li>If seed is RANDOMNESS_UNIQUE then strictly-positive value based on time of day greater than all the RANDOMNESS_xxx values.</li>
      * <li>Another strictly-positive value will be preserved as-is.</li>
-     * <li>All other values are coerced into something strictly positive.</li>
+     * <li>All other values are coerced into something strictly positive greater than all the RANDOMNESS_xxx values.</li>
      * </ul>
      * Preserving strictly-positive derived seed values
      * should allow them to be fed back in
@@ -189,17 +192,14 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
      *
      * @return non-negative new seed value, zero if input is zero, else strictly positive,
      *     ie a positive result requests an output varied from standard '0' form
-     *
-     * <p>
-     * TODO: test cazses
      */
     public static int makeDerivedSeed(final int seed, final String name)
 	    {
 	    return(switch(seed) {
 	    case RANDOMNESS_NONE -> RANDOMNESS_NONE;
-	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.max(1, name.hashCode() >>> 1);
-	    case RANDOMNESS_UNIQUE -> Math.max(1, ((int) System.currentTimeMillis()) >>> 1);
-	    default -> Math.max(1, seed & 0x7fffffff);
+	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.max(GenerationParameters.RANDOMNESS__MAX+1, name.hashCode() >>> 1);
+	    case RANDOMNESS_UNIQUE -> Math.max(GenerationParameters.RANDOMNESS__MAX+1, ((int) System.currentTimeMillis()) >>> 1);
+	    default -> Math.max(GenerationParameters.RANDOMNESS__MAX+1, seed & 0x7fffffff);
 	    });
 	    }
 	}
