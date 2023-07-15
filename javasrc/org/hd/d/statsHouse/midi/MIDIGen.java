@@ -1018,10 +1018,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    		final List<String> row = data.data().get(i);
 	    		final String date = row.get(0);
 	    		final int lastDash = date.lastIndexOf('-');
-	    		if(lastDash < 0) { throw new DateTimeException("malformed date (missing '-'): " + date + ", " + cadence); }
+	    		if(lastDash < 0) { throw new DateTimeException("malformed date (missing '-'): " + date); }
 	    		final String lsdRaw = date.substring(lastDash + 1);
 	    		final int lsd = Integer.parseInt(lsdRaw, 10);
-	    		if(lsd <= 0) { throw new DateTimeException("malformed date (lsd < 0): " + date); }
+	    		if(lsd <= 0) { throw new DateTimeException("malformed date (lsd <= 0): " + date); }
 	    		if(lsd > dataNotesPerBar) { throw new DateTimeException("malformed date (lsd too high): " + date); }
 
 
