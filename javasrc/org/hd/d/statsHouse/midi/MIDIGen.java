@@ -359,7 +359,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             				default -> false;});
 
                 		final List<MIDIPlayableMonophonicDataBar> newBars;
-                		if(!fadeIn && !fadeOut && followedByDrop)
+                		if(isNotSecondaryDataStream && !fadeIn && !fadeOut && followedByDrop)
 	                		{
                 			// Warm up to drop...
                 			newBars = warmUpToDrop(mpmBars);
@@ -422,8 +422,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		return(new MIDITune(Arrays.asList(tracks), Arrays.asList(support), new TuneSectionPlan(plan)));
     	}
 
-    /**Warm up for a following drop (or high-energy section) with a slow fall t
-     * hen sudden rise in expression; never null.
+    /**Warm up for a following drop (or high-energy section) with a slow fall then sudden rise in expression; never null.
+     * Start at maximum, fade out a little until the last bar, then fade back up to max.
+     *
      * @param mpmBars  unfaded bars; never null
      * @return  same-length List of bars with new expression set; never null
      */
@@ -435,12 +436,31 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
 		final int barCount = mpmBars.size();
 
+        // Number of bars to partly fade out over.
+		// If only one bar input then there will be no fade out.
+        final int fadeBarCount = barCount - 1;
+        final byte totalFade = (MIDIConstant.DEFAULT_EXPRESSION + 1) / 4;
+        final int fadePerBar = (byte) (totalFade / Math.max(1, fadeBarCount));
 
+        final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
 
+        // Bars before final one slowly fade out a little.
+        byte expression = MIDIConstant.DEFAULT_EXPRESSION;
+        for(int i = 0; i < fadeBarCount; ++i)
+	        {
+        	final byte newExpression = (byte) (expression - fadePerBar);
+            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+            expression = newExpression;
+	        }
+//        assert(expression > 0); // Should not be fading all the way out!
 
-    	// TODO Auto-generated method stub
-		return mpmBars;
-		}
+        // Fade back up on final bar.
+        updatedBars.add(mpmBars.get(barCount-1).cloneAndSetExpression(expression, MIDIConstant.DEFAULT_EXPRESSION));
+
+//		assert(barCount == updatedBars.size());
+		updatedBars.trimToSize(); // Should be a no-op.
+        return(Collections.unmodifiableList(updatedBars));
+        }
 
 	/**Apply optional fade-in/fade-out to the List of bars, to hit silent at the end.
      * The default behaviour is to return the input List unchanged.
