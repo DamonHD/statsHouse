@@ -71,7 +71,7 @@ public final class Main
         System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
         GenerationParameters.printOptions();
     	System.err.println();
-        System.err.println("    This format may be used, one per line, in the command file.");
+        System.err.println("    This syntax may be used, one per line, in the command file.");
         }
 
 	/**Charset for command list (ASCII 7-bit). */
