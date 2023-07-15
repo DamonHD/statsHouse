@@ -15,6 +15,8 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
     DHD20230714: better conversion of input filename to tune name.
     DHD20230714: tweaking volume down to stay away from red!
+    DHD20230715: building up expression before chorus/drop.
+    
 
 
 

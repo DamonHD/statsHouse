@@ -439,7 +439,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         // Number of bars to partly fade out over.
 		// If only one bar input then there will be no fade out.
         final int fadeBarCount = barCount - 1;
-        final byte totalFade = (MIDIConstant.DEFAULT_EXPRESSION + 1) / 4;
+        final byte totalFade = (MIDIConstant.DEFAULT_EXPRESSION + 1) / 3;
         final int fadePerBar = (byte) (totalFade / Math.max(1, fadeBarCount));
 
         final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);

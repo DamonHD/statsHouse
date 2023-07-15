@@ -7,7 +7,6 @@ Entries should be deleted when substantially implemented.
 Current priorities:
   * Alignment.
   * Chorus bar synthesis.
-  * Buildup expression before chorus.
   * Work in some progression especially for repeat verse/chorus.
   * Seeding/variations...
 
