@@ -172,7 +172,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     public boolean randomnessUnique() { return(RANDOMNESS_UNIQUE == seed); }
     /**True if no randomness should be applied to the music generation: use only 'best' choices. */
     public boolean randomnessNone() { return(RANDOMNESS_NONE == seed); }
-    /**True if name-based randomness should be applied to the music generation. */
+    /**True if name-based (or eg data-based) randomness should be applied to the music generation. */
     public boolean randomnessName() { return(RANDOMNESS_NAME == seed); }
 
     /**Make derived seed (ie for when not supplied/overridden); non-negative.
