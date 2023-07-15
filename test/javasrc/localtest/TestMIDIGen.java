@@ -62,6 +62,10 @@ public final class TestMIDIGen extends TestCase
         assertFalse("expect different name to usually differ",
     		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name") ==
     		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "other-name"));
+
+        final int customVal1 = 12345;
+        assertEquals("expect custom +ve value to remain unchanged", customVal1, GenerationParameters.makeDerivedSeed(customVal1, null));
+        assertEquals("expect custom +ve value to remain unchanged", customVal1, GenerationParameters.makeDerivedSeed(customVal1, "other"));
 	    }
 
     /**Test minimal data MIDICSV and Sequence generation.
