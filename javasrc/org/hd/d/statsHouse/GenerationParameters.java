@@ -192,7 +192,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
     /**Make derived seed (ie for when not supplied/overridden); non-negative.
      * <ul>
      * <li>If seed is RANDOMNESS_NONE then is returned as-is.</li>
-     * <li>If seed is RANDOMNESS_NAME then strictly-positive value based on the name if non-null, else RANDOMNESS_NONE.</li>
+     * <li>If seed is RANDOMNESS_NAME then strictly-positive value based on the name if non-null, else RANDOMNESS_NAME.</li>
      * <li>If seed is RANDOMNESS_UNIQUE then strictly-positive value based on time of day greater than all the RANDOMNESS_xxx values.</li>
      * <li>Another strictly-positive value will be preserved as-is.</li>
      * <li>All other values are coerced into something strictly positive greater than all the RANDOMNESS_xxx values.</li>
@@ -208,7 +208,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    {
 	    return(switch(seed) {
 	    case RANDOMNESS_NONE -> RANDOMNESS_NONE;
-	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NONE : Math.max(RANDOMNESS__MAX+1, name.hashCode() >>> 1);
+	    case RANDOMNESS_NAME -> (null == name) ? RANDOMNESS_NAME : Math.max(RANDOMNESS__MAX+1, name.hashCode() >>> 1);
 	    case RANDOMNESS_UNIQUE -> Math.max(RANDOMNESS__MAX+1, ((int) (System.currentTimeMillis() ^ System.nanoTime())) >>> 1);
 	    default -> Math.max(RANDOMNESS__MAX+1, seed & 0x7fffffff);
 	    });

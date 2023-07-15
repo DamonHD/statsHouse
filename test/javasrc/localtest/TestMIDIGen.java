@@ -54,7 +54,7 @@ public final class TestMIDIGen extends TestCase
         assertTrue(GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_UNIQUE, "otherName") > GenerationParameters.RANDOMNESS__MAX);
 
     	assertEquals(1, GenerationParameters.RANDOMNESS_NAME);
-        assertEquals(GenerationParameters.RANDOMNESS_NONE, GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, null));
+        assertEquals(GenerationParameters.RANDOMNESS_NAME, GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, null));
         assertTrue(GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name") > GenerationParameters.RANDOMNESS__MAX);
         assertEquals("expect two RANDOMNESS_NAME with the same name to be equal",
     		GenerationParameters.makeDerivedSeed(GenerationParameters.RANDOMNESS_NAME, "some-name"),
