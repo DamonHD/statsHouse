@@ -38,7 +38,7 @@ import localtest.support.BuiltInCSVDataSamples;
 public final class TestMIDIGen extends TestCase
     {
 	/**Test makeDerivedSeed() behaviour. */
-    public static void testGenMakeDerivedSeed()
+    public static void testMakeDerivedSeed()
 	    {
     	assertTrue(GenerationParameters.RANDOMNESS__MAX > 0);
     	assertTrue(GenerationParameters.RANDOMNESS__MAX >= GenerationParameters.RANDOMNESS_NONE);
