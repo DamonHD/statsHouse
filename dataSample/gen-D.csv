@@ -617,7 +617,7 @@
 2009-10-17,SunnyBeam,1,3.350
 2009-10-18,SunnyBeam,1,5.330
 2009-10-19,SunnyBeam,1,2.100
-2009-10-19,SunnyBeam,1,2.390
+2009-10-20,SunnyBeam,1,2.390
 2009-10-21,SunnyBeam,1,2.110
 2009-10-22,SunnyBeam,1,4.040
 2009-10-23,SunnyBeam,1,3.980
@@ -5626,4 +5626,10 @@
 2023-07-06,SunnyBeam,1,23.870
 2023-07-07,SunnyBeam,1,28.170
 2023-07-08,SunnyBeam,1,11.830
+2023-07-09,SunnyBeam,1,15.990
+2023-07-10,SunnyBeam,1,21.870
+2023-07-11,SunnyBeam,1,15.920
+2023-07-12,SunnyBeam,1,18.290
+2023-07-13,SunnyBeam,1,14.200
+2023-07-14,SunnyBeam,1,4.530
 #script,"script/consolidate/energy/std/gen/D/SunnyBeam/gen-D-SunnyBeam.sh"
