@@ -19,6 +19,7 @@ package org.hd.d.statsHouse.midi;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -990,8 +991,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// We may choose not to align in the most produced music for some seeds.
     	final boolean canAlign = cadence.canAlign();
 		final boolean doAlign = canAlign &&
+			(
 			(params.style().level == ProductionLevel.Gentle) ||
-			(params.style().level == ProductionLevel.Danceable); // Alt: randomness
+			(params.style().level == ProductionLevel.Danceable) // Alt: randomness
+			);
 
 	    final int size = data.data().size(); // TODO: allow for alignment
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(1 + (size/dataNotesPerBar));
@@ -1009,23 +1012,40 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    	//       but we could drop through to the next rule to cope with some gaps.)
 	    	//     * If a datum with lsd greater than the current beat is encountered
 	    	//       then insert empty notes to get to beat N.
+		    final List<List<String>> bar = new ArrayList<>(dataNotesPerBar);
+	    	for(int i = 0; i < size; ++i)
+		    	{
+	    		final List<String> row = data.data().get(i);
+	    		final String date = row.get(0);
+	    		final int lastDash = date.lastIndexOf('-');
+	    		if(lastDash < 0) { throw new DateTimeException("malformed date (missing '-'): " + date + ", " + cadence); }
+	    		final String lsdRaw = date.substring(lastDash + 1);
+	    		final int lsd = Integer.parseInt(lsdRaw, 10);
+	    		if(lsd <= 0) { throw new DateTimeException("malformed date (lsd < 0): " + date); }
+	    		if(lsd > dataNotesPerBar) { throw new DateTimeException("malformed date (lsd too high): " + date); }
 
-		    	//FIXME
 
 
+			    	//FIXME
+
+		    	}
+
+		    // Pad the final possibly-partial bar if necessary.
+		    while(bar.size() < dataNotesPerBar) { bar.add(null); }
+		    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
 		    }
 	    else
 		    {
 	    	// No alignment
 			for(int i = 0; i < size; i += dataNotesPerBar)
 			    {
-			    final List<List<String>> out = new ArrayList<>(dataNotesPerBar);
+			    final List<List<String>> bar = new ArrayList<>(dataNotesPerBar);
 			    // FIXME: wrap leaf List if not already Unmodifiable.
 			    for(int j = i; (j - i < dataNotesPerBar) && (j < size); ++j)
-				    { out.add(data.data().get(j)); }
-			    // Pad the final partial bar if necessary.
-			    while(out.size() < dataNotesPerBar) { out.add(null); }
-			    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(out))));
+				    { bar.add(data.data().get(j)); }
+			    // Pad the final possibly-partial bar if necessary.
+			    while(bar.size() < dataNotesPerBar) { bar.add(null); }
+			    result.add(new DataProtoBar(dataNotesPerBar, new EOUDataCSV(Collections.unmodifiableList(bar))));
 			    }
 		    }
 
