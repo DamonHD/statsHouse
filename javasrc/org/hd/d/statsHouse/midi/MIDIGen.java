@@ -965,13 +965,16 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * The verse output is the one most reflective of the input data,
      * and should be the only one used for plain style for example.
      * <p>
-     * Can only support a few section types, including verse.
+     * May only support a few section types, including verse.
      *
-     * @param section  which song section this is for; never null
+     * @param section  which song section type this is for; never null
      * @param params  generation parameters; never null
      * @param data  the entire ingested data set; never null
      */
-    public static List<DataProtoBar> splitAndAlignData(final TuneSection section, final GenerationParameters params, final EOUDataCSV data)
+    public static List<DataProtoBar> splitAndAlignData(
+    		final TuneSection section,
+    		final GenerationParameters params,
+    		final EOUDataCSV data)
 	    {
     	if(null == section) { throw new IllegalArgumentException(); }
     	switch(section) {
