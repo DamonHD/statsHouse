@@ -110,9 +110,10 @@ public final class TestSplitAndAlign extends TestCase
 	    assertNotNull("first note in unaligned first bar should not be null", result6.get(0).dataRows().data().get(0));
 	    assertNull("last note in last bar should be null", result6.get(15).dataRows().data().get(11));
 
-	    // Take long M sample with aligned data and remove first sample to make it non-aligned.
+	    // Take long M sample with aligned data and remove initial samples to make it non-aligned.
 	    // Use gentle style to force alignment.
-	    final EOUDataCSV conexDHWNonAligned = new EOUDataCSV(conexDHW.data().subList(1, conexDHW.data().size()));
+	    final int droppedInitialSamples = 5;
+	    final EOUDataCSV conexDHWNonAligned = new EOUDataCSV(conexDHW.data().subList(droppedInitialSamples, conexDHW.data().size()));
     	final List<DataProtoBar> result7 = MIDIGen.splitAndAlignData(TuneSection.verse,
 			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.gentle, 0, false, null),
 			conexDHWNonAligned);
@@ -120,11 +121,11 @@ public final class TestSplitAndAlign extends TestCase
 	    assertFalse(result7.isEmpty());
 	    assertEquals("16 bars", 16, result7.size());
 	    assertEquals("first bar should have nominal 12 notes", DataCadence.M.defaultPerBar, result7.get(0).dataNotesPerBar());
-	    assertEquals("first bar should not be full", 11, result7.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
+	    assertEquals("first bar should not be full", 12-droppedInitialSamples, result7.get(0).dataRows().data().stream().filter(Objects::nonNull).count());
 	    assertNull("first note in unaligned first bar should be null", result7.get(0).dataRows().data().get(0));
 	    assertNull("last note in last bar should be null", result7.get(15).dataRows().data().get(11));
 
-	    // Take long M sample with aligned data and remove first sample to make it non-aligned.
+	    // Take long M sample with aligned data and remove initial samples to make it non-aligned.
 	    // Use house style to force alignment and allow trimming of partial start/end bars.
     	final List<DataProtoBar> result8 = MIDIGen.splitAndAlignData(TuneSection.verse,
 			new GenerationParameters(GenerationParameters.RANDOMNESS_NONE, Style.house, 0, false, null),

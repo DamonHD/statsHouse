@@ -1082,14 +1082,17 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    // Be prepared to discard partial start/end bars
 	    // for Danceable tunes
 	    // if there is plenty of remaining data.
+	    // Npte that some bars will always be missing notes,
+	    // eg daily cadence 32 per bar.
 	    if(maybeOmitPartialStartEndBars && (result.size() > DEFAULT_MIN_SECTION_BARS+1))
 		    {
+	    	final int maxMissiong = dataNotesPerBar/4; // Alt: vary
             final DataProtoBar last = result.get(result.size()-1);
             final long lastNulls = last.dataRows().data().stream().filter(Objects::isNull).count();
-            if(lastNulls > 0) { result.remove(result.size()-1); }
+            if(lastNulls > maxMissiong) { result.remove(result.size()-1); }
             final DataProtoBar first = result.get(0);
             final long firstNulls = first.dataRows().data().stream().filter(Objects::isNull).count();
-            if(firstNulls > 0) { result.remove(0); }
+            if(firstNulls > maxMissiong) { result.remove(0); }
 		    }
 
 	    assert(data.data().isEmpty() == result.isEmpty());
