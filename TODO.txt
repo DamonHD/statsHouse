@@ -19,6 +19,7 @@ Current priorities:
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
   * Do better with -ve values in all styles.
+  * Look at VCV Rack
   
 
 2023-06-13 thoughts:
