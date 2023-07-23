@@ -104,6 +104,8 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
         System.err.println("         ie not the same variable");
         System.err.println("      [-intro (auto|<bars>)]");
         System.err.println("      [-style (plain|gentle|house)]");
+//      System.err.println("      [-substyle <name>]");
+//      System.err.println("      [-hints <key>=<value>(,<key>=<value>)*]");
 //		System.err.println("      [-highWorse]");
 //		System.err.println("      [OFFSET [INSTRUMENT]]");
         }

@@ -23,7 +23,10 @@ public enum TuneSection {
 	verse,
 	chorus,
 	breakdown,
-	drop,
+	drop, // Maybe merge with chorus?
+
+	// climax,
+	// buildup,
 
 	outro,
 }
