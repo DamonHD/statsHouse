@@ -26,8 +26,8 @@ public enum Style
     house(ProductionLevel.Danceable);
 
 //	// TODO: trance, drumAndBase, ...
-//    trance(ProductionLevel.Danceable),
-//    dnb(ProductionLevel.Danceable);
+//    trance(ProductionLevel.Danceable), // psytrance
+//    dnb(ProductionLevel.Danceable); // liquid d&b...
 
 	/**Production level for this style. */
 	public final ProductionLevel level;
