@@ -111,7 +111,7 @@ public final class TestCSVDataSamples extends TestCase
      */
     public static void testKeyMIDIFilesGeneration() throws Exception
 	    {
-		assertTrue("expecting test output directoty to be present", ExternalFile.TEST_OUTPUT_DIR.isDirectory());
+		assertTrue("expecting test output directory to be present", ExternalFile.TEST_OUTPUT_DIR.isDirectory());
     	final List<ExternalFile> samples = TestCSVDataSamples.mainFileDataSamples();
     	assertNotNull(samples);
     	assertFalse(samples.isEmpty());
