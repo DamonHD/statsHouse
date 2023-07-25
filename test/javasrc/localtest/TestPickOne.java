@@ -26,17 +26,17 @@ import junit.framework.TestCase;
  */
 public final class TestPickOne extends TestCase
     {
+    /**Typical max choice array size. */
+    private static final int TYPICAL_MAX_CHOICE_SIZE = 6;
+
     /**Test ALWAYS_ZERO does always return zero. */
     public static void testZERO()
 	    {
 	    assertEquals(0, PickOne.ZERO.pickOne(null, 1));
 	    assertEquals(0, PickOne.ZERO.pickOne(null, 2));
-	    assertEquals(0, PickOne.ZERO.pickOne(null, 999));
-	    assertEquals(0, PickOne.ZERO.pickOne(new Random(), 1 + (new Random()).nextInt(999)));
+	    assertEquals(0, PickOne.ZERO.pickOne(null, TYPICAL_MAX_CHOICE_SIZE));
+	    assertEquals(0, PickOne.ZERO.pickOne(new Random(), 1 + (new Random()).nextInt(TYPICAL_MAX_CHOICE_SIZE)));
 	    }
-
-    /**Typical max choice array size. */
-    private static final int TYPICAL_MAX_CHOICE_SIZE = 6;
 
     /**Test UNIFORM. */
     public static void testUNIFORM()
