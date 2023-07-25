@@ -20,7 +20,12 @@ import java.util.Objects;
 
 import org.hd.d.statsHouse.GenerationParameters;
 
-/**Source of (reproducible) progression/randomisation for music. */
+/**Source of (reproducible) progression/randomisation for music.
+ * Behaviour is driven both by whole-tune GenerationParameters
+ * and the unique(-ish) identifier for a particular progression group
+ * so that different parts of the tune can diverge in different ways
+ * for the same seeds.
+ */
 public final class Progression
 	{
 	/**Generation parameters for entire tune generation; never null. */
