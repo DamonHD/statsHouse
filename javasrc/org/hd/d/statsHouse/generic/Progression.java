@@ -49,34 +49,28 @@ public final class Progression
 	public Progression(final GenerationParameters params, final String uniqueID)
 		{ this(params, (null == uniqueID) ? 0 : uniqueID.hashCode()); }
 
-	/**PRNG that always returns 0; may break some things eg cause some routines to hang! */
-	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
+//	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
+//	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
 
-	public RandomGenerator getPRNGNoProgression()
+	/**Munge components together to make good 64-bit seed.
+	 * This depends on any per-run randomness,
+	 * the unique name/ID of this progression group,
+	 * and any progression numbers fed in.
+	 * <p>
+	 * Only the lower 48 bits may be used, eg for Random(seed).
+	 */
+	private long makeSeed(final Integer ...progression)
 		{
-		// Where there should be no randomness,
-		// always pick the first element of any array of alternatives
-		// by ensuring that nextInt(int bound) is always zero.
-		if(params.randomnessNone())
-            { return(ALWAYS_ZERO); }
-
-		// Return PRNG starting at fixed position for this progression group.
-		return(new Random(params.derivedSeed() ^ (uniqueID << 31)));
+		final long seed = params.derivedSeed() ^ (((long)params.derivedSeed()) << 13) ^
+			(((long) uniqueID) << 3) ^ (((long)uniqueID) << 32) ^
+			(((long)Arrays.hashCode(progression)) << 5);
+		return(seed);
 		}
 
-	public RandomGenerator getPRNG(final Integer ...progression)
+	/**Creates a simple PRNG seeded from per-run randomness, progression group ID and values; never null. */
+	public RandomGenerator getPRNG(final Integer ...progressionValues)
 		{
-		// Hash over all progression arguments, else zero if null.
-		final int progHash = Arrays.hashCode(progression);
-
-		// Where there should be no randomness,
-		// always pick the first element of any array of alternatives
-		// by ensuring that nextInt(int bound) is always zero.
-		if(params.randomnessNone())
-            { return(ALWAYS_ZERO); }
-
 		// Return PRNG starting at fixed position for this progression group.
-		return(new Random(params.derivedSeed() ^ (uniqueID << 31)));
+		return(new Random(makeSeed(progressionValues)));
 		}
-
 	}
