@@ -27,12 +27,12 @@ import junit.framework.TestCase;
 public final class TestPickOne extends TestCase
     {
     /**Test ALWAYS_ZERO does always return zero. */
-    public static void testALWAYS_ZERO()
+    public static void testZERO()
 	    {
-	    assertEquals(0, PickOne.ALWAYS_ZERO.pickOne(null, 1));
-	    assertEquals(0, PickOne.ALWAYS_ZERO.pickOne(null, 2));
-	    assertEquals(0, PickOne.ALWAYS_ZERO.pickOne(null, 999));
-	    assertEquals(0, PickOne.ALWAYS_ZERO.pickOne(new Random(), (new Random()).nextInt(999)));
+	    assertEquals(0, PickOne.ZERO.pickOne(null, 1));
+	    assertEquals(0, PickOne.ZERO.pickOne(null, 2));
+	    assertEquals(0, PickOne.ZERO.pickOne(null, 999));
+	    assertEquals(0, PickOne.ZERO.pickOne(new Random(), (new Random()).nextInt(999)));
 	    }
 
     /**Typical max choice array size. */

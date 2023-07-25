@@ -40,7 +40,7 @@ public interface PickOne
     int pickOne(RandomGenerator prng, int n);
 
     /**Always pick element zero; the PRNG is not used so can be null. */
-    public static final PickOne ALWAYS_ZERO = (prng, n) -> (0);
+    public static final PickOne ZERO = (prng, n) -> (0);
 
     /**Pick with equal/uniform weighting. */
     public static final PickOne UNIFORM = (prng, n) -> (prng.nextInt(n));
