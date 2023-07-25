@@ -18,7 +18,7 @@ package org.hd.d.statsHouse.generic;
 
 import java.util.random.RandomGenerator;
 
-/**Picks an integer randomly between 0 and n-1 inclusive, usually weighted towards 0.
+/**Picks an integer randomly between 0 and n-1 inclusive, often weighted towards lower values.
  * Intended to be used to pick amongst a number of alternatives
  * from an n-element array, typically favouring lower-index values,
  * with a variety of possible distributions.
@@ -45,6 +45,6 @@ public interface PickOne
     /**Pick with equal/uniform weighting. */
     public static final PickOne UNIFORM = (prng, n) -> (prng.nextInt(n));
 
-    /**Pick weighted towards 0 with a square law. */
+    /**Pick weighted towards lower values with a square law. */
     public static final PickOne SQUARE = (prng, n) -> ((int) Math.floor(prng.nextDouble() * prng.nextDouble() * n));
 	}
