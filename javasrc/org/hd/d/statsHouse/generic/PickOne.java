@@ -33,9 +33,11 @@ public interface PickOne
 	 * <p>
 	 * Must be thread safe if the prng is.
 	 *
-	 * @param prng  (pseudo) random number source; usually must not be null.
-	 * @param n  length of array to pick from (ie number of choices); strictly positive.
-	 * @return  value in the range 0 to n-1 inclusive
+	 * @param prng  (usually pseudo) random number generator;
+	 *     usually must be thread-safe and not null
+	 * @param n  length of array to pick from (ie number of choices);
+	 *     strictly positive
+	 * @return  choice in the range 0 to n-1 inclusive
 	 */
     int pickOne(RandomGenerator prng, int n);
 
