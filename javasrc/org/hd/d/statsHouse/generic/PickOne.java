@@ -18,13 +18,13 @@ package org.hd.d.statsHouse.generic;
 
 import java.util.random.RandomGenerator;
 
-/**Picks an integer randomly between 0 and n-1 inclusive, often weighted towards lower values.
+/**Picks an integer randomly between 0 and n-1 inclusive.
  * Intended to be used to pick amongst a number of alternatives
  * from an n-element array, typically favouring lower-index values,
  * with a variety of possible distributions.
  * <p>
  * The array/selection is always expected to have at least 1 item,
- * so 0 is always a valid result.
+ * thus 0 is always a valid result.
  */
 public interface PickOne
 	{
