@@ -63,7 +63,7 @@ public final class Progression
 		{
 		final long seed = params.derivedSeed() ^ (((long)params.derivedSeed()) << 13) ^
 			(((long) uniqueID) << 3) ^ (((long)uniqueID) << 32) ^
-			(((long)Arrays.hashCode(progression)) << 5);
+			(((long)Arrays.hashCode(progression)) << 17);
 		return(seed);
 		}
 
