@@ -31,7 +31,7 @@ public interface PickOne
 	/**Pick a value in the range [0,n-1] using a random number generator.
 	 * Parameters may not be validated for simplicity and speed.
 	 * <p>
-	 * Should be thread safe if the prng is.
+	 * Must be thread safe if the prng is.
 	 *
 	 * @param prng  (pseudo) random number source; usually must not be null.
 	 * @param n  length of array to pick from (ie number of choices); strictly positive.
