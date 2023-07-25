@@ -51,6 +51,7 @@ public record GenerationParameters(int seed, Style style, int introBars, boolean
 	    Objects.requireNonNull(style);
 	    if(introBars < AUTO_INTRO_BARS) { throw new IllegalArgumentException(); }
 	    if(derivedSeed < 0) { throw new IllegalArgumentException(); }
+	    if((RANDOMNESS_NONE == seed) && (derivedSeed != 0)) { throw new IllegalArgumentException(seed +"/" +derivedSeed); }
 	    }
 
     /**Generate the derived seed automatically. */
