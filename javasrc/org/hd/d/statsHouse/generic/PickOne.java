@@ -22,8 +22,20 @@ import java.util.random.RandomGenerator;
  * Intended to be used to pick amongst a number of alternatives
  * from an n-element array, typically favouring lower-index values,
  * with a variety of possible distributions.
+ * <p>
+ * The array/selection is always expected to have at least 1 item,
+ * so 0 is always a valid result.
  */
 public interface PickOne
 	{
     int pickOne(RandomGenerator prng, int n);
+
+    /**Always pick element zero. */
+    public static final PickOne ALWAYS_ZERO = (prng, n) -> (0);
+
+    /**Pick with equal/uniform weighting. */
+    public static final PickOne UNIFORM = (prng, n) -> (prng.nextInt(n));
+
+    /**Pick weighted towards 0 with a square law. */
+    public static final PickOne SQUARE = (prng, n) -> ((int) Math.floor(prng.nextDouble() * prng.nextDouble() * n));
 	}
