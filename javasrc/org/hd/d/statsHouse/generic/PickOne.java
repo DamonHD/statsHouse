@@ -28,9 +28,18 @@ import java.util.random.RandomGenerator;
  */
 public interface PickOne
 	{
+	/**Pick a value in the range [0,n-1] using a random number generator.
+	 * Parameters may not be validated for simplicity and speed.
+	 * <p>
+	 * Should be thread safe if the prng is.
+	 *
+	 * @param prng  (pseudo) random number source; usually must not be null.
+	 * @param n  length of array to pick from (ie number of choices); strictly positive.
+	 * @return  value in the range 0 to n-1 inclusive
+	 */
     int pickOne(RandomGenerator prng, int n);
 
-    /**Always pick element zero. */
+    /**Always pick element zero; the PRNG is not used so can be null. */
     public static final PickOne ALWAYS_ZERO = (prng, n) -> (0);
 
     /**Pick with equal/uniform weighting. */
