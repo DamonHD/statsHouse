@@ -16,6 +16,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.generic;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -62,4 +63,20 @@ public final class Progression
 		// Return PRNG starting at fixed position for this progression group.
 		return(new Random(params.derivedSeed() ^ (uniqueID << 31)));
 		}
+
+	public RandomGenerator getPRNG(final Integer ...progression)
+		{
+		// Hash over all progression arguments, else zero if null.
+		final int progHash = Arrays.hashCode(progression);
+
+		// Where there should be no randomness,
+		// always pick the first element of any array of alternatives
+		// by ensuring that nextInt(int bound) is always zero.
+		if(params.randomnessNone())
+            { return(ALWAYS_ZERO); }
+
+		// Return PRNG starting at fixed position for this progression group.
+		return(new Random(params.derivedSeed() ^ (uniqueID << 31)));
+		}
+
 	}
