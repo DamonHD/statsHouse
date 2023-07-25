@@ -64,7 +64,7 @@ public final class MIDIGen
     /**Default clock pulses per quarter note. */
 	public static final int DEFAULT_CLKSPQTR = 480;
 	/**Default 120bpm (0.5s per quarter note / beat). */
-	public static final int DEFAULT_TEMPO  = 500_000;
+	public static final int DEFAULT_TEMPO = 500_000;
 	/**Default beats / quarter notes per bar (4/4 time). */
 	public static final int DEFAULT_BEATS_PER_BAR = 4;
 	/**Default clock pulses per bar, eg for empty bars. */
@@ -75,7 +75,7 @@ public final class MIDIGen
      */
     public static final int DEFAULT_SECTION_BARS = 16;
     /**Default minimum section length in bars. */
-    public static final int DEFAULT_MIN_SECTION_BARS = 4;
+    public static final int DEFAULT_MIN_SECTION_BARS = 8; // 4
     /**Default note velocity. */
     public static final byte DEFAULT_MELODY_VELOCITY = 63;
     /**Default maximum note velocity to avoid clipping. */
