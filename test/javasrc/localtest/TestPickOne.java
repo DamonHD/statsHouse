@@ -32,7 +32,7 @@ public final class TestPickOne extends TestCase
 	    assertEquals(0, PickOne.ZERO.pickOne(null, 1));
 	    assertEquals(0, PickOne.ZERO.pickOne(null, 2));
 	    assertEquals(0, PickOne.ZERO.pickOne(null, 999));
-	    assertEquals(0, PickOne.ZERO.pickOne(new Random(), (new Random()).nextInt(999)));
+	    assertEquals(0, PickOne.ZERO.pickOne(new Random(), 1 + (new Random()).nextInt(999)));
 	    }
 
     /**Typical max choice array size. */
