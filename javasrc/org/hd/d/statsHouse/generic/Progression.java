@@ -49,6 +49,21 @@ public final class Progression
 	public Progression(final GenerationParameters params, final String uniqueID)
 		{ this(params, (null == uniqueID) ? 0 : uniqueID.hashCode()); }
 
+	/**Pick one of an array of objects, most likely first. */
+	public static Object pickOneOf(final RandomGenerator prng, final Object ...values)
+		{
+		Objects.requireNonNull(prng);
+		Objects.requireNonNull(values);
+		if(0 == values.length) { throw new IllegalArgumentException(); }
+
+		// If only one value then always return it.
+		if(1 == values.length)
+			{ return(values[0]); }
+
+
+		return(null);
+		}
+
 //	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
 //	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
 
