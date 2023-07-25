@@ -232,7 +232,7 @@ public final class TestMIDIGen extends TestCase
         assertNotNull(result1.dataMelody().get(0).bars());
         assertFalse("expect bars non-empty", result1.dataMelody().get(0).bars().isEmpty());
         assertNotNull("expect notes non-null", result1.dataMelody().get(0).bars().get(0).notes());
-        assertTrue("expect at least 40 melody bars (section=4b, i,v,c,v,c,v,c,v,c,o)", MIDIGen.DEFAULT_MIN_SECTION_BARS*(1+4*2+1) <= result1.dataMelody().get(0).bars().size());
+        assertTrue("expect at least 40 melody bars (section=4b, i,v,c,...,v,c,o)", 40 <= result1.dataMelody().get(0).bars().size());
         assertTrue("expect a support track", result1.supportTracks().size() > 0);
         assertTrue("expect a percussion support track",
     		result1.supportTracks().stream().anyMatch(st -> (st.setup().channel() == (MIDIConstant.GM1_PERCUSSION_CHANNEL-1))));
