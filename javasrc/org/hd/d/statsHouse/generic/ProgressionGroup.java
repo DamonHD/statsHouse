@@ -85,7 +85,7 @@ public final class ProgressionGroup
         final int length = choices.size();
 		if(length < 1) { throw new IllegalArgumentException(); }
 
-        // If no randomness then always return the first.
+        // If no randomness then always (cheaply) return the first choice.
         if(params.randomnessNone()) { return(choices.get(0)); }
 
         // Use our PRNG creation as an elaborate hash.
