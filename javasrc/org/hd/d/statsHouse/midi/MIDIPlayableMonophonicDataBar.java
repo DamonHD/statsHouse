@@ -114,7 +114,7 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
      *
      * @param index  index of note to set, zero-based; [0,notes.length-1]
      * @param note  new note for given index or null for no note
-     * @return  immutable clone of original with the specified change
+     * @return immutable clone of original with the specified change
      */
     public MIDIPlayableMonophonicDataBar cloneAndSetNote(
     		final int index, final NoteAndVelocity note)
