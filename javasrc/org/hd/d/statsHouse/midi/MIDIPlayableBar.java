@@ -53,6 +53,7 @@ public record MIDIPlayableBar(
 		SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes,
 		int clocks,
 		byte expressionStart, byte expressionEnd)
+	implements MIDIBarExpression
     {
     public MIDIPlayableBar
 	    {

@@ -53,6 +53,7 @@ import org.hd.d.statsHouse.generic.NoteAndVelocity;
  */
 public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dpr, int stream, List<NoteAndVelocity> notes,
 		byte expressionStart, byte expressionEnd)
+	implements MIDIBarExpression
     {
     public MIDIPlayableMonophonicDataBar
 	    {
