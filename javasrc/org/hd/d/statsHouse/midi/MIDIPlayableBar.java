@@ -67,11 +67,10 @@ public record MIDIPlayableBar(
     public MIDIPlayableBar(final SortedSet<StartNoteVelocityDuration> notes)
     	{ this(notes, MIDIGen.DEFAULT_CLOCKS_PER_BAR, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
 
-    /**Make an immutable copy/clone with new expression levels.
-	 *
+    /**Make an immutable copy/clone with specified expression levels.
      * @param newExpressionStart  expression level (CC 11) at the start of the bar [0,127]
-     * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
-	 * @return  immutable clone of original with the specified change
+     * @param newExpressionEnd  expression level (CC 11) at the end of the bar [0,127]
+	 * @return immutable clone of original with the specified change
 	 */
 	@Override
     @SuppressWarnings("unchecked")

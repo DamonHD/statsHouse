@@ -25,12 +25,10 @@ public interface MIDIBarExpression
 	/**Get expression level (CC 11) at the end of the bar [0,127]. */
     byte expressionEnd();
 
-    /**Make an immutable copy/clone with new expression levels.
-     * Any previous non-default expression levels may be ignored.
-	 *
+    /**Make an immutable copy/clone with specified expression levels.
      * @param newExpressionStart  expression level (CC 11) at the start of the bar [0,127]
-     * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
-	 * @return  immutable clone of original with the specified change
+     * @param newExpressionEnd  expression level (CC 11) at the end of the bar [0,127]
+	 * @return immutable clone of original with the specified change
 	 */
     <T extends MIDIBarExpression> T cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd);
