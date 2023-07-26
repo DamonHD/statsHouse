@@ -125,7 +125,7 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
             expressionStart, expressionEnd));
 	    }
 
-    /**Make an immutable copy/clone expression levels changed.
+    /**Make an immutable copy/clone with new expression levels.
 	 *
      * @param newExpressionStart  expression level (CC 11) at the start of the bar [0,127]
      * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]

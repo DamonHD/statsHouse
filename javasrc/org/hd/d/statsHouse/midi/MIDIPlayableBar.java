@@ -19,6 +19,7 @@ package org.hd.d.statsHouse.midi;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
 
@@ -65,6 +66,25 @@ public record MIDIPlayableBar(
     public MIDIPlayableBar(final SortedSet<StartNoteVelocityDuration> notes)
     	{ this(notes, MIDIGen.DEFAULT_CLOCKS_PER_BAR, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
 
+    /**Make an immutable copy/clone with new expression levels.
+	 *
+     * @param newExpressionStart  expression level (CC 11) at the start of the bar [0,127]
+     * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
+	 * @return  immutable clone of original with the specified change
+	 */
+    public MIDIPlayableBar cloneAndSetExpression(
+    		final byte newExpressionStart, final byte newExpressionEnd)
+	    {
+		return(new MIDIPlayableBar(
+	        Collections.unmodifiableSortedSet(new TreeSet<>(notes)),
+	        clocks,
+	        newExpressionStart, newExpressionEnd));
+	    }
+
+    /**Empty bar with default number of clocks. */
+    public static final MIDIPlayableBar EMPTY_DEFAULT_CLOCKS = new MIDIPlayableBar(Collections.emptySortedSet());
+
+
     /**Note and velocity, and +ve duration in clocks (MIDI note-on to note-off).
      * Immutable.
      * <p>
@@ -98,7 +118,4 @@ public record MIDIPlayableBar(
     		return(0);
     		}
 	    }
-
-    /**Empty bar with default number of clocks. */
-    public static final MIDIPlayableBar EMPTY_DEFAULT_CLOCKS = new MIDIPlayableBar(Collections.emptySortedSet());
     }
