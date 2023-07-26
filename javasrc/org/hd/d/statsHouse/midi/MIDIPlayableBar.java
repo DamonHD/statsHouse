@@ -73,6 +73,8 @@ public record MIDIPlayableBar(
      * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
 	 * @return  immutable clone of original with the specified change
 	 */
+	@Override
+    @SuppressWarnings("unchecked")
     public MIDIPlayableBar cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd)
 	    {

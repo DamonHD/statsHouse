@@ -32,6 +32,6 @@ public interface MIDIBarExpression
      * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
 	 * @return  immutable clone of original with the specified change
 	 */
-    public <T extends MIDIBarExpression> T cloneAndSetExpression(
+    <T extends MIDIBarExpression> T cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd);
 	}

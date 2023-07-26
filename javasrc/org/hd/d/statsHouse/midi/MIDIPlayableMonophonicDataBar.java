@@ -132,7 +132,9 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
      * @param newExpressionEnd expression level (CC 11) at the end of the bar [0,127]
 	 * @return  immutable clone of original with the specified change
 	 */
-    public MIDIPlayableMonophonicDataBar cloneAndSetExpression(
+    @Override
+	@SuppressWarnings("unchecked")
+	public MIDIPlayableMonophonicDataBar cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd)
 	    {
 		final List<NoteAndVelocity> l = new ArrayList<>(notes);
