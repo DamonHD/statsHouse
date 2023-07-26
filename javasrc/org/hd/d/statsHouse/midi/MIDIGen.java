@@ -235,7 +235,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
     	Arrays.setAll(tracks,
 			i -> new MIDIDataMelodyTrack(
-					genMIDITrackSetup(i+1, params, db,
+					genMIDITrackSetupGeneric(i+1, params, db,
 						((null==data)?null:("source: "+DataUtils.extractSourceName(data, i+1)))),
 				new ArrayList<>()));
 
@@ -821,7 +821,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	final MIDIDataMelodyTrack tracks[] = new MIDIDataMelodyTrack[streams];
     	Arrays.setAll(tracks,
 			i -> new MIDIDataMelodyTrack(
-					genMIDITrackSetup(i+1, params, db,
+					genMIDITrackSetupGeneric(i+1, params, db,
 						((null==data)?null:("source: "+DataUtils.extractSourceName(data, i+1)))),
 				new ArrayList<>()));
 
@@ -922,7 +922,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      *     out of bounds value indicates not a (primary) data stream
      * @return  track setup, with channel number 1 less than stream number
      */
-    public static MIDITrackSetup genMIDITrackSetup(
+    public static MIDITrackSetup genMIDITrackSetupGeneric(
     		final int stream,
     		final GenerationParameters params,
     		final DataBounds db,
