@@ -45,6 +45,7 @@ import org.hd.d.statsHouse.generic.ChorusStyleFromData;
 import org.hd.d.statsHouse.generic.DataCadence;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
 import org.hd.d.statsHouse.generic.ProductionLevel;
+import org.hd.d.statsHouse.generic.ProgressionGroup;
 import org.hd.d.statsHouse.generic.Scale;
 import org.hd.d.statsHouse.generic.Style;
 import org.hd.d.statsHouse.generic.TuneSection;
@@ -169,6 +170,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			}
     	Objects.requireNonNull(db);
     	Objects.requireNonNull(data);
+
+    	// Progression group for whole house.
+    	// Any once-per-tune selections can use this.
+    	final ProgressionGroup prog = new ProgressionGroup(params, "house");
 
     	// Initial partitioning/alignment/padding for main data melody verse.
     	final List<DataProtoBar> verseProtoBars = splitAndAlignData(TuneSection.verse, params, data);

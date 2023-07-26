@@ -29,7 +29,7 @@ import org.hd.d.statsHouse.GenerationParameters;
  * so that different parts of the tune can diverge in different ways
  * for the same seeds.
  */
-public final class Progression
+public final class ProgressionGroup
 	{
 	/**Generation parameters for entire tune generation; never null. */
 	public final GenerationParameters params;
@@ -39,14 +39,14 @@ public final class Progression
 	 */
 	public final int uniqueID;
 
-	public Progression(final GenerationParameters params, final int uniqueID)
+	public ProgressionGroup(final GenerationParameters params, final int uniqueID)
 		{
 		Objects.requireNonNull(params);
 		this.params = params;
 		this.uniqueID = uniqueID;
 		}
 
-	public Progression(final GenerationParameters params, final String uniqueID)
+	public ProgressionGroup(final GenerationParameters params, final String uniqueID)
 		{ this(params, (null == uniqueID) ? 0 : uniqueID.hashCode()); }
 
 	/**Pick one of an array of objects, most likely first. */
