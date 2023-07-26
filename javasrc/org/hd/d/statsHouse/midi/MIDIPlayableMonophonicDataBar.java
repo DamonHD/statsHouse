@@ -136,9 +136,8 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
 	public MIDIPlayableMonophonicDataBar cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd)
 	    {
-		final List<NoteAndVelocity> l = new ArrayList<>(notes);
 		return(new MIDIPlayableMonophonicDataBar(dataNotesPerBar, dpr, stream,
-	        Collections.unmodifiableList(new ArrayList<>(l)),
+	        Collections.unmodifiableList(new ArrayList<>(notes)),
 	        newExpressionStart, newExpressionEnd));
 	    }
     }
