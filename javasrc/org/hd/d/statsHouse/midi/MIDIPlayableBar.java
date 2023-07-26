@@ -45,18 +45,25 @@ import org.hd.d.statsHouse.generic.NoteAndVelocity;
  * @param notes  time ordered by from non-negative clocks offset from start of bar,
  *     to note and velocity and note-on/note-off duration in clocks;
  *     may be empty but not null
+ * @param expressionStart  expression level (CC 11) at the start of the bar [0,127]
+ * @param expressionEnd  expression level (CC 11) at the end of the bar [0,127]
  */
-public record MIDIPlayableBar(SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes, int clocks)
+public record MIDIPlayableBar(
+		SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes,
+		int clocks,
+		byte expressionStart, byte expressionEnd)
     {
     public MIDIPlayableBar
 	    {
     	Objects.requireNonNull(notes);
     	if(clocks <= 0) { throw new IllegalArgumentException(); }
+	    if(expressionStart < 0) { throw new IllegalArgumentException(Byte.toString(expressionStart)); }
+	    if(expressionEnd < 0) { throw new IllegalArgumentException(Byte.toString(expressionEnd)); }
 		}
 
-    /**Supplied notes, with default clocks per bar. */
+    /**Supplied notes, with default clocks per bar, and default expression throughout. */
     public MIDIPlayableBar(final SortedSet<StartNoteVelocityDuration> notes)
-    	{ this(notes, MIDIGen.DEFAULT_CLOCKS_PER_BAR); }
+    	{ this(notes, MIDIGen.DEFAULT_CLOCKS_PER_BAR, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
 
     /**Note and velocity, and +ve duration in clocks (MIDI note-on to note-off).
      * Immutable.
