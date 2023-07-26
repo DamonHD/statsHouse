@@ -5,7 +5,7 @@ Entries should be deleted when substantially implemented.
 
 
 Current priorities:
-  * Fade in/out bass at start/end, and maybe change further for chorus/drop?
+  * Fade in/out bass: *** expression support for MIDIPlayableBar ***
   * Improved (eg more robust, wider range, more representative) chorus bar synthesis.
   * Work in some progression especially for repeat verse/chorus.
 
