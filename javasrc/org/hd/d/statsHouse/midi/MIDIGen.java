@@ -278,7 +278,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     		_generateHousePercussionBySection(percTrack, ts);
 
-            _generateHouseBassBySection(bassTrack, ts, params);
+            _generateHouseBassBySection(bassTrack, ts, prog, sectionNumber);
 
             // Fade in and out first and last verse/chorus.
             // Also fade in/out each non-primary instrument verse?
@@ -555,7 +555,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	public static void _generateHouseBassBySection(
 			final MIDISupportTrack bassTrack,
 			final TuneSectionMetadata ts,
-			final GenerationParameters params)
+			final ProgressionGroup prog,
+			final int sectionNumber)
 		{
 		// Inject normal bass for verse and chorus only,
 		// though possibly varying between types and instances.
@@ -564,7 +565,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			case verse, chorus:
 				{
 				final MIDIPlayableBar bar = SupportBarGen.makeBasicHouseBassBar(
-					params, ts.sectionType());
+					ts.sectionType(), prog, sectionNumber);
 				final int barCount = ts.bars();
 				bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
 		        break;

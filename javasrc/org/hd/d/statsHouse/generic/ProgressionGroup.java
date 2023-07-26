@@ -117,6 +117,32 @@ public final class ProgressionGroup
 		return(choices.get(choice));
 		}
 
+	/**Pick one value using external PRNG.
+	 * The choices should not be null, nor zero length, nor usually include nulls.
+	 * <p>
+	 * The PRNG may have been created with #getPRNG()
+	 * to reduce the cost and improve the spread
+	 * from randomising several parameters.
+	 * This may already therefore have had any progression folded in.
+	 * <p>
+	 * May be expensive so remember the result
+	 * rather that regenerating where possible.
+	 */
+	public final static <T> T pickOne(final RandomGenerator prng, final PickOne distribution, final List<T> choices)
+		{
+        Objects.requireNonNull(prng);
+        Objects.requireNonNull(distribution);
+        Objects.requireNonNull(choices);
+        final int length = choices.size();
+		if(length < 1) { throw new IllegalArgumentException(); }
+
+        // Use our PRNG creation as an elaborate hash.
+        // Fold the choices array length in as extra randomness.
+        final int choice = distribution.pickOne(prng, length);
+//System.err.println(String.format("choice %d/%d", choice, length));
+		return(choices.get(choice));
+		}
+
 //	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
 //	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
 

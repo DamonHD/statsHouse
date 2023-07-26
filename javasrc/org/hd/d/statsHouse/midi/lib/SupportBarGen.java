@@ -20,9 +20,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.random.RandomGenerator;
 
-import org.hd.d.statsHouse.GenerationParameters;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.PickOne;
+import org.hd.d.statsHouse.generic.ProgressionGroup;
 import org.hd.d.statsHouse.generic.TuneSection;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDIPercusssionInstrument;
@@ -128,29 +130,39 @@ public final class SupportBarGen
 
 	/**Create a basic house bass bar.
 	 * Modulate slightly based on (eg) section type.
-	 * @return
+	 * @return single bar to be used throughout the given section
 	 */
 	public static MIDIPlayableBar makeBasicHouseBassBar(
-			final GenerationParameters params, final TuneSection section)
+			final TuneSection section,
+			final ProgressionGroup prog,
+			final int sectionNumber)
 		{
+		// The bass line can show some progression...
+		final RandomGenerator prng = prog.getPRNG(sectionNumber, section.ordinal());
+
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
-//		final byte BASS = MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0;
 		final byte vBASS = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 
 		final int offset = 2 * 12; // Alt: vary eg 1 or 2 octaves down from root.
 
-		// Much around with first note each chorus bar.
+		// Sometimes mess around with first note each chorus bar.
 		final byte defaultNote = (byte) (MIDIGen.DEFAULT_ROOT_NOTE-offset);
 		final byte firstNote = (TuneSection.chorus != section) ? defaultNote :
-			(byte) (MIDIGen.DEFAULT_ROOT_NOTE-offset+12);
+			ProgressionGroup.pickOne(prng, PickOne.SQUARE, Arrays.asList(
+				(byte) (MIDIGen.DEFAULT_ROOT_NOTE-offset+12),
+				defaultNote));
 
-//		final int delay = 0;
-		final int delay = MIDIGen.DEFAULT_CLKSPQTR/8; // Alt: vary (eg 0).
-//		final int delay = MIDIGen.DEFAULT_CLKSPQTR/4; // Alt: vary (eg 0).
+		// Delay of bass note from start of beat.
+		final int delay = ProgressionGroup.pickOne(prng, PickOne.SQUARE, Arrays.asList(
+			MIDIGen.DEFAULT_CLKSPQTR/8,
+			0,
+			MIDIGen.DEFAULT_CLKSPQTR/4));
 
-//		final int duration = MIDIGen.DEFAULT_CLKSPQTR/4;
-		final int duration = MIDIGen.DEFAULT_CLKSPQTR/2; // Alt: vary
+		// Duration of bass note.
+		final int duration = ProgressionGroup.pickOne(prng, PickOne.SQUARE, Arrays.asList(
+			MIDIGen.DEFAULT_CLKSPQTR/2,
+			MIDIGen.DEFAULT_CLKSPQTR/4));
 
 		// Beat 1, 2, 3, 4.
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
