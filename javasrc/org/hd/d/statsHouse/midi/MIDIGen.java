@@ -44,6 +44,7 @@ import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.generic.ChorusStyleFromData;
 import org.hd.d.statsHouse.generic.DataCadence;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.PickOne;
 import org.hd.d.statsHouse.generic.ProductionLevel;
 import org.hd.d.statsHouse.generic.ProgressionGroup;
 import org.hd.d.statsHouse.generic.Scale;
@@ -249,10 +250,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     			new ArrayList<>());
     	final MIDISupportTrack bassTrack =
 			new MIDISupportTrack(
-    			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel after percussion.
-    					//MIDIInstrument.ELECTRIC_BASE_FINGER.instrument0, // Alt: vary eg SYNTH_BASE_1, SYNTH_BASE_2
-    					//MIDIInstrument.SYNTH_BASE_1.instrument0, // Alt: vary
-    					MIDIInstrument.SYNTH_BASE_2.instrument0, // Alt: vary
+    			new MIDITrackSetup((MIDIConstant.GM1_PERCUSSION_CHANNEL), // Use channel one after percussion.
+    					prog.pickOneNoProgression(PickOne.SQUARE, Arrays.asList(
+							MIDIInstrument.SYNTH_BASE_2,
+							MIDIInstrument.SYNTH_BASE_1,
+							MIDIInstrument.ELECTRIC_BASE_FINGER)).instrument0,
     					(byte) (2*(MIDIConstant.DEFAULT_VOLUME/3)),
     					(byte) (MIDIConstant.DEFAULT_PAN+1), // Slightly off to side.
     					"bass: house"),

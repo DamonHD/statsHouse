@@ -67,6 +67,7 @@ public final class ProgressionGroup
 
 	/**Pick one value without progression.
 	 * If 'no randomness' is selected then always returns the first (best) item.
+	 * (This also avoids any potentially-expensive PRNG creation/use.)
 	 * <p>
 	 * Does not take any progression parameters,
 	 * so is constant for a given input choice set
@@ -90,23 +91,25 @@ public final class ProgressionGroup
         // Use our PRNG creation as an elaborate hash.
         // Fold the choices array length in as extra randomness.
         final RandomGenerator prng = getPRNG(length);
-        return(choices.get(distribution.pickOne(prng, length)));
+        final int choice = distribution.pickOne(prng, length);
+//System.err.println(String.format("choice %d/%d", choice, length));
+		return(choices.get(choice));
 		}
 
 //	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
 //	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
 
-	/**Munge components together to make good 64-bit seed.
+	/**Fold components together to try to make a good 64-bit seed.
 	 * This depends on any per-run randomness,
 	 * the unique name/ID of this progression group,
 	 * and any progression numbers fed in.
 	 * <p>
-	 * Only the lower 48 bits may be used, eg for Random(seed).
+	 * Only the lower 48 bits may end up being used, eg for Random(seed).
 	 */
 	private long makeSeed(final Integer ...progression)
 		{
 		final long seed = params.derivedSeed() ^ (((long)params.derivedSeed()) << 13) ^
-			(((long) uniqueID) << 3) ^ (((long)uniqueID) << 32) ^
+			(((long)uniqueID) << 3) ^ (((long)uniqueID) << 32) ^
 			(((long)Arrays.hashCode(progression)) << 17);
 		return(seed);
 		}
