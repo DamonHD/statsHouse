@@ -18,6 +18,7 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
     DHD20230715: building up expression (a little) for chorus/drop.
     DHD20230715: created GenerationParameters.makeDerivedSeed().
     DHD20230715: alignment first pass done; partial start/end bars omitted if enough data.
+    DHD20230726: started building in progression and randomisation, eg random minor scale for house.
     
 
 
