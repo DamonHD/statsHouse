@@ -5,6 +5,7 @@ Entries should be deleted when substantially implemented.
 
 
 Current priorities:
+  * Fade in/out bass at start/end, and maybe change further for chorus/drop?
   * Improved (eg more robust, wider range, more representative) chorus bar synthesis.
   * Work in some progression especially for repeat verse/chorus.
   * Seeding/variations...
