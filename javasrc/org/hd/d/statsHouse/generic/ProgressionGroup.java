@@ -96,6 +96,27 @@ public final class ProgressionGroup
 		return(choices.get(choice));
 		}
 
+	/**Pick one value with progression.
+	 * The choices should not be null, nor zero length, nor usually include nulls.
+	 * <p>
+	 * May be expensive so remember the result
+	 * rather that regenerating where possible.
+	 */
+	public final <T> T pickOne(final PickOne distribution, final List<T> choices, final Integer ...progression)
+		{
+        Objects.requireNonNull(distribution);
+        Objects.requireNonNull(choices);
+        final int length = choices.size();
+		if(length < 1) { throw new IllegalArgumentException(); }
+
+        // Use our PRNG creation as an elaborate hash.
+        // Fold the choices array length in as extra randomness.
+        final RandomGenerator prng = getPRNG(progression);
+        final int choice = distribution.pickOne(prng, length);
+//System.err.println(String.format("choice %d/%d", choice, length));
+		return(choices.get(choice));
+		}
+
 //	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
 //	private static final RandomGenerator ALWAYS_ZERO = () -> (0);
 
