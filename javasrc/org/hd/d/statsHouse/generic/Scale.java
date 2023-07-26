@@ -45,8 +45,8 @@ public final class Scale
 	public static final Scale MINOR_PENTATONIC = new Scale(3, 2, 2, 3, 2);
 	public static final Scale MAJOR_PENTATONIC = new Scale(2, 2, 3, 2, 3);
 
-	/** Equivalent to no scale at all, ie all notes in the octave. */
-	public static final Scale NO_SCALE = new Scale(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+	/**Equivalent to no scale at all, ie all notes in the octave. */
+	public static final Scale CHROMATIC = new Scale(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 
 	/**Semitones for this scale; non-null, non-empty, all entries in range [1,12]. */

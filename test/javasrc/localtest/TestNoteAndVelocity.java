@@ -33,7 +33,7 @@ public final class TestNoteAndVelocity extends TestCase
     	final NoteAndVelocity result0 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, -1f),
     			true, // isNotSecondaryDataStream,
-    			Scale.NO_SCALE,
+    			Scale.CHROMATIC,
     			1,
     			0f);
     	assertNull("should not (yet) generate a note with negative value", result0);
@@ -41,7 +41,7 @@ public final class TestNoteAndVelocity extends TestCase
     	final NoteAndVelocity result1 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, 0f),
     			true, // isNotSecondaryDataStream,
-    			Scale.NO_SCALE,
+    			Scale.CHROMATIC,
     			1,
     			0f);
     	assertNotNull("should generate a note", result1);
@@ -51,7 +51,7 @@ public final class TestNoteAndVelocity extends TestCase
     	final NoteAndVelocity result2 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, 1f),
     			true, // isNotSecondaryDataStream,
-    			Scale.NO_SCALE,
+    			Scale.CHROMATIC,
     			1,
     			1f);
     	assertNotNull("should generate a note", result2);
@@ -61,7 +61,7 @@ public final class TestNoteAndVelocity extends TestCase
     	final NoteAndVelocity result3 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, 1f),
     			true, // isNotSecondaryDataStream,
-    			Scale.NO_SCALE,
+    			Scale.CHROMATIC,
     			2,
     			1f);
     	assertNotNull("should generate a note", result3);
@@ -81,7 +81,7 @@ public final class TestNoteAndVelocity extends TestCase
     	final NoteAndVelocity result5 = MIDIGen.datumToNoteAndVelocity(
     			new Datum(null, 1f, 1f),
     			true, // isNotSecondaryDataStream,
-    			Scale.NO_SCALE,
+    			Scale.CHROMATIC,
     			2,
     			4f);
     	assertNotNull("should generate a note", result5);

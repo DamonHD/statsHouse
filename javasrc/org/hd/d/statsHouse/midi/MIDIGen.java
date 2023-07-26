@@ -197,7 +197,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     		Scale.HARMONIC_MINOR,
     		Scale.DORIAN,
     		Scale.MAJOR,
-    		Scale.NO_SCALE
+    		Scale.CHROMATIC
     		));
 
     	// Establish how many sections worth of 'verse' data there is.
