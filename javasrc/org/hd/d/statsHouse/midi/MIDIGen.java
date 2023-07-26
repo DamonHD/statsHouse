@@ -440,16 +440,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     /**Warm up for a following drop (or high-energy section) with a slow fall then sudden rise in expression; never null.
      * Start at maximum, fade out a little until the last bar, then fade back up to max.
      *
-     * @param mpmBars  unfaded bars; never null
+     * @param bars  unfaded bars; never null
      * @return  same-length List of bars with new expression set; never null
      */
-    private static <T extends MIDIBarExpression> List<T> warmUpToDrop(final List<T> mpmBars)
+    private static <T extends MIDIBarExpression> List<T> warmUpToDrop(final List<T> bars)
     	{
-		Objects.requireNonNull(mpmBars);
+		Objects.requireNonNull(bars);
 
-		if(mpmBars.isEmpty()) { return(mpmBars); }
-
-		final int barCount = mpmBars.size();
+		final int barCount = bars.size();
+		if(0 == barCount) { return(bars); }
 
         // Number of bars to partly fade out over.
 		// If only one bar input then there will be no fade out.
@@ -464,13 +463,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         for(int i = 0; i < fadeBarCount; ++i)
 	        {
         	final byte newExpression = (byte) (expression - fadePerBar);
-            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
             expression = newExpression;
 	        }
 //        assert(expression > 0); // Should not be fading all the way out!
 
         // Fade back up on final bar.
-        updatedBars.add(mpmBars.get(barCount-1).cloneAndSetExpression(expression, MIDIConstant.DEFAULT_EXPRESSION));
+        updatedBars.add(bars.get(barCount-1).cloneAndSetExpression(expression, MIDIConstant.DEFAULT_EXPRESSION));
 
 //		assert(barCount == updatedBars.size());
 		updatedBars.trimToSize(); // Should be a no-op.
@@ -490,20 +489,19 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * <p>
      * For a single bar, only fade-out will happen if both are requested.
      *
-     * @param mpmBars  unfaded bars; never null
+     * @param bars  unfaded bars; never null
      * @param fadeIn  if true, request a fade in
      * @param fadeOut  if true, request a fade out
      * @return  same-length List of bars with new expression set; never null
      */
 	private static <T extends MIDIBarExpression> List<T> optionalFadeInOut(
-			final List<T> mpmBars,
+			final List<T> bars,
 			final boolean fadeIn, final boolean fadeOut)
 		{
-		Objects.requireNonNull(mpmBars);
+		Objects.requireNonNull(bars);
 
-		if(mpmBars.isEmpty()) { return(mpmBars); }
-
-		final int barCount = mpmBars.size();
+		final int barCount = bars.size();
+		if(0 == barCount) { return(bars); }
 
 		// Forbid both fade in and fade out on a single bar section.
 		// Block any fade in for this case.
@@ -527,7 +525,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final boolean isFinalFadeInBar = (i == postFadeInBarIndex - 1);
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
-	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+	            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
 //	            assert(expression < MIDIConstant.DEFAULT_EXPRESSION); // No note (even last) at max.
 	            expression = newExpression;
 	            }
@@ -535,7 +533,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        }
 
         // Preserve any middle unfaded portion.
-		updatedBars.addAll(mpmBars.subList(postFadeInBarIndex, firstFadeOutBarIndex));
+		updatedBars.addAll(bars.subList(postFadeInBarIndex, firstFadeOutBarIndex));
 
 		// Reduce expression on the tail bars, ending at 0.
 		if(doFadeOut)
@@ -546,7 +544,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final boolean isFinalFadeOutBar = (i == barCount - 1);
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeOutBar ? 0 : (expression - fadePerBar));
-	            updatedBars.add(mpmBars.get(i).cloneAndSetExpression(expression, newExpression));
+	            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
 //	            assert(expression > 0); // No note (even last) totally silent.
 	            expression = newExpression;
 	            }
