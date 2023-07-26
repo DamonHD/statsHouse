@@ -443,7 +443,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @param mpmBars  unfaded bars; never null
      * @return  same-length List of bars with new expression set; never null
      */
-    private static List<MIDIPlayableMonophonicDataBar> warmUpToDrop(final List<MIDIPlayableMonophonicDataBar> mpmBars)
+    private static <T extends MIDIBarExpression> List<T> warmUpToDrop(final List<T> mpmBars)
     	{
 		Objects.requireNonNull(mpmBars);
 
@@ -457,7 +457,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         final byte totalFade = (MIDIConstant.DEFAULT_EXPRESSION + 1) / 3;
         final int fadePerBar = (byte) (totalFade / Math.max(1, fadeBarCount));
 
-        final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
+        final ArrayList<T> updatedBars = new ArrayList<>(barCount);
 
         // Bars before final one slowly fade out a little.
         byte expression = MIDIConstant.DEFAULT_EXPRESSION;
@@ -495,8 +495,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @param fadeOut  if true, request a fade out
      * @return  same-length List of bars with new expression set; never null
      */
-	private static List<MIDIPlayableMonophonicDataBar> optionalFadeInOut(
-			final List<MIDIPlayableMonophonicDataBar> mpmBars,
+	private static <T extends MIDIBarExpression> List<T> optionalFadeInOut(
+			final List<T> mpmBars,
 			final boolean fadeIn, final boolean fadeOut)
 		{
 		Objects.requireNonNull(mpmBars);
@@ -516,7 +516,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         final int firstFadeOutBarIndex = doFadeOut ? (barCount - fadeBarCount) : barCount;
         final int fadePerBar = (MIDIConstant.DEFAULT_EXPRESSION + 1) / fadeBarCount;
 
-        final ArrayList<MIDIPlayableMonophonicDataBar> updatedBars = new ArrayList<>(barCount);
+        final ArrayList<T> updatedBars = new ArrayList<>(barCount);
 
 		// Raise expression on the lead bars, ending at max/default.
         if(doFadeIn)
