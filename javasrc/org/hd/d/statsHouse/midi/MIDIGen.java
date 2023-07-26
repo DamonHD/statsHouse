@@ -191,7 +191,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Parameterisation of melody play with scales.
     	// Have a more muted tonal range for house, to let percussion/base stand out.
 		final int octaves = Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-        final Scale scale = MIDIGen.DEFAULT_HOUSE_SCALE; // Alt: vary with seed
+//        final Scale scale = MIDIGen.DEFAULT_HOUSE_SCALE; // Alt: vary with seed
+        final Scale scale = prog.pickOneNoProgression(PickOne.UNIFORM, Arrays.asList(
+    		Scale.NATURAL_MINOR,
+    		Scale.HARMONIC_MINOR,
+    		Scale.DORIAN
+    		));
 
     	// Establish how many sections worth of 'verse' data there is.
     	// Always at least one.
