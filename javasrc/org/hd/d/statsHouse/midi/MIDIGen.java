@@ -376,8 +376,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	                		{
                 			// Fade in and/or out for start/finish.
                     		newBars = optionalFadeInOut(mpmBars,
-                    				fadeIn || !isNotSecondaryDataStream,
-                    				fadeOut || !isNotSecondaryDataStream);
+                				fadeIn || !isNotSecondaryDataStream,
+                				fadeOut || !isNotSecondaryDataStream);
 	                		}
 
 						tracks[s - 1].bars().addAll(newBars);
