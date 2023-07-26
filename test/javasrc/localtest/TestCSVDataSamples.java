@@ -84,7 +84,11 @@ public final class TestCSVDataSamples extends TestCase
 			for(final int introBars : new int[] {-1, 0, 1, 4, 12, 13, 16})
 	    		{
     			// Testing against conventional and strange intro bar (and thus section bar) counts.
-    			for(final int seed : new int[] {-1, 0, 42})
+    			for(final int seed : new int[] {
+    					GenerationParameters.RANDOMNESS_UNIQUE,
+    					GenerationParameters.RANDOMNESS_NONE,
+    					GenerationParameters.RANDOMNESS_NAME,
+    					42})
 	    			{
     	    		for(final Style style : Style.values())
 	        			{
