@@ -17,6 +17,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse.generic;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -62,6 +63,34 @@ public final class ProgressionGroup
 
 
 		return(null);
+		}
+
+	/**Pick one value without progression.
+	 * If 'no randomness' is selected then always returns the first (best) item.
+	 * <p>
+	 * Does not take any progression parameters,
+	 * so is constant for a given input choice set
+	 * throughout the life of a ProgressionGroup instance.
+	 * <p>
+	 * The choices should not be null, nor zero length, nor usually include nulls.
+	 * <p>
+	 * May be expensive so remember the result
+	 * rather that regenerating where possible.
+	 */
+	public final <T> T pickOneNoProgression(final PickOne distribution, final List<T> choices)
+		{
+        Objects.requireNonNull(distribution);
+        Objects.requireNonNull(choices);
+        final int length = choices.size();
+		if(length < 1) { throw new IllegalArgumentException(); }
+
+        // If no randomness then always return the first.
+        if(params.randomnessNone()) { return(choices.get(0)); }
+
+        // Use our PRNG creation as an elaborate hash.
+        // Fold the choices array length in as extra randomness.
+        final RandomGenerator prng = getPRNG(length);
+        return(choices.get(distribution.pickOne(prng, length)));
 		}
 
 //	/**Trivial fake PRNG that always returns 0; may break some things eg cause some routines to hang! */
