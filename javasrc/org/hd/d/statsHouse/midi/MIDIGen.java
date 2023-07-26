@@ -285,18 +285,28 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 
     		_generateHousePercussionBySection(percTrack, ts);
 
-            _generateHouseBassBySection(bassTrack, ts, prog, sectionNumber);
-
             // Fade in and out first and last verse/chorus.
             // Also fade in/out each non-primary instrument verse?
     		// Maybe do not want this type of logic hard-wired in.
-    		// TODO: sometimes omit (some) fades depending on the seed.
+    		// TODO: Alt: sometimes omit (some) fades depending on the seed.
     		// If the previous section is intro (or there is no previous section)
     		// then set this section to fade in.
     		final boolean fadeIn = (null == tsPrev) || (TuneSection.intro == tsPrev.sectionType());
     		// If the following section is outro (or there is no further section)
     		// then set this section to fade out.
     		final boolean fadeOut = (null == tsNext) || (TuneSection.outro == tsNext.sectionType());
+
+    		// If this verse is not getting any other fade
+    		// and it is followed by a drop or a (higher-energy) chorus
+    		// then adjust the expression to build up to the drop/chorus.
+    		final boolean followedByDrop = (null != tsNext) &&
+				(switch(tsNext.sectionType()) {
+				case drop, chorus -> true;
+				default -> false;});
+
+            _generateHouseBassBySection(bassTrack, ts,
+            		fadeIn, fadeOut, followedByDrop,
+            		prog, sectionNumber);
 
             // Inject relatively-vanilla data melody for verse.
             switch(ts.sectionType())
@@ -364,14 +374,6 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 		// TODO: other transformations
 
                 		// TODO: construct padding track?
-
-                		// If this verse is not getting any other fade
-                		// and it is followed by a drop or a (higher-energy) chorus
-                		// then adjust the expression to build up to the drop/chorus.
-                		final boolean followedByDrop = (null != tsNext) &&
-            				(switch(tsNext.sectionType()) {
-            				case drop, chorus -> true;
-            				default -> false;});
 
                 		final List<MIDIPlayableMonophonicDataBar> newBars;
                 		if(isNotSecondaryDataStream && !fadeIn && !fadeOut && followedByDrop)
@@ -560,6 +562,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	public static void _generateHouseBassBySection(
 			final MIDISupportTrack bassTrack,
 			final TuneSectionMetadata ts,
+			final boolean fadeIn, final boolean fadeOut, final boolean followedByDrop,
 			final ProgressionGroup prog,
 			final int sectionNumber)
 		{
@@ -572,7 +575,21 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				final MIDIPlayableBar bar = SupportBarGen.makeBasicHouseBassBar(
 					ts.sectionType(), prog, sectionNumber);
 				final int barCount = ts.bars();
-				bassTrack.bars().addAll(Collections.nCopies(barCount, bar));
+				final List<MIDIPlayableBar> oldBars = Collections.nCopies(barCount, bar);
+
+        		final List<MIDIPlayableBar> newBars;
+        		if(!fadeIn && !fadeOut && followedByDrop)
+            		{
+        			// Warm up to drop...
+        			newBars = warmUpToDrop(oldBars);
+            		}
+        		else
+            		{
+        			// Fade in and/or out for start/finish.
+            		newBars = optionalFadeInOut(oldBars, fadeIn, fadeOut);
+            		}
+
+				bassTrack.bars().addAll(newBars);
 		        break;
 		        }
 			default:
