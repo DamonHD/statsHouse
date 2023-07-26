@@ -37,7 +37,7 @@ import org.hd.d.statsHouse.generic.NoteAndVelocity;
  * <p>
  * This may be the output of a chain of transformations.
  * <p>
- * This object is immutable if the Set is.
+ * This instance is immutable if the SortedSet is.
  * <p>
  * A note should not run beyond the end of its bar, in general.
  * <p>
@@ -81,7 +81,7 @@ public record MIDIPlayableBar(
 	        newExpressionStart, newExpressionEnd));
 	    }
 
-    /**Empty bar with default number of clocks. */
+    /**Empty bar with default number of clocks (and expression). */
     public static final MIDIPlayableBar EMPTY_DEFAULT_CLOCKS = new MIDIPlayableBar(Collections.emptySortedSet());
 
 
@@ -105,7 +105,6 @@ public record MIDIPlayableBar(
     	public int compareTo(final StartNoteVelocityDuration o)
     		{
     		Objects.requireNonNull(o);
-
     		final int startDiff = start - o.start;
     		if(0 != startDiff) { return(startDiff); }
     		final int durationDiff = duration - o.duration;

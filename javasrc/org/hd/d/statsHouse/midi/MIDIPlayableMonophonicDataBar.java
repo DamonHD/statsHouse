@@ -41,7 +41,7 @@ import org.hd.d.statsHouse.generic.NoteAndVelocity;
  * <p>
  * This may be the output of a chain of transformations.
  * <p>
- * This object is immutable if the List is.
+ * This instance is immutable if the List is.
  *
  * @param dpr  data proto bar; null if not backed by source data
  * @param stream  which data stream this is from in a non-null dpr;
