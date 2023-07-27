@@ -13,13 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20230714: better conversion of input filename to tune name.
-    DHD20230714: tweaking volume down to stay away from red!
-    DHD20230715: building up expression (a little) for chorus/drop.
-    DHD20230715: created GenerationParameters.makeDerivedSeed().
-    DHD20230715: alignment first pass done; partial start/end bars omitted if enough data.
-    DHD20230726: started building in progression and randomisation, eg random minor scale for house.
-    DHD20230727: added expression for fade in/out for bass.
     
 
 
@@ -31,7 +24,19 @@ RELEASES
 ========
 
 
-20230710:
+20230727:
+    freezepoint name: V5.2.7 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    DHD20230714: better conversion of input filename to tune name.
+    DHD20230714: tweaking volume down to stay away from red!
+    DHD20230715: building up expression (a little) for chorus/drop.
+    DHD20230715: created GenerationParameters.makeDerivedSeed().
+    DHD20230715: alignment first pass done; partial start/end bars omitted if enough data.
+    DHD20230726: started building in progression and randomisation, eg random minor scale for house.
+    DHD20230727: added expression for fade in/out for bass.
+
+
+20230713:
     freezepoint name: V5.2.6 (main)
     Changes since last freezepoint (developer/mgr initials and brief description):
     DHD20230712: provide some progression and use all data by end-aligning on alternate repeats.
