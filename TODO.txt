@@ -5,7 +5,7 @@ Entries should be deleted when substantially implemented.
 
 
 Current priorities:
-  * Improved (eg more robust, wider range, more representative) chorus bar(s) synthesis.
+  * Improved (eg more robust, wider range, more representative, non-cyclic) chorus bar(s) synthesis.
   * Work in more progression especially for repeat verse/chorus.
 
 
