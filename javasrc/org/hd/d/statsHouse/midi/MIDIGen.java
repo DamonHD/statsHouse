@@ -1322,6 +1322,9 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 			final byte channel = ts.channel();
 			_setupMIDITrack(track, ts);
 
+			// All data melody tracks start at the default expression level.
+			byte expression = MIDIConstant.DEFAULT_EXPRESSION;
+
 			// Generate each bar for this track.
 			// Note that the javax implementation inserts events in correct order,
 			// which means that this code can insert the on and off events easily,
@@ -1332,10 +1335,32 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 				{
 				final int startOfBarClock = clock;
 
+				byte targetExpression = b.expressionStart();
+				// Change in expression per clock tick.
+				final boolean flatExpression = (b.expressionEnd() == b.expressionStart());
+				final float expressionDeltaPerClock = flatExpression ? 0f :
+						((b.expressionEnd() - b.expressionStart()) / (float) barClocks);
+
+				// Play each note in this bar.
 				for(final MIDIPlayableBar.StartNoteVelocityDuration n : b.notes())
 					{
 					final int start = startOfBarClock + n.start();
 					final int end = start + Math.max(0, n.duration() - 1);
+
+					// Adjust expression level just before each played note as needed.
+					if(!flatExpression)
+						{
+						targetExpression = (byte) Math.max(0, Math.min(127, Math.round(
+							b.expressionStart() + (n.start() * expressionDeltaPerClock))));
+						}
+					if(expression != targetExpression)
+						{
+						expression = targetExpression;
+						final ShortMessage exp = new ShortMessage();
+						exp.setMessage(ShortMessage.CONTROL_CHANGE, channel, 11, expression);
+						track.add(new MidiEvent(exp, start));
+						}
+
 					// Add a note-on event to the track.
 				    final ShortMessage noteOn = new ShortMessage();
 				    noteOn.setMessage(ShortMessage.NOTE_ON, channel, n.note().note(), n.note().velocity());
