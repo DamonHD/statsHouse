@@ -5,8 +5,8 @@ Entries should be deleted when substantially implemented.
 
 
 Current priorities:
-  * Improved (eg more robust, wider range, more representative) chorus bar synthesis.
-  * Work in some progression especially for repeat verse/chorus.
+  * Improved (eg more robust, wider range, more representative) chorus bar(s) synthesis.
+  * Work in more progression especially for repeat verse/chorus.
 
 
 2023-07 thoughts:
@@ -17,7 +17,7 @@ Current priorities:
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
   * Do better with -ve values in all styles.
-  * Look at VCV Rack
+  * Look at VCV Rack.
   
 
 2023-06-13 thoughts:
