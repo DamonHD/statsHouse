@@ -13,7 +13,6 @@ Current priorities:
 
   * A8: in response to V5.1.0 imp-M dc sample: "... put a mastering plugin on it though. Even if it's just a basic limiter."
   * Seeding and extra generation params / hints (eg cycle on W not M for daily data, use date range).
-  * Turn up lead "brightness" (CC 71/74?) at end of verse leading into chorus?
   * For some cadences, have notes transition rather than be abrupt, using MIDI CC (legato?).
   * Make the tune progress, especially on repeated verse/chorus.
   * Consider building combo mix of multiple files, eg with alternating cadences.
