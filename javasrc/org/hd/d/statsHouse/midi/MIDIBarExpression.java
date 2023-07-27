@@ -16,9 +16,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.midi;
 
-/**Parent interface of MIDI music bars covering expression handling.
- */
-public interface MIDIBarExpression
+/**Parent interface of MIDI music bars covering expression (CC 11) handling. */
+public sealed interface MIDIBarExpression permits MIDIPlayableBar, MIDIPlayableMonophonicDataBar
 	{
 	/**Get expression level (CC 11) at the start of the bar [0,127]. */
     byte expressionStart();
