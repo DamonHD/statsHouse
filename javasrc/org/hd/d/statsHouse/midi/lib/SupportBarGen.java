@@ -18,6 +18,7 @@ package org.hd.d.statsHouse.midi.lib;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.random.RandomGenerator;
@@ -50,16 +51,26 @@ public final class SupportBarGen
 	}
 
 	/**Create a basic house percussion bar: four on the floor.
+	 * @param prog   progression control; never null
 	 * @param finalBar  if true, is the final bar of a (usually longish) section
 	 * @return one bar; never null
 	 */
-	public static MIDIPlayableBar makeBasicHousePercussionBar(final boolean finalBar)
+	public static MIDIPlayableBar makeBasicHousePercussionBar(
+			final ProgressionGroup prog, final boolean finalBar)
 		{
+		Objects.requireNonNull(prog);
+
+		final RandomGenerator prng = prog.getPRNG(finalBar ? 1 : 42);
+
 		final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
-		final byte DRUM = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0; // Alt: ELECTRIC_BASE_DRUM
+		final byte DRUM = ProgressionGroup.pickOne(prng, PickOne.SQUARE, Arrays.asList(
+				MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM,
+				MIDIPercusssionInstrument.ELECTRIC_BASE_DRUM)).instrument0;
 		final byte vDRUM = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
-		final byte HAT = MIDIPercusssionInstrument.CLOSED_HI_HAT.instrument0; // OPEN_HI_HAT: OPEN_HI_HAT
+		final byte HAT = ProgressionGroup.pickOne(prng, PickOne.SQUARE, Arrays.asList(
+				MIDIPercusssionInstrument.CLOSED_HI_HAT,
+				MIDIPercusssionInstrument.OPEN_HI_HAT)).instrument0;
 		final byte vHAT = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 		final byte CLAP = MIDIPercusssionInstrument.HAND_CLAP.instrument0;
 		final byte vCLAP = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
@@ -74,8 +85,8 @@ public final class SupportBarGen
 			0 + MIDIGen.DEFAULT_CLKSPQTR/2,
 					new NoteAndVelocity(HAT, vHAT),
 					MIDIGen.DEFAULT_CLKSPQTR/2));
-		// Beat 1 final: extra kick
-		if(finalBar)
+		// Beat 1 final: extra kick usually.
+		if(finalBar == (prng.nextBoolean() || prng.nextBoolean()))
 			{
 			notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 				0 + MIDIGen.DEFAULT_CLKSPQTR/2,
@@ -83,7 +94,7 @@ public final class SupportBarGen
 					MIDIGen.DEFAULT_CLKSPQTR/2));
 			}
 
-		// Beat 2: drum, clap
+		// Beat 2: drum, clap - hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			1 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(DRUM, vDRUM),
@@ -109,7 +120,7 @@ public final class SupportBarGen
 					new NoteAndVelocity(HAT, vHAT),
 					MIDIGen.DEFAULT_CLKSPQTR/2));
 
-		// Beat 4: drum, clap
+		// Beat 4: drum, clap - hat
 		notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 			3 * MIDIGen.DEFAULT_CLKSPQTR,
 					new NoteAndVelocity(DRUM, vDRUM),

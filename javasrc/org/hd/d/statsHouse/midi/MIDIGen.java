@@ -191,7 +191,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
     	// Parameterisation of melody play with scales.
     	// Have a more muted tonal range for house, to let percussion/base stand out.
 		final int octaves = Math.max(1, DEFAULT_RANGE_OCTAVES/2);
-//        final Scale scale = MIDIGen.DEFAULT_HOUSE_SCALE; // Alt: vary with seed
+//        final Scale scale = MIDIGen.DEFAULT_HOUSE_SCALE;
         final Scale scale = prog.pickOneNoProgression(PickOne.SQUARE, Arrays.asList(
     		Scale.NATURAL_MINOR,
     		Scale.HARMONIC_MINOR,
@@ -283,7 +283,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
             // Verify that section size is correct.
             assert(ts.bars() == sectionBars);
 
-    		_generateHousePercussionBySection(percTrack, ts);
+    		_generateHousePercussionBySection(percTrack, ts, prog);
 
             // Fade in and out first and last verse/chorus.
             // Also fade in/out each non-primary instrument verse?
@@ -603,7 +603,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	/**Generate a single house tune section of percussion. */
 	public static void _generateHousePercussionBySection(
 			final MIDISupportTrack percTrack,
-			final TuneSectionMetadata ts)
+			final TuneSectionMetadata ts,
+			final ProgressionGroup prog)
 	    {
 		// Inject percussion for most section types,
 		// though possibly varying between types and instances.
@@ -617,8 +618,8 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		    // Default simple floor-to-the-floor.
 		    default:
 		        {
-				final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar(false);
-				final MIDIPlayableBar barFinal = SupportBarGen.makeBasicHousePercussionBar(true);
+				final MIDIPlayableBar bar = SupportBarGen.makeBasicHousePercussionBar(prog, false);
+				final MIDIPlayableBar barFinal = SupportBarGen.makeBasicHousePercussionBar(prog, true);
 				final int barCount = ts.bars();
 				if(barCount > 1) { percTrack.bars().addAll(Collections.nCopies(barCount-1, bar)); }
 				percTrack.bars().add(barFinal);
@@ -1116,13 +1117,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	    // eg daily cadence 32 per bar.
 	    if(maybeOmitPartialStartEndBars && (result.size() > DEFAULT_MIN_SECTION_BARS+1))
 		    {
-	    	final int maxMissiong = dataNotesPerBar/4; // Alt: vary
+	    	final int maxMissing = dataNotesPerBar/4; // Alt: vary
             final DataProtoBar last = result.get(result.size()-1);
             final long lastNulls = last.dataRows().data().stream().filter(Objects::isNull).count();
-            if(lastNulls > maxMissiong) { result.remove(result.size()-1); }
+            if(lastNulls > maxMissing) { result.remove(result.size()-1); }
             final DataProtoBar first = result.get(0);
             final long firstNulls = first.dataRows().data().stream().filter(Objects::isNull).count();
-            if(firstNulls > maxMissiong) { result.remove(0); }
+            if(firstNulls > maxMissing) { result.remove(0); }
 		    }
 
 	    assert(data.data().isEmpty() == result.isEmpty());
