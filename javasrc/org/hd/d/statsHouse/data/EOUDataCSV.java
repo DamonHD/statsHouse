@@ -130,11 +130,11 @@ public record EOUDataCSV(List<List<String>> data)
 	/**Load from file EOU consolidated data in a form that parseEOUDataCSV() can read; never null but may be empty.
 	 * @throws IOException  if file not present or unreadable/unparseable.
 	 */
-	public static EOUDataCSV loadEOUDataCSV(final File longStoreFile)
+	public static EOUDataCSV loadEOUDataCSV(final File dataCSVFile)
 	    throws IOException
 	    {
-		if(null == longStoreFile) { throw new IllegalArgumentException(); }
-		try(final Reader r = new FileReader(longStoreFile, EOUDATACSV_CHARSET))
+		if(null == dataCSVFile) { throw new IllegalArgumentException(); }
+		try(final Reader r = new FileReader(dataCSVFile, EOUDATACSV_CHARSET))
 		    { return(parseEOUDataCSV(r)); }
 	    }
 	}
