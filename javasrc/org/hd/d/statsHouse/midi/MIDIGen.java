@@ -1028,13 +1028,15 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final boolean doAlign = canAlign &&
 			(
 			(params.style().level == ProductionLevel.Gentle) ||
-			((params.style().level == ProductionLevel.Danceable) && prng.nextBoolean())
+			((params.style().level == ProductionLevel.Danceable) &&
+					(params.randomnessNone() || prng.nextBoolean()))
 			);
 		// Be prepared to omit partial starting and ending bars,
 		// for Danceable tunes
 		// unless there is very little data left!
 		final boolean maybeOmitPartialStartEndBars = // doAlign &&
-			((params.style().level == ProductionLevel.Danceable) && prng.nextBoolean());
+			((params.style().level == ProductionLevel.Danceable) &&
+					(params.randomnessNone() || prng.nextBoolean()));
 
 	    final int size = data.data().size();
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(2 + (size/dataNotesPerBar));
