@@ -34,6 +34,7 @@ RELEASES
     DHD20230715: alignment first pass done; partial start/end bars omitted if enough data.
     DHD20230726: started building in progression and randomisation, eg random minor scale for house.
     DHD20230727: added expression for fade in/out for bass.
+    DHD20230801: adding variation for Danceable split / alignment / partial-bar discard.
 
 
 20230713:

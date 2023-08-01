@@ -26,6 +26,7 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.random.RandomGenerator;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
@@ -1000,21 +1001,24 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * May only support a few section types, including verse.
      *
      * @param section  which song section type this is for; never null
-     * @param params  generation parameters; never null
-     * @param data  the entire ingested data set; never null
+	 * @param params  generation parameters; never null
+	 * @param data  the entire ingested data set; never null
      */
     public static List<DataProtoBar> splitAndAlignData(
     		final TuneSection section,
     		final GenerationParameters params,
     		final EOUDataCSV data)
 	    {
-    	if(null == section) { throw new IllegalArgumentException(); }
+    	Objects.requireNonNull(section);
     	switch(section) {
     	    case verse: break;
 	    	default: throw new IllegalArgumentException("unsupported section type");
 	    	}
-    	if(null == params) { throw new IllegalArgumentException(); }
-    	if(null == data) { throw new IllegalArgumentException(); }
+    	Objects.requireNonNull(params);
+    	Objects.requireNonNull(data);
+
+    	final ProgressionGroup prog = new ProgressionGroup(params, "split");
+    	final RandomGenerator prng = prog.getPRNG(data.data().size());
 
     	// Data notes per bar is determined by the cadence.
     	final DataCadence cadence = DataUtils.extractDataCadenceQuick(data);
@@ -1024,13 +1028,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 		final boolean doAlign = canAlign &&
 			(
 			(params.style().level == ProductionLevel.Gentle) ||
-			(params.style().level == ProductionLevel.Danceable) // Alt: randomness
+			((params.style().level == ProductionLevel.Danceable) && prng.nextBoolean())
 			);
 		// Be prepared to omit partial starting and ending bars,
 		// for Danceable tunes
 		// unless there is very little data left!
-		final boolean maybeOmitPartialStartEndBars = doAlign &&
-			(params.style().level == ProductionLevel.Danceable); // Alt: randomness
+		final boolean maybeOmitPartialStartEndBars = // doAlign &&
+			((params.style().level == ProductionLevel.Danceable) && prng.nextBoolean());
 
 	    final int size = data.data().size();
 	    final ArrayList<DataProtoBar> result = new ArrayList<>(2 + (size/dataNotesPerBar));
