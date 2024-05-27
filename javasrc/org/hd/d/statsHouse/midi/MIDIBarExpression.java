@@ -29,6 +29,7 @@ public sealed interface MIDIBarExpression permits MIDIPlayableBar, MIDIPlayableM
      * @param newExpressionEnd  expression level (CC 11) at the end of the bar [0,127]
 	 * @return immutable clone of original with the specified change
 	 */
-    <T extends MIDIBarExpression> T cloneAndSetExpression(
+//    <T extends MIDIBarExpression> T cloneAndSetExpression(
+    MIDIBarExpression cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd);
 	}

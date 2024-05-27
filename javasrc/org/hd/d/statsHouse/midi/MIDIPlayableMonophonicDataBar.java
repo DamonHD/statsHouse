@@ -132,7 +132,6 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
 	 * @return immutable clone of original with the specified change
 	 */
     @Override
-	@SuppressWarnings("unchecked")
 	public MIDIPlayableMonophonicDataBar cloneAndSetExpression(
     		final byte newExpressionStart, final byte newExpressionEnd)
 	    {

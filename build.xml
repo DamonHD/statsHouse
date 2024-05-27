@@ -90,7 +90,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 	
 	<!-- ProGuard static optimiser/shrunker.  -->
     <property name="pg.dir" value="../proguard-7.4.2" />
-    <taskdef resource="${pg.dir}/ant/task.properties" 
+    <taskdef resource="proguard/ant/task.properties" 
              classpath="${pg.dir}/lib/proguard-ant.jar" />	
 
     <!-- General initialisation target. -->

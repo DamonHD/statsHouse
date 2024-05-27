@@ -381,12 +381,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
                 		if(isNotSecondaryDataStream && !fadeIn && !fadeOut && followedByDrop)
 	                		{
                 			// Warm up to drop...
-                			newBars = warmUpToDrop(mpmBars);
+                			newBars = warmUpToDrop(mpmBars, MIDIPlayableMonophonicDataBar.class);
 	                		}
                 		else
 	                		{
                 			// Fade in and/or out for start/finish.
-                    		newBars = optionalFadeInOut(mpmBars,
+                    		newBars = optionalFadeInOut(mpmBars, MIDIPlayableMonophonicDataBar.class,
                 				fadeIn || !isNotSecondaryDataStream,
                 				fadeOut || !isNotSecondaryDataStream);
 	                		}
@@ -410,7 +410,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 								chorusCount, s, ts, params, db, data,
 								scale);
 //	        			assert(mpmBars.size() == ts.bars());
-	            		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, fadeIn, fadeOut));
+	            		tracks[s - 1].bars().addAll(optionalFadeInOut(mpmBars, MIDIPlayableMonophonicDataBar.class, fadeIn, fadeOut));
 	            		}
 	        		break;
 	        		}
@@ -447,9 +447,10 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @param bars  unfaded bars; never null
      * @return  same-length List of bars with new expression set; never null
      */
-    private static <T extends MIDIBarExpression> List<T> warmUpToDrop(final List<T> bars)
+    private static <T extends MIDIBarExpression> List<T> warmUpToDrop(final List<T> bars, final Class<T> type)
     	{
 		Objects.requireNonNull(bars);
+		Objects.requireNonNull(type);
 
 		final int barCount = bars.size();
 		if(0 == barCount) { return(bars); }
@@ -467,13 +468,13 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         for(int i = 0; i < fadeBarCount; ++i)
 	        {
         	final byte newExpression = (byte) (expression - fadePerBar);
-            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
+            updatedBars.add(type.cast(bars.get(i).cloneAndSetExpression(expression, newExpression)));
             expression = newExpression;
 	        }
 //        assert(expression > 0); // Should not be fading all the way out!
 
         // Fade back up on final bar.
-        updatedBars.add(bars.get(barCount-1).cloneAndSetExpression(expression, MIDIConstant.DEFAULT_EXPRESSION));
+        updatedBars.add(type.cast(bars.get(barCount-1).cloneAndSetExpression(expression, MIDIConstant.DEFAULT_EXPRESSION)));
 
 //		assert(barCount == updatedBars.size());
 		updatedBars.trimToSize(); // Should be a no-op.
@@ -499,10 +500,11 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
      * @return  same-length List of bars with new expression set; never null
      */
 	private static <T extends MIDIBarExpression> List<T> optionalFadeInOut(
-			final List<T> bars,
+			final List<T> bars, final Class<T> type,
 			final boolean fadeIn, final boolean fadeOut)
 		{
 		Objects.requireNonNull(bars);
+		Objects.requireNonNull(type);
 
 		final int barCount = bars.size();
 		if(0 == barCount) { return(bars); }
@@ -529,7 +531,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final boolean isFinalFadeInBar = (i == postFadeInBarIndex - 1);
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeInBar ? MIDIConstant.DEFAULT_EXPRESSION : (expression + fadePerBar));
-	            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
+	            updatedBars.add(type.cast(bars.get(i).cloneAndSetExpression(expression, newExpression)));
 //	            assert(expression < MIDIConstant.DEFAULT_EXPRESSION); // No note (even last) at max.
 	            expression = newExpression;
 	            }
@@ -548,7 +550,7 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
 	        	final boolean isFinalFadeOutBar = (i == barCount - 1);
 	        	final byte newExpression = (byte)
 	    			(isFinalFadeOutBar ? 0 : (expression - fadePerBar));
-	            updatedBars.add(bars.get(i).cloneAndSetExpression(expression, newExpression));
+	            updatedBars.add(type.cast(bars.get(i).cloneAndSetExpression(expression, newExpression)));
 //	            assert(expression > 0); // No note (even last) totally silent.
 	            expression = newExpression;
 	            }
@@ -583,12 +585,12 @@ default -> throw new UnsupportedOperationException("NOT IMPLEMENTED YET"); // FI
         		if(!fadeIn && !fadeOut && followedByDrop)
             		{
         			// Warm up to drop...
-        			newBars = warmUpToDrop(oldBars);
+        			newBars = warmUpToDrop(oldBars, MIDIPlayableBar.class);
             		}
         		else
             		{
         			// Fade in and/or out for start/finish.
-            		newBars = optionalFadeInOut(oldBars, fadeIn, fadeOut);
+            		newBars = optionalFadeInOut(oldBars, MIDIPlayableBar.class, fadeIn, fadeOut);
             		}
 
 				bassTrack.bars().addAll(newBars);
