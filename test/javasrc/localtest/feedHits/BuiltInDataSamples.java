@@ -22,7 +22,10 @@ public final class BuiltInDataSamples
 	/**Prevent instance creation. */
 	private BuiltInDataSamples() { }
 
-	/**One week of feed hit types by hour of day (UTC).
+	/**Number of days coverage of data block 20240527. */
+	public static final int intervalDays_20240527 = 8;
+
+	/**One block of feed hit types by hour of day (UTC).
 	 * From https://www.earth.org.uk/img/research/RSS-efficiency/data/20240527/feedStatusByHour.log
 	 */
 	public static final String feedStatusByHour_20240527 = """
