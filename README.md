@@ -1,5 +1,7 @@
 # statsHouse
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11352182.svg)](https://doi.org/10.5281/zenodo.11352182)
+
 [![Java CI](https://github.com/DamonHD/statsHouse/actions/workflows/ant.yml/badge.svg)](https://github.com/DamonHD/statsHouse/actions/workflows/ant.yml)
 
 Turning home (energy) stats into house music mechanically: sonification.
