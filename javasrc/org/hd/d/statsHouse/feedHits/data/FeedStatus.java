@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
-/**Single feed status record, for by-hour or by-User-Agent forms.
+/**Single feed status record, for by-hour or by-User-Agent forms, immutable.
  * Input records are of the form:
 <pre>
 539 2295559 200:304:406:429:SH 90 81 0 367 539 00
@@ -40,8 +40,9 @@ import java.util.Objects;
  * unquoted <code>ALL</code> summary/total, or
  * quoted <code>User-Agent</code> string, with <code>"-"</code> indicating no/empty UA.
  * <p>
- * All integer values are non-negative, all Strings are non-null, cols is non-null,
- * and the record will be immutable if the cols List is.
+ * All integer values are non-negative, all Strings are non-null, cols is non-null.
+ * <p>
+ * This makes an immutable copy of the cols data to ensure record immutability.
  */
 public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> cols, String index)
     {
