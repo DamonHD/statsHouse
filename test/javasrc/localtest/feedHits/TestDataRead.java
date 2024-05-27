@@ -16,58 +16,21 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package localtest.feedHits;
 
-import java.io.IOException;
-import java.io.StringReader;
+import java.util.List;
 
-import org.hd.d.statsHouse.data.EOUDataCSV;
+import org.hd.d.statsHouse.feedHits.data.FeedStatus;
 
 import junit.framework.TestCase;
-import localtest.support.BuiltInCSVDataSamples;
 
 /**Test reading of feed data files.
  * Also some limited subsequent processing of raw data files.
  */
 public final class TestDataRead extends TestCase
     {
-    /**Verify that parse of real-life sample CSV works. */
-    public static void testReadSample() throws IOException
-	    {
-        final EOUDataCSV result1 = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_M));
-        assertEquals("Sample should have 6 data rows", 6, result1.data().size());
-
-        // Sample some fields.
-        assertEquals("meter", result1.data().get(3).get(4));
-        assertEquals("1", result1.data().get(2).get(5));
-        assertEquals("", result1.data().get(4).get(2));
-        assertEquals("2008-07", result1.data().get(5).get(0));
-
-        final EOUDataCSV result2 = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_Y));
-        assertEquals("Sample should have 16 data rows", 16, result2.data().size());
-	    }
-
-//    /**Check simple splitting into DataProtoBar.
-//     * @throws IOException
-//     */
-//    public static void testChopDataIntoProtoBars() throws IOException
-//	    {
-//    	// Expecting 2 bars, the first of 4 notes, the second of 2 notes plus 2 nulls.
-//        final EOUDataCSV edc1 = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_M));
-//        final List<DataProtoBar> result1 = DataUtils.chopDataIntoProtoBarsSimple(4, edc1);
-//        assertNotNull(result1);
-//        assertEquals(2, result1.size());
-//        assertEquals(4, result1.get(0).dataNotesPerBar());
-//        assertEquals(4, result1.get(0).dataRows().data().size());
-//        assertEquals("2008-02", result1.get(0).dataRows().data().get(0).get(0));
-//        assertEquals("2008-05", result1.get(0).dataRows().data().get(3).get(0));
-//        assertEquals(4, result1.get(1).dataNotesPerBar());
-//        assertEquals(4, result1.get(1).dataRows().data().size());
-//        assertEquals("2008-06", result1.get(1).dataRows().data().get(0).get(0));
-//        assertEquals("2008-07", result1.get(1).dataRows().data().get(1).get(0));
-//        assertNull(result1.get(1).dataRows().data().get(2));
-//        assertNull(result1.get(1).dataRows().data().get(3));
-//
-//        final EOUDataCSV edc2 = EOUDataCSV.parseEOUDataCSV(new StringReader(BuiltInCSVDataSamples.sample_gen_Y));
-//        final List<DataProtoBar> result2 = DataUtils.chopDataIntoProtoBarsSimple(4, edc2);
-//        assertEquals(4, result2.size());
-//	    }
+	/**Test construction of a FeedStatus record, eg that it does not throw. */
+	public static void testConstructionOfSampleFeedStatus()
+		{
+		//12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL
+		new FeedStatus(12857, 71404021, "200:304:406:429:SH", List.of(2987, 1993, 359, 7476, 5129), "ALL");
+		}
     }
