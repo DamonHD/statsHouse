@@ -54,9 +54,9 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 		if(bytes < 0) { throw new IllegalArgumentException(); }
 		Objects.nonNull(colTypes);
 		Objects.nonNull(cols);
+		if(cols.size() != colTypes.split(":").length) { throw new IllegalArgumentException("colTypes element count must match cols"); }
 		for(final int c : cols) { if(c < 0) { throw new IllegalArgumentException(); } }
 		Objects.nonNull(index);
-		if(cols.size() != colTypes.split(":").length) { throw new IllegalArgumentException("colTypes element count must match cols"); }
 	    }
 
 	/**Charset for feed status data (ASCII 7-bit). */
