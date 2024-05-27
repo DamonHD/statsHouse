@@ -89,10 +89,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="javadoc.dir" value="${build.dir.cmn}/javadoc"/>
 	
 	<!-- ProGuard static optimiser/shrunker.  -->
-	<property name="pg.dir" value="../proguard/" />
-	<taskdef resource="proguard/ant/task.properties"
-	         classpath="${pg.dir}/lib/proguard-ant.jar" />
-	
+    <property name="pg.dir" value="../proguard-7.4.2" />
+    <taskdef resource="${pg.dir}/ant/task.properties" 
+             classpath="${pg.dir}/lib/proguard-ant.jar" />	
 
     <!-- General initialisation target. -->
     <target name="init">
@@ -145,6 +144,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             debug="on"
             deprecation="on"
             optimize="off">
+        	<compilerarg value="-Xlint"/>
             <include name="**/*.java"/>
         </javac>
     </target>
@@ -159,6 +159,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
             debug="on"
             deprecation="on"
             optimize="on">
+        	<compilerarg value="-Xlint"/>
             <include name="**/*.java"/>
         </javac>
     </target>
