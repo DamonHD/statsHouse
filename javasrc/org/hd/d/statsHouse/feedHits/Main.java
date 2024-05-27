@@ -14,39 +14,19 @@ Licensed under the Apache License, Version 2.0 (the "License");
    limitations under the License.
 */
 
-package org.hd.d.statsHouse;
+package org.hd.d.statsHouse.feedHits;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
-
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Sequencer;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-
-import org.hd.d.statsHouse.data.DataBounds;
-import org.hd.d.statsHouse.data.EOUDataCSV;
-import org.hd.d.statsHouse.data.FileUtils;
-import org.hd.d.statsHouse.midi.MIDIConstant;
-import org.hd.d.statsHouse.midi.MIDIGen;
-import org.hd.d.statsHouse.midi.MIDITune;
 
 /**Main (command-line) entry-point for the data handler.
  */
@@ -56,16 +36,11 @@ public final class Main
     private static void printOptions()
         {
     	final String version = getManifestVersion();
-    	System.err.println("statsHouse" + ((null == version) ? "" : (" V" + version)));
+    	System.err.println("feedHits: statsHouse" + ((null == version) ? "" : (" V" + version)));
     	System.err.println();
         System.err.println("Commands/options:");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
-        System.err.println("  -@(<cmdfilename>|-)");
-        System.err.println("    Read independent command lines from specified file or stdin if '-'");
-        System.err.println("    Do not process further command-line arguments.");
-        System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
-        GenerationParameters.printOptions();
     	System.err.println();
         System.err.println("    This syntax may be used, one per line, in the command file.");
         }
@@ -145,17 +120,17 @@ public final class Main
         System.exit(1);
         }
 
-    /**Convert input filename to tune name; never null.
-     * Discard any path and and trailing ".csv" parts.
-     */
-    public static String filenameToTuneName(final String filename)
-	    {
-	    Objects.requireNonNull(filename);
-	    final String basename = (new File(filename)).getName();
-	    if(basename.endsWith(".csv"))
-	    	{ return(basename.substring(0, basename.length()-4)); }
-	    return(basename);
-	    }
+//    /**Convert input filename to tune name; never null.
+//     * Discard any path and and trailing ".csv" parts.
+//     */
+//    public static String filenameToTuneName(final String filename)
+//	    {
+//	    Objects.requireNonNull(filename);
+//	    final String basename = (new File(filename)).getName();
+//	    if(basename.endsWith(".csv"))
+//	    	{ return(basename.substring(0, basename.length()-4)); }
+//	    return(basename);
+//	    }
 
     /**Run zero or more command lines, aborting with an exception in case of error.
      * Any caught exception is rethrown as a RuntimeException, wrapped in some extra context.
@@ -166,7 +141,7 @@ public final class Main
 	public static void runCommands(final List<List<String>> cmdlines, final boolean quiet)
 		{
 		// Execute command line(s) sequentially, aborting at any exception.
-		int cmdCount = 0;
+		final int cmdCount = 0;
 		for(final List<String> cmdline : cmdlines)
 			{
 			final int argCount = cmdline.size();
@@ -177,94 +152,12 @@ public final class Main
 		    final String outputFileName = cmdline.get(1);
 
 		    try {
-				// Remaining optional args determine GenerationParameters.
-				// Use the final component of the input file name as the tune name.
-				// TODO strip extension
-				final GenerationParameters params =
-					GenerationParameters.parseOptionalCommandArguments(cmdline.subList(2, cmdline.size()),
-						filenameToTuneName(inputFileName));
-				if(!quiet)
-				    {
-					System.out.println("INFO: sonifying: " +
-				        (++cmdCount) + "/" + (cmdlines.size()) + ": " +
-//					params);
-						Arrays.toString(cmdline.toArray()) + ", " +
-						"derivedSeed=" + params.derivedSeed());
-					}
 
-				// Generate the abstract MIDI form.
-				final EOUDataCSV data = EOUDataCSV.loadEOUDataCSV(new File (inputFileName));
-				final DataBounds db = new DataBounds(data);
-				final MIDITune mt = MIDIGen.genTune(params, data);
 
-				// Choose output type based on suffix, or -play.
-				if(outputFileName.endsWith(".csv"))
-				    {
-				    // Generate and publish MIDICSV file.
-					try (
-						ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
-						Writer w = new OutputStreamWriter(baos)
-						)
-				    	{
-				    	MIDIGen.genFromTuneMIDICSV(w, mt);
-				        FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
-				    	}
-				    }
-				else
-				    {
-					// MIDI output to play immediately or to save.
-					final Sequence s = MIDIGen.genFromTuneSequence(mt, params, db);
-					final boolean isMid = outputFileName.endsWith(".mid");
-					if(isMid || outputFileName.endsWith(".wav"))
-				    	{
-				        // Generate MIDI binary file.
-				    	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
-				        	{
-				        	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
-				        	if(isMid)
-				                {
-				        		// Publish binary MIDI file.
-				        		FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
-				        		}
-				        	else
-				            	{
-				        		// Generate and publish WAV.
-				        	    final AudioInputStream stream = AudioSystem.getAudioInputStream(
-				    	    		new ByteArrayInputStream(baos.toByteArray()));
-				        	    try (ByteArrayOutputStream baosWAV = new ByteArrayOutputStream(16384))
-				            	    {
-				                    AudioSystem.write(stream, AudioFileFormat.Type.WAVE, baosWAV);
-				                    FileUtils.replacePublishedFile(outputFileName, baosWAV.toByteArray(), true);
-				            	    }
-				            	}
-				        	}
-				    	}
-					else if("-play".equals(outputFileName))
-				    	{
-				    	// Get default sequencer.
-				    	try(final Sequencer sequencer = MidiSystem.getSequencer())
-					    	{
-					    	if(null == sequencer)
-					    	    {
-					    		throw new UnsupportedOperationException("MIDI sequencer not available.");
-					    	    }
-
-				    	    // Acquire resources and make operational.
-				    	    sequencer.open();
-
-				            sequencer.setSequence(s);
-				            final long usLength = sequencer.getMicrosecondLength();
-				        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
-				            sequencer.start();
-				            while(sequencer.isRunning()) { Thread.sleep(1000); }
-				            Thread.sleep(1000); // Allow for some graceful decay of the sound!
-					    	}
-				    	}
-					else
+//					else
 				    	{
 				    	throw new IllegalArgumentException("unrecognised output type/suffix: " + outputFileName);
 				    	}
-				    }
 				}
 		    catch(final Exception e)
 		        {
