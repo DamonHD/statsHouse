@@ -59,7 +59,6 @@ public final class TestDataRead extends TestCase
 	/**Test parse of by-hour FeedStatus record, eg that it does not throw. */
 	public static void testParseOfSampleByHourFeedStatus()
 		{
-		//			"539 2295559 200:304:406:429:SH 90 81 0 367 539 00";
 		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_byHour_record);
         assertNotNull(fs);
         assertEquals(539, fs.hits());
