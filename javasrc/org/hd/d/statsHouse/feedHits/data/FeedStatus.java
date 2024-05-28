@@ -18,6 +18,7 @@ package org.hd.d.statsHouse.feedHits.data;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -74,18 +75,21 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 		Objects.nonNull(line);
 		final String trimmed = line.trim();
 		if(trimmed.endsWith("\"")) { throw new RuntimeException("cannot handle UA index yet"); }
+		final boolean isUA = false;
 		// Initial parse with spaces for leading columns.
 		final String[] rawFields = trimmed.split(" ");
 		if(rawFields.length < 4) { throw new IllegalArgumentException("too few fields"); }
         final int hits = Integer.parseInt(rawFields[0], 10);
         final int bytes = Integer.parseInt(rawFields[1], 10);
         final String colTypes = rawFields[2];
-
-
-
-
-
-        throw new RuntimeException("NOT IMPLEMENTED");
+        final String[] colTypeArray = colTypes.split(":");
+        final int nCols = colTypeArray.length;
+        // Reparse to capture index field in one go.
+		final String[] rawFields2 = trimmed.split(" ", 3 + nCols + 1);
+        final List<Integer> colArray = new ArrayList<>(nCols);
+        for(int c = 0; c < nCols; ++c) { colArray.add(Integer.parseInt(rawFields[3 + c], 10)); }
+        final String index = rawFields2[rawFields2.length -1];
+        return(new FeedStatus(hits, bytes, colTypes, colArray, index));
 		}
 
 //	/**Parse EOU consolidated data CSV file/stream; never null but may be empty.
