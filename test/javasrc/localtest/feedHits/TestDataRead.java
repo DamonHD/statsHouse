@@ -27,10 +27,24 @@ import junit.framework.TestCase;
  */
 public final class TestDataRead extends TestCase
     {
+	public static final String sample_FeedStatus_ALL_record =
+		"12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL";
+
 	/**Test construction of a FeedStatus record, eg that it does not throw. */
 	public static void testConstructionOfSampleFeedStatus()
 		{
-		//12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL
 		new FeedStatus(12857, 71404021, "200:304:406:429:SH", List.of(2987, 1993, 359, 7476, 5129), "ALL");
+		}
+
+	/**Test parse of a FeedStatus record, eg that it does not throw. */
+	public static void testParseOfSampleFeedStatus()
+		{
+		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_ALL_record);
+        assertNotNull(fs);
+        assertEquals(12857, fs.hits());
+        assertEquals(71404021, fs.bytes());
+        assertEquals("200:304:406:429:SH", fs.colTypes());
+        // TODO
+        assertEquals("ALL", fs.index());
 		}
     }

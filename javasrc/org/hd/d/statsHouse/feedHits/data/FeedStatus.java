@@ -69,6 +69,8 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 	 * The colTypes element count must match cols.
 	 * <p>
 	 * The record is trim()med of excess leading and trailing whitespace before parsing.
+	 * <p>
+	 * Content validation is deferred to the constructor.
 	 */
 	public static FeedStatus parseRecord(final String line)
 		{
@@ -84,8 +86,10 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
         final String colTypes = rawFields[2];
         final String[] colTypeArray = colTypes.split(":");
         final int nCols = colTypeArray.length;
-        // Reparse to capture index field in one go.
-		final String[] rawFields2 = trimmed.split(" ", 3 + nCols + 1);
+        // Reparse to capture index field in final slot.
+        final int expectedFieldCount = 3 + nCols + 1;
+		final String[] rawFields2 = trimmed.split(" ", expectedFieldCount);
+		if(rawFields2.length != expectedFieldCount) { throw new IllegalArgumentException("too few cols"); }
         final List<Integer> colArray = new ArrayList<>(nCols);
         for(int c = 0; c < nCols; ++c) { colArray.add(Integer.parseInt(rawFields[3 + c], 10)); }
         final String index = rawFields2[rawFields2.length -1];
