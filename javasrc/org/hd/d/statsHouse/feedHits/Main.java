@@ -41,8 +41,10 @@ public final class Main
         System.err.println("Commands/options:");
         System.err.println("  -help");
         System.err.println("    This summary/help.");
+        System.err.println("  -summary <typeN> {dir}*");
+        System.err.println("    Summary/quick play, 0 (use internal) or more directories.");
+        System.err.println("    Each directory should contain a standard set of data extract files.");
     	System.err.println();
-        System.err.println("    This syntax may be used, one per line, in the command file.");
         }
 
 	/**Charset for command list (ASCII 7-bit). */
