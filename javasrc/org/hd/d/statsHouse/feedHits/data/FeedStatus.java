@@ -22,29 +22,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**Single feed status record, for by-hour or by-User-Agent forms, immutable.
- * Input records are of the form:
-<pre>
-539 2295559 200:304:406:429:SH 90 81 0 367 539 00
-</pre>
- * or
-<pre>
-12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL
-</pre>
- or
-<pre>
-1701 3248489 200:304:406:429:SH 183 0 0 1518 421 "Podbean/FeedUpdate 2.1"
-</pre>
- *
- * Where the third column enumerates the following columns before the index.
- * The index can be unquoted numeric 00 to 23, or
- * unquoted <code>ALL</code> summary/total, or
- * quoted <code>User-Agent</code> string, with <code>"-"</code> indicating no/empty UA.
- * <p>
  * All integer values are non-negative, all Strings are non-null, cols is non-null.
  * <p>
  * The colTypes element count must match cols.
  * <p>
- * This makes an immutable copy of the cols data to ensure record immutability.
+ * This makes a defensive immutable copy of the cols data to ensure record immutability.
  */
 public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> cols, String index)
     {
@@ -81,11 +63,30 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 	 * unquoted <code>ALL</code> summary/total, or
 	 * quoted <code>User-Agent</code> string, with <code>"-"</code> indicating no/empty UA.
 	 * <p>
-	 * All integer values are non-negative, all Strings are non-null, cols is non-null.
+	 * All integer values are base-10 and non-negative, all Strings are non-null, cols is non-null.
 	 * <p>
 	 * The colTypes element count must match cols.
-	 *
+	 * <p>
+	 * The record is trim()med of excess leading and trailing whitespace before parsing.
 	 */
+	public static FeedStatus parseRecord(final String line)
+		{
+		Objects.nonNull(line);
+		final String trimmed = line.trim();
+		if(trimmed.endsWith("\"")) { throw new RuntimeException("cannot handle UA index yet"); }
+		// Initial parse with spaces for leading columns.
+		final String[] rawFields = trimmed.split(" ");
+		if(rawFields.length < 4) { throw new IllegalArgumentException("too few fields"); }
+        final int hits = Integer.parseInt(rawFields[0], 10);
+        final int bytes = Integer.parseInt(rawFields[1], 10);
+        final String colTypes = rawFields[2];
+
+
+
+
+
+        throw new RuntimeException("NOT IMPLEMENTED");
+		}
 
 //	/**Parse EOU consolidated data CSV file/stream; never null but may be empty.
 //     * Parses CSV as List (by row) of List (of String fields),
