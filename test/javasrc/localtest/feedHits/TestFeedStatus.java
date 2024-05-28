@@ -27,15 +27,6 @@ import junit.framework.TestCase;
  */
 public final class TestFeedStatus extends TestCase
     {
-	public static final String sample_FeedStatus_ALL_record =
-		"12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL";
-	public static final String sample_FeedStatus_byHour_record =
-			"539 2295559 200:304:406:429:SH 90 81 0 367 539 00";
-	public static final String sample_FeedStatus_empty_UA_record =
-		"477 632084 200:304:406:429:SH 22 0 75 380 173 \"-\"";
-	public static final String sample_FeedStatus_spaced_UA_record =
-		"1701 3248489 200:304:406:429:SH 183 0 0 1518 421 \"Podbean/FeedUpdate 2.1\"";
-
 	/**Test construction of a FeedStatus record, eg that it does not throw. */
 	public static void testConstructionOfSampleFeedStatus()
 		{
@@ -45,7 +36,7 @@ public final class TestFeedStatus extends TestCase
 	/**Test parse of an "ALL" FeedStatus record, eg that it does not throw. */
 	public static void testParseOfSampleALLFeedStatus()
 		{
-		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_ALL_record);
+		final FeedStatus fs = FeedStatus.parseRecord(BuiltInFeedHitsDataSamples.sample_FeedStatus_ALL_record);
         assertNotNull(fs);
         assertEquals(12857, fs.hits());
         assertEquals(71404021, fs.bytes());
@@ -64,7 +55,7 @@ public final class TestFeedStatus extends TestCase
 	/**Test parse of by-hour FeedStatus record, eg that it does not throw. */
 	public static void testParseOfSampleByHourFeedStatus()
 		{
-		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_byHour_record);
+		final FeedStatus fs = FeedStatus.parseRecord(BuiltInFeedHitsDataSamples.sample_FeedStatus_byHour_record);
         assertNotNull(fs);
         assertEquals(539, fs.hits());
         assertEquals(2295559, fs.bytes());
@@ -78,7 +69,7 @@ public final class TestFeedStatus extends TestCase
 	/**Test parse of an empty UA FeedStatus record, eg that it does not throw. */
 	public static void testParseOfSampleEmptyUAFeedStatus()
 		{
-		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_empty_UA_record);
+		final FeedStatus fs = FeedStatus.parseRecord(BuiltInFeedHitsDataSamples.sample_FeedStatus_empty_UA_record);
         assertNotNull(fs);
         assertEquals(477, fs.hits());
         assertEquals(632084, fs.bytes());
@@ -92,7 +83,7 @@ public final class TestFeedStatus extends TestCase
 	/**Test parse of an UA-with-space FeedStatus record, eg that it does not throw. */
 	public static void testParseOfSampleUAWithSpaceFeedStatus()
 		{
-		final FeedStatus fs = FeedStatus.parseRecord(sample_FeedStatus_spaced_UA_record);
+		final FeedStatus fs = FeedStatus.parseRecord(BuiltInFeedHitsDataSamples.sample_FeedStatus_spaced_UA_record);
         assertNotNull(fs);
         assertEquals(1701, fs.hits());
         assertEquals(3248489, fs.bytes());

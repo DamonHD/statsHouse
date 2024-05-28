@@ -29,15 +29,6 @@ import junit.framework.TestCase;
  */
 public final class TestFeedStatusBlock extends TestCase
     {
-	public static final String sample_FeedStatus_ALL_record =
-		"12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL";
-	public static final String sample_FeedStatus_byHour_record =
-			"539 2295559 200:304:406:429:SH 90 81 0 367 539 00";
-	public static final String sample_FeedStatus_empty_UA_record =
-		"477 632084 200:304:406:429:SH 22 0 75 380 173 \"-\"";
-	public static final String sample_FeedStatus_spaced_UA_record =
-		"1701 3248489 200:304:406:429:SH 183 0 0 1518 421 \"Podbean/FeedUpdate 2.1\"";
-
 	/**Test construction of a minimal FeedStatusBlock, eg that it does not throw. */
 	public static void testConstructionOfMinimalFeedStatusBlock() throws IOException
 		{
@@ -48,7 +39,7 @@ public final class TestFeedStatusBlock extends TestCase
 	public static void testParseOfSingleLineFeedStatusBlock() throws IOException
 		{
 		final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(
-				8, new StringReader(TestFeedStatus.sample_FeedStatus_ALL_record));
+				8, new StringReader(BuiltInFeedHitsDataSamples.sample_FeedStatus_ALL_record));
         assertNotNull(fsb);
         assertEquals(8, fsb.nDays());
         assertNotNull(fsb.records());
@@ -62,7 +53,6 @@ public final class TestFeedStatusBlock extends TestCase
 	/**Test parse of a full by-hour data block. */
 	public static void testParseOfByHourFeedStatusBlock() throws IOException
 		{
-		// 539 2295559 200:304:406:429:SH 90 81 0 367 539 00
 		final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(
 				8, new StringReader(BuiltInFeedHitsDataSamples.feedStatusByHour_20240527));
 	    assertNotNull(fsb);
@@ -75,6 +65,10 @@ public final class TestFeedStatusBlock extends TestCase
 	    assertEquals(90, fsb.records().get(0).getColsMap().get("200").intValue());
 	    // ...
 	    assertEquals("00", fsb.records().get(0).index());
+	    // ...
+	    assertEquals("12", fsb.records().get(12).index());
+	    // ...
+	    assertEquals("ALL", fsb.records().get(24).index());
 		}
 
     }

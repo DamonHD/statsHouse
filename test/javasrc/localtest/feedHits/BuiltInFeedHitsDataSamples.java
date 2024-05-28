@@ -22,6 +22,15 @@ public final class BuiltInFeedHitsDataSamples
 	/**Prevent instance creation. */
 	private BuiltInFeedHitsDataSamples() { }
 
+	public static final String sample_FeedStatus_ALL_record =
+	"12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL";
+	public static final String sample_FeedStatus_byHour_record =
+	"539 2295559 200:304:406:429:SH 90 81 0 367 539 00";
+	public static final String sample_FeedStatus_empty_UA_record =
+	"477 632084 200:304:406:429:SH 22 0 75 380 173 \"-\"";
+	public static final String sample_FeedStatus_spaced_UA_record =
+	"1701 3248489 200:304:406:429:SH 183 0 0 1518 421 \"Podbean/FeedUpdate 2.1\"";
+
 	/**Number of days coverage of data block 20240527. */
 	public static final int intervalDays_20240527 = 8;
 	/**One block of feed hit types by hour of day (UTC).
