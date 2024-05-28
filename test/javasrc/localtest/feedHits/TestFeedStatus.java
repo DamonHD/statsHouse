@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 /**Test reading of feed data files.
  * Also some limited subsequent processing of raw data files.
  */
-public final class TestDataRead extends TestCase
+public final class TestFeedStatus extends TestCase
     {
 	public static final String sample_FeedStatus_ALL_record =
 		"12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL";
