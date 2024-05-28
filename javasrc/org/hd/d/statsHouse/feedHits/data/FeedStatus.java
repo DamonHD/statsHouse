@@ -56,11 +56,36 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 		Objects.nonNull(cols);
 		if(cols.size() != colTypes.split(":").length) { throw new IllegalArgumentException("colTypes element count must match cols"); }
 		for(final int c : cols) { if(c < 0) { throw new IllegalArgumentException(); } }
+		cols = List.copyOf(cols); // Defensive copy to enforce immutability.
 		Objects.nonNull(index);
 	    }
 
 	/**Charset for feed status data (ASCII 7-bit). */
 	public static final Charset CHARSET = StandardCharsets.US_ASCII;
+
+	/**Parse a since line/record.
+	 * Input records are of the form:
+<pre>
+539 2295559 200:304:406:429:SH 90 81 0 367 539 00
+</pre>
+     * or
+<pre>
+12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL
+</pre>
+     * or
+<pre>
+1701 3248489 200:304:406:429:SH 183 0 0 1518 421 "Podbean/FeedUpdate 2.1"
+</pre>
+	 * The third column enumerates the following columns before the index.
+	 * The index can be unquoted numeric 00 to 23, or
+	 * unquoted <code>ALL</code> summary/total, or
+	 * quoted <code>User-Agent</code> string, with <code>"-"</code> indicating no/empty UA.
+	 * <p>
+	 * All integer values are non-negative, all Strings are non-null, cols is non-null.
+	 * <p>
+	 * The colTypes element count must match cols.
+	 *
+	 */
 
 //	/**Parse EOU consolidated data CSV file/stream; never null but may be empty.
 //     * Parses CSV as List (by row) of List (of String fields),
