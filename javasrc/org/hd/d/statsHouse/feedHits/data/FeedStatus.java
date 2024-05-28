@@ -100,7 +100,7 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
         return(new FeedStatus(hits, bytes, colTypes, colArray, index));
 		}
 
-	/**Returns true if the index is a <code>User-Agent</code> (starts with <code>"</code>). */
+	/**Returns true if the index is a <code>User-Agent</code> (index starts with <code>"</code>). */
 	public boolean isUA() { return(index.startsWith("\"")); }
 
 	/**Extracts the <code>User-Agent</code> from the index; null if not a <code>User-Agent</code>.
