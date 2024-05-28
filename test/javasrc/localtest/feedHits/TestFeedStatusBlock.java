@@ -70,5 +70,4 @@ public final class TestFeedStatusBlock extends TestCase
 	    // ...
 	    assertEquals("ALL", fsb.records().get(24).index());
 		}
-
     }
