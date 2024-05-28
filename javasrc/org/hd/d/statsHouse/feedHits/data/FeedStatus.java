@@ -19,7 +19,10 @@ package org.hd.d.statsHouse.feedHits.data;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**Single feed status record, for by-hour or by-User-Agent forms, immutable.
@@ -114,4 +117,20 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 		if("\"-\"".equals(index)) { return(""); }
 		return(index.substring(1, index.length()-1));
 	    }
+
+	/**Return cols values as a Map from the keys in <code>colTypes</code> to (non-negative) Integer values; never null.
+	 * The key order is the same as in <code>colTypes</code>.
+	 * <p>
+	 * The return value is immutable.
+	 * @return
+	 */
+	public Map<String, Integer> getColsMap()
+		{
+		final int nCols = cols.size();
+        final LinkedHashMap<String, Integer> m = new LinkedHashMap<>(nCols);
+        final String[] keys = colTypes.split(":");
+        for(int i = 0; i < nCols; ++i)
+	        { m.put(keys[i], cols.get(i)); }
+        return(Collections.unmodifiableMap(m));
+		}
 	}

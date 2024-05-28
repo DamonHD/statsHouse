@@ -50,7 +50,12 @@ public final class TestDataRead extends TestCase
         assertEquals(12857, fs.hits());
         assertEquals(71404021, fs.bytes());
         assertEquals("200:304:406:429:SH", fs.colTypes());
-        // TODO: cols content
+        assertEquals("200", fs.getColsMap().keySet().iterator().next());
+        assertEquals(2987, fs.getColsMap().get("200").intValue());
+        assertEquals(1993, fs.getColsMap().get("304").intValue());
+        assertEquals(359, fs.getColsMap().get("406").intValue());
+        assertEquals(7476, fs.getColsMap().get("429").intValue());
+        assertEquals(5129, fs.getColsMap().get("SH").intValue());
         assertEquals("ALL", fs.index());
         assertFalse(fs.isUA());
         assertNull(fs.extractUA());
