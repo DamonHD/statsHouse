@@ -17,10 +17,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package localtest.feedHits;
 
 /**Significant built-in test data, shareable across all test cases. */
-public final class BuiltInDataSamples
+public final class BuiltInFeedHitsDataSamples
 	{
 	/**Prevent instance creation. */
-	private BuiltInDataSamples() { }
+	private BuiltInFeedHitsDataSamples() { }
 
 	/**Number of days coverage of data block 20240527. */
 	public static final int intervalDays_20240527 = 8;
@@ -54,5 +54,4 @@ public final class BuiltInDataSamples
 508 2203081 200:304:406:429:SH 82 101 0 325 508 23
 12857 71404021 200:304:406:429:SH 2987 1993 359 7476 5129 ALL
 	""";
-
 	}

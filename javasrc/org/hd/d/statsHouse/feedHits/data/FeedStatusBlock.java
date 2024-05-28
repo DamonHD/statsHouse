@@ -16,6 +16,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.feedHits.data;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,4 +36,29 @@ public record FeedStatusBlock(int nDays, List<FeedStatus> records)
 		Objects.nonNull(records);
 		records = List.copyOf(records); // Defensive copy to enforce immutability.
 	    }
+
+	/**Read a sequence of FeedStatus records from a stream, and add the day count; never null.
+	 * @throws IOException
+	 */
+	public static FeedStatusBlock parseRecords(final int nDays, final Reader r) throws IOException
+		{
+        if(nDays <= 0) { throw new IllegalArgumentException(); }
+        Objects.requireNonNull(r);
+
+        final List<FeedStatus> l = new ArrayList<>();
+
+        // Wrap a buffered reader around the input if not already so.
+        final BufferedReader br = (r instanceof BufferedReader) ? (BufferedReader)r :
+        	new BufferedReader(r, 8192);
+
+        String row;
+        while(null != (row = br.readLine()))
+            {
+        	// Skip empty line.
+        	if("".equals(row)) { continue; }
+            l.add(FeedStatus.parseRecord(row));
+            }
+
+        return(new FeedStatusBlock(nDays, l));
+		}
 	}
