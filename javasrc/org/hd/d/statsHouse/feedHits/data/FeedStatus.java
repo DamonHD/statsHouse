@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**Single feed status record, for by-hour or by-User-Agent forms, immutable.
- * All integer values are non-negative, all Strings are non-null, cols is non-null.
+ * All integer values are non-negative, colTypes and other Strings are non-null, cols is non-null.
  * <p>
  * The colTypes element count must match cols.
  * <p>
@@ -76,8 +76,6 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
 		{
 		Objects.nonNull(line);
 		final String trimmed = line.trim();
-		if(trimmed.endsWith("\"")) { throw new RuntimeException("cannot handle UA index yet"); }
-		final boolean isUA = false;
 		// Initial parse with spaces for leading columns.
 		final String[] rawFields = trimmed.split(" ");
 		if(rawFields.length < 4) { throw new IllegalArgumentException("too few fields"); }
@@ -93,8 +91,25 @@ public record FeedStatus(int hits, int bytes, String colTypes, List<Integer> col
         final List<Integer> colArray = new ArrayList<>(nCols);
         for(int c = 0; c < nCols; ++c) { colArray.add(Integer.parseInt(rawFields[3 + c], 10)); }
         final String index = rawFields2[rawFields2.length -1];
+        // Validate that any index that starts with a " ends with one too.
+        if(index.startsWith("\"") && !index.endsWith("\"")) { throw new IllegalArgumentException("index UA not correctly quoted"); }
         return(new FeedStatus(hits, bytes, colTypes, colArray, index));
 		}
+
+	/**Returns true if the index is a <code>User-Agent</code> (starts with <code>"</code>). */
+	public boolean isUA() { return(index.startsWith("\"")); }
+
+	/**Extracts the <code>User-Agent</code> from the index; null if not a <code>User-Agent</code>.
+	 * This returns null if <code>!isUA()</code>,
+	 * and strips the quotes from the index value,
+	 * and treats <code>"-"</code> as special, returning the empty string.
+	 */
+	public String extractUA()
+	    {
+		if(!isUA()) { return(null); }
+		if("\"-\"".equals(index)) { return(""); }
+		return(index.substring(1, index.length()-1));
+	    }
 
 //	/**Parse EOU consolidated data CSV file/stream; never null but may be empty.
 //     * Parses CSV as List (by row) of List (of String fields),
