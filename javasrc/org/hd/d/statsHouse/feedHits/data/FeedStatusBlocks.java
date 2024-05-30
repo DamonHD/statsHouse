@@ -58,7 +58,7 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 	        final File sbh = new File(d, STATUS_BY_HOUR_FILENAME);
 	        if(!sbh.isFile()) { throw new IOException("no "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
 
-	        final int nDays = Integer.parseInt(Files.readString(id.toPath(), FeedStatus.CHARSET), 10);
+	        final int nDays = Integer.parseInt(Files.readString(id.toPath(), FeedStatus.CHARSET).trim(), 10);
             final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(nDays,
             		new FileReader(sbh, FeedStatus.CHARSET));
 

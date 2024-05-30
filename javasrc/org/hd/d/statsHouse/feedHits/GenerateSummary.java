@@ -16,8 +16,11 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.feedHits;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+
+import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
 
 /**Generate sonification from summary information across 1 or more data blocks.
  */
@@ -28,11 +31,14 @@ public final class GenerateSummary
 	 * @param dirnames  names of directories to extract data from
 	 */
 	public static void summary(final int summaryType, final List<String> dirnames)
+	    throws IOException
 		{
 		Objects.requireNonNull(dirnames);
 		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
 
-//		List<FeedStatusBlock> blocks =
+		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+
+
 
 		}
 
