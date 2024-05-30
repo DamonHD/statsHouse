@@ -33,6 +33,11 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 		blocks = List.copyOf(blocks); // Defensive copy to enforce immutability.
 	    }
 
+	/**File containing positive integer number of days for the data block directory. */
+	public static final String INTERVAL_DAYS_FILENAME = "intervalDays.txt";
+	/**File containing summary by-hour status data for the data block directory.. */
+	public static final String STATUS_BY_HOUR_FILENAME = "feedStatusByHour.log";
+
 	/**Construct FeedStatusBlocks from an ordered list of directory names.
 	 * @throws IOException
 	 */
@@ -45,6 +50,11 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 	        {
 	        final File d = new File(dn);
 	        if(!d.isDirectory()) { throw new IOException("not a directory: " + dn); }
+
+	        final File id = new File(d, INTERVAL_DAYS_FILENAME);
+	        if(!id.isFile()) { throw new IOException("no "+INTERVAL_DAYS_FILENAME+" file in directory: " + dn); }
+	        final File sbh = new File(d, STATUS_BY_HOUR_FILENAME);
+	        if(!sbh.isFile()) { throw new IOException("no "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
 	        }
 
         // TODO
