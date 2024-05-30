@@ -78,13 +78,13 @@ public final class GenerateSummary
 			(byte)(MIDIConstant.DEFAULT_PAN + 10),
 			"hits/h");
 
-
 		final List<MIDIDataMelodyTrack> dataMelody = new ArrayList<>();
 
 
 		// TODO
 
 
+		// No support track or section plan yet.
 		final List<MIDISupportTrack> supportTracks = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, supportTracks, tsp));

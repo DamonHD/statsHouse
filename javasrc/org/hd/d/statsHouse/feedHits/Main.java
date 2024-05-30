@@ -29,6 +29,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+
+import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDITune;
+
 /**Main (command-line) entry-point for the data handler.
  */
 public final class Main
@@ -46,10 +53,13 @@ public final class Main
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  -summary <typeN> {dir}*");
+//      System.err.println("    (-play|<outfilename>.(mid|wav)))");
         System.err.println("    Summary/quick play, 0 (use internal) or more directories.");
         System.err.println("    Each directory should contain a standard set of data extract files.");
     	System.err.println();
         }
+
+
 
 	/**Charset for command list (ASCII 7-bit). */
 	public static final Charset CMD_STREAM_CHARSET = StandardCharsets.US_ASCII;
@@ -157,7 +167,33 @@ public final class Main
 			    	case "-summary":
 			    		{
 						if(argCount < 3) { throw new IllegalArgumentException("too few arguments to -summary"); }
-						GenerateSummary.summary(Integer.parseInt(cmdline.get(1), 10), cmdline.subList(2, cmdline.size()));
+						final MIDITune mt = GenerateSummary.summary(Integer.parseInt(cmdline.get(1), 10), cmdline.subList(2, cmdline.size()));
+
+
+
+						// Play it immediately!
+						final Sequence s = MIDIGen.genFromTuneSequence(mt, null, null);
+				    	// Get default sequencer.
+				    	try(final Sequencer sequencer = MidiSystem.getSequencer())
+					    	{
+					    	if(null == sequencer)
+					    	    {
+					    		throw new UnsupportedOperationException("MIDI sequencer not available.");
+					    	    }
+
+				    	    // Acquire resources and make operational.
+				    	    sequencer.open();
+
+				            sequencer.setSequence(s);
+				            final long usLength = sequencer.getMicrosecondLength();
+				        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
+				            sequencer.start();
+				            while(sequencer.isRunning()) { Thread.sleep(1000); }
+				            Thread.sleep(1000); // Allow for some graceful decay of the sound!
+					    	}
+
+
+
 						break;
 			    		}
 
