@@ -32,6 +32,8 @@ public final class MIDIConstant
 
     /**GM1 reserved percussion channel (1-based). */
     public static final byte GM1_PERCUSSION_CHANNEL = 10;
+    /**GM1 reserved percussion channel (0-based). */
+    public static final byte GM1_PERCUSSION_CHANNEL0 = GM1_PERCUSSION_CHANNEL-1;
 
     /**Preferred MIDI filestype to write. */
     public static final int PREFERRED_MIDI_FILETYPE = 1;

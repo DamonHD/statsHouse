@@ -20,6 +20,7 @@ package org.hd.d.statsHouse.midi;
  * For data melody the 1-based channel number will be the 1-based data stream number.
  * (This the actual raw channel number in messages will be one less.)
  *
+ * @param channel <em>zero based</code< MIDI channel [0,15]
  * @param name  track/source name; may be null
  * @param comment  additional comment if any; may be null
  */

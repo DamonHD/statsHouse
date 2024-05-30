@@ -17,14 +17,17 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse.feedHits;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
 import org.hd.d.statsHouse.generic.TuneSectionPlan;
+import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIDataMelodyTrack;
 import org.hd.d.statsHouse.midi.MIDISupportTrack;
+import org.hd.d.statsHouse.midi.MIDITrackSetup;
 import org.hd.d.statsHouse.midi.MIDITune;
 
 /**Generate sonification from summary information across 1 or more data blocks.
@@ -47,7 +50,7 @@ public final class GenerateSummary
 		};
 		}
 
-	/**Summary type 1; of by-hour data. */
+	/**Summary type 1; by-hour data blocks. */
 	public static MIDITune summary1(final List<String> dirnames) throws IOException
 		{
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
@@ -59,10 +62,31 @@ public final class GenerateSummary
 		// Total number of data bars to generate.
 		final int nDataBars = nTotalHours / nHoursPerBar;
 
-		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
+		// Setup for the bytes-per-hour track.
+		final MIDITrackSetup trSetupBytes = new MIDITrackSetup(
+			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
+			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
+			MIDIConstant.DEFAULT_VOLUME,
+			(byte)(MIDIConstant.DEFAULT_PAN - 10),
+			"bytes/h");
+
+		// Setup for the hits-per-hour track.
+		final MIDITrackSetup trSetupHits = new MIDITrackSetup(
+			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
+			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
+			MIDIConstant.DEFAULT_VOLUME,
+			(byte)(MIDIConstant.DEFAULT_PAN + 10),
+			"hits/h");
+
+
+		final List<MIDIDataMelodyTrack> dataMelody = new ArrayList<>();
+
+
+		// TODO
+
+
 		final List<MIDISupportTrack> supportTracks = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
-
 		return(new MIDITune(dataMelody, supportTracks, tsp));
 		}
     }
