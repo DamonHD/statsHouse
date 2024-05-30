@@ -17,6 +17,6 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.hd.d.statsHouse.feedHits.Main"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="statsHouse"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-summary 1 ../RSS-data/20240527"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-summary 1 ../RSS-data/20240519 ../RSS-data/20240527"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="statsHouse"/>
 </launchConfiguration>
