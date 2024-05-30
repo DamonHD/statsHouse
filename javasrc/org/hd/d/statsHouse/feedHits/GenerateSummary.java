@@ -21,12 +21,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlock;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
+import org.hd.d.statsHouse.generic.NoteAndVelocity;
 import org.hd.d.statsHouse.generic.TuneSectionPlan;
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIDataMelodyTrack;
+import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDIPercusssionInstrument;
+import org.hd.d.statsHouse.midi.MIDIPlayableBar;
 import org.hd.d.statsHouse.midi.MIDISupportTrack;
 import org.hd.d.statsHouse.midi.MIDITrackSetup;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -87,31 +93,53 @@ public final class GenerateSummary
 				}
 			}
 
-
-		// Setup for the bytes-per-hour track.
+		// Setup for the hits and bytes per-hour track.
 		final MIDITrackSetup trSetupBytes = new MIDITrackSetup(
 			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
 			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
 			MIDIConstant.DEFAULT_VOLUME,
-			(byte)(MIDIConstant.DEFAULT_PAN - 10),
-			"bytes/h");
+			(MIDIConstant.DEFAULT_PAN),
+			"hits and bytes per hour");
+		// Bytes-per-hour track.
+		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
 
-		// Setup for the hits-per-hour track.
-		final MIDITrackSetup trSetupHits = new MIDITrackSetup(
-			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
-			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
-			MIDIConstant.DEFAULT_VOLUME,
-			(byte)(MIDIConstant.DEFAULT_PAN + 10),
-			"hits/h");
+		final List<MIDISupportTrack> supportTracks = List.of(
+				new MIDISupportTrack(trSetupBytes, pbBytes)
+				);
 
-		final List<MIDIDataMelodyTrack> dataMelody = new ArrayList<>();
+		// Create bars from the normalised data.
+		// Further normalise strength to maximum encountered.
+		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
+			{
+			final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
+			final byte DRUMB = MIDIPercusssionInstrument.HI_MID_TOM.instrument0;
+			final byte DRUMH = MIDIPercusssionInstrument.LOW_MID_TOM.instrument0;
+//			final byte DRUMH = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0;
+			final byte vDRUM = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 
-		// TODO
+			for(int b = 0; b < nHoursPerBar; ++b)
+				{
+				final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
+				// On beat: bytes
+				final float intB = normalisedBytesPerHour[h+b] / normalisedBytesPerHourMax;
+				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+						beatStart,
+						new NoteAndVelocity(DRUMB, (byte) Math.round(vDRUM * intB)),
+						MIDIGen.DEFAULT_CLKSPQTR/2-1));
+				// Off beat: hits
+				final float intH = normalisedHitsPerHour[h+b] / normalisedHitsPerHourMax;
+				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
+						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
+						MIDIGen.DEFAULT_CLKSPQTR/2-1));
+				}
 
+			final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
+			pbBytes.add(bar);
+			}
 
-		// No support track or section plan yet.
-		final List<MIDISupportTrack> supportTracks = Collections.emptyList();
+		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, supportTracks, tsp));
 		}
