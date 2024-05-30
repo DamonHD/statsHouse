@@ -40,8 +40,10 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTra
 	    {
 	    Objects.requireNonNull(dataMelody);
 	    if(dataMelody.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
+	    dataMelody = List.copyOf(dataMelody); // Defensive copy.
 	    Objects.requireNonNull(supportTracks);
 	    if(supportTracks.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
+	    supportTracks = List.copyOf(supportTracks); // Defensive copy.
 	    }
 
     /**Data melody and support track, no plan. */

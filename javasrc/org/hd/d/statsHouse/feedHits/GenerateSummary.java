@@ -46,11 +46,14 @@ public final class GenerateSummary
 	/**Summary type 1; of by-hour data. */
 	public static MIDITune summary1(final List<String> dirnames) throws IOException
 		{
-        // Summary type 1...
-		// By-hour data.
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
 
-
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+		// Hours' data for each bar (must be a factor of 24).
+		final int nHoursPerBar = 4;
+		// Total number of data bars to generate.
+		final int nDataBars = nTotalHours / nHoursPerBar;
 
 
         throw new RuntimeException("NOT IMPLEMENTED");
