@@ -36,12 +36,24 @@ public final class GenerateSummary
 		Objects.requireNonNull(dirnames);
 		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
 
+        switch(summaryType)
+	        {
+	        case 1: summary1(dirnames); break;
 
+	        default: throw new IllegalArgumentException("unknown summary type " + summaryType);
+	        }
+		}
 
+	/**Summary type 1; of by-hour data. */
+	public static void summary1(final List<String> dirnames) throws IOException
+		{
+        // Summary type 1...
+		// By-hour data.
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
 
 
 
-		}
 
+
+		}
     }
