@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2023, Damon Hart-Davis
+Copyright (c) 2023, 2024, Damon Hart-Davis
 
 Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.hd.d.statsHouse.generic;
 /**Cadence of input data: daily, monthly, yearly. */
 public enum DataCadence
     {
+	H(4, 24, 6), // Hourly, with daily cycle over 6 bars.
     D(32, 32, 12), // Also 7 days, or 28 days with a cycle of 13 plus some kinda 1 or 2 day fudge...
     M(12, 12, 0),
     Y(4, 0, 0);
