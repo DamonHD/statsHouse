@@ -62,6 +62,12 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
             final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(nDays,
             		new FileReader(sbh, FeedStatus.CHARSET));
 
+            // Do a little bit of validation of by-hour records.
+            if(fsb.records().size() < 24)
+                { throw new IOException("too few records in "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
+            if(!"00".equals(fsb.records().get(0).index()) || !"23".equals(fsb.records().get(23).index()))
+            	{ throw new IOException("unexpected records in "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
+
             blocks.add(fsb);
 	        }
 

@@ -36,6 +36,8 @@ public final class GenerateSummary
 		Objects.requireNonNull(dirnames);
 		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
 
+
+
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
 
 
