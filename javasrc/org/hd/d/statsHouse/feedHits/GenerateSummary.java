@@ -17,10 +17,14 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse.feedHits;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
+import org.hd.d.statsHouse.generic.TuneSectionPlan;
+import org.hd.d.statsHouse.midi.MIDIDataMelodyTrack;
+import org.hd.d.statsHouse.midi.MIDISupportTrack;
 import org.hd.d.statsHouse.midi.MIDITune;
 
 /**Generate sonification from summary information across 1 or more data blocks.
@@ -55,7 +59,10 @@ public final class GenerateSummary
 		// Total number of data bars to generate.
 		final int nDataBars = nTotalHours / nHoursPerBar;
 
+		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
+		final List<MIDISupportTrack> supportTracks = Collections.emptyList();
+		final TuneSectionPlan tsp = null;
 
-        throw new RuntimeException("NOT IMPLEMENTED");
+		return(new MIDITune(dataMelody, supportTracks, tsp));
 		}
     }
