@@ -17,7 +17,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse.feedHits.data;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +43,7 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 	/**Construct FeedStatusBlocks from an ordered list of directory names.
 	 * @throws IOException
 	 */
-	public static FeedStatusBlocks loadFromDirs(final List<String> dirnames) throws IOException
+	public static FeedStatusBlocks loadStatusByHourFromDirs(final List<String> dirnames) throws IOException
 		{
 		Objects.requireNonNull(dirnames);
 		final List <FeedStatusBlock> blocks = new ArrayList<>(dirnames.size());
@@ -55,12 +57,13 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 	        if(!id.isFile()) { throw new IOException("no "+INTERVAL_DAYS_FILENAME+" file in directory: " + dn); }
 	        final File sbh = new File(d, STATUS_BY_HOUR_FILENAME);
 	        if(!sbh.isFile()) { throw new IOException("no "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
+
+	        final int nDays = Integer.parseInt(Files.readString(id.toPath(), FeedStatus.CHARSET), 10);
+            final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(nDays,
+            		new FileReader(sbh, FeedStatus.CHARSET));
+
+            blocks.add(fsb);
 	        }
-
-        // TODO
-
-
-
 
         return(new FeedStatusBlocks(blocks));
 		}
