@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
+import org.hd.d.statsHouse.midi.MIDITune;
 
 /**Generate sonification from summary information across 1 or more data blocks.
  */
@@ -30,22 +31,20 @@ public final class GenerateSummary
 	 * @param summaryType  type of summary to generate (small +ve int)
 	 * @param dirnames  names of directories to extract data from
 	 */
-	public static void summary(final int summaryType, final List<String> dirnames)
+	public static MIDITune summary(final int summaryType, final List<String> dirnames)
 	    throws IOException
 		{
 		Objects.requireNonNull(dirnames);
 		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
 
-        switch(summaryType)
-	        {
-	        case 1: summary1(dirnames); break;
-
-	        default: throw new IllegalArgumentException("unknown summary type " + summaryType);
-	        }
+        return switch (summaryType) {
+		case 1 -> (summary1(dirnames));
+		default -> throw new IllegalArgumentException("unknown summary type " + summaryType);
+		};
 		}
 
 	/**Summary type 1; of by-hour data. */
-	public static void summary1(final List<String> dirnames) throws IOException
+	public static MIDITune summary1(final List<String> dirnames) throws IOException
 		{
         // Summary type 1...
 		// By-hour data.
@@ -54,6 +53,6 @@ public final class GenerateSummary
 
 
 
-
+        throw new RuntimeException("NOT IMPLEMENTED");
 		}
     }
