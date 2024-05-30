@@ -32,8 +32,7 @@ public final class GenerateSummary
 		Objects.requireNonNull(dirnames);
 		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
 
-
-
+//		List<FeedStatusBlock> blocks =
 
 		}
 

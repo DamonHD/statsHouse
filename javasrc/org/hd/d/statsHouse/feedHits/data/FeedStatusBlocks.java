@@ -16,6 +16,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.feedHits.data;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,4 +32,26 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 		Objects.nonNull(blocks);
 		blocks = List.copyOf(blocks); // Defensive copy to enforce immutability.
 	    }
+
+	/**Construct FeedStatusBlocks from an ordered list of directory names.
+	 * @throws IOException
+	 */
+	public static FeedStatusBlocks loadFromDirs(final List<String> dirnames) throws IOException
+		{
+		Objects.requireNonNull(dirnames);
+		final List <FeedStatusBlock> blocks = new ArrayList<>(dirnames.size());
+
+        for(final String dn : dirnames)
+	        {
+	        final File d = new File(dn);
+	        if(!d.isDirectory()) { throw new IOException("not a directory: " + dn); }
+	        }
+
+        // TODO
+
+
+
+
+        return(new FeedStatusBlocks(blocks));
+		}
 	}
