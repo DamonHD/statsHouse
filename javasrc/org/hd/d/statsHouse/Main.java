@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -34,7 +35,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioFileFormat;
@@ -44,6 +47,7 @@ import javax.sound.sampled.AudioSystem;
 import org.hd.d.statsHouse.data.DataBounds;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.data.FileUtils;
+import org.hd.d.statsHouse.feedHits.GenerateSummary;
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIGen;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -65,6 +69,7 @@ public final class Main
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
+        System.err.println("  -feedHitsSummary -play|<outfilename>.mid <typeN> {feedHitsDataDir}*");
         GenerationParameters.printOptions();
     	System.err.println();
         System.err.println("    This syntax may be used, one per line, in the command file.");
@@ -173,10 +178,27 @@ public final class Main
 			if(argCount < 2)
 			    { throw new IllegalArgumentException("too few arguments: at least input.csv and -play or output.csv or output.mid required"); }
 
-		    final String inputFileName = cmdline.get(0);
-		    final String outputFileName = cmdline.get(1);
-
 		    try {
+	            if("-feedHitsSummary".equals(cmdline.get(0)))
+		            {
+		            // feedHits integration
+					if(argCount < 4) { throw new IllegalArgumentException("too few arguments to -feedHitsSummary"); }
+				    final String outputFileName = cmdline.get(1);
+					final MIDITune mt = GenerateSummary.summary(Integer.parseInt(cmdline.get(2), 10), cmdline.subList(3, cmdline.size()));
+
+					final Sequence s = MIDIGen.genFromTuneSequence(mt, null, null);
+
+					// Play it immediately!
+					if("-play".equals(outputFileName))
+					    { playIt(s); }
+					else
+						{ saveIt(s, outputFileName); }
+
+	            	continue;
+		            }
+
+			    final String inputFileName = cmdline.get(0);
+			    final String outputFileName = cmdline.get(1);
 				// Remaining optional args determine GenerationParameters.
 				// Use the final component of the input file name as the tune name.
 				// TODO strip extension
@@ -241,24 +263,25 @@ public final class Main
 				    	}
 					else if("-play".equals(outputFileName))
 				    	{
-				    	// Get default sequencer.
-				    	try(final Sequencer sequencer = MidiSystem.getSequencer())
-					    	{
-					    	if(null == sequencer)
-					    	    {
-					    		throw new UnsupportedOperationException("MIDI sequencer not available.");
-					    	    }
-
-				    	    // Acquire resources and make operational.
-				    	    sequencer.open();
-
-				            sequencer.setSequence(s);
-				            final long usLength = sequencer.getMicrosecondLength();
-				        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
-				            sequencer.start();
-				            while(sequencer.isRunning()) { Thread.sleep(1000); }
-				            Thread.sleep(1000); // Allow for some graceful decay of the sound!
-					    	}
+						playIt(s);
+//				    	// Get default sequencer.
+//				    	try(final Sequencer sequencer = MidiSystem.getSequencer())
+//					    	{
+//					    	if(null == sequencer)
+//					    	    {
+//					    		throw new UnsupportedOperationException("MIDI sequencer not available.");
+//					    	    }
+//
+//				    	    // Acquire resources and make operational.
+//				    	    sequencer.open();
+//
+//				            sequencer.setSequence(s);
+//				            final long usLength = sequencer.getMicrosecondLength();
+//				        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
+//				            sequencer.start();
+//				            while(sequencer.isRunning()) { Thread.sleep(1000); }
+//				            Thread.sleep(1000); // Allow for some graceful decay of the sound!
+//					    	}
 				    	}
 					else
 				    	{
@@ -269,9 +292,52 @@ public final class Main
 		    catch(final Exception e)
 		        {
 				e.printStackTrace();
-		    	throw new RuntimeException("failed processing input " + inputFileName, e);
+		    	throw new RuntimeException("failed processing command " + cmdline, e);
 				}
 			}
+		}
+
+	/**Save the MIDI sequence; never null.
+	 * @throws InvalidMidiDataException
+	 * @throws IOException
+	 */
+	private static final void saveIt(final Sequence s, final String outputFileName)
+		throws InvalidMidiDataException, IOException
+		{
+		// Generate MIDI binary file.
+    	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(256))
+        	{
+        	MidiSystem.write(s, MIDIConstant.PREFERRED_MIDI_FILETYPE, baos);
+    		FileUtils.replacePublishedFile(outputFileName, baos.toByteArray(), true);
+        	}
+		}
+
+	/**Play the MIDI Sequence; never null.
+	 * @throws InvalidMidiDataException
+	 * @throws MidiUnavailableException
+	 * @throws InterruptedException
+	 */
+	private static final void playIt(final Sequence s)
+		throws InvalidMidiDataException, MidiUnavailableException, InterruptedException
+		{
+    	// Get default sequencer.
+    	try(final Sequencer sequencer = MidiSystem.getSequencer())
+	    	{
+	    	if(null == sequencer)
+	    	    {
+	    		throw new UnsupportedOperationException("MIDI sequencer not available.");
+	    	    }
+
+    	    // Acquire resources and make operational.
+    	    sequencer.open();
+
+            sequencer.setSequence(s);
+            final long usLength = sequencer.getMicrosecondLength();
+        	System.out.println(String.format("INFO: duration %.1fs...", usLength / 1_000_000f));
+            sequencer.start();
+            while(sequencer.isRunning()) { Thread.sleep(1000); }
+            Thread.sleep(1000); // Allow for some graceful decay of the sound!
+	    	}
 		}
 
 	/**Get version number as a.b.c String, else null if not available. */

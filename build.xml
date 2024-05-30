@@ -34,12 +34,16 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="app.name" value="statsHouse"/>
     <property name="app.version.major" value="5"/>
     <property name="app.version.minor" value="3"/>
-    <property name="app.version.micro" value="0"/>
+    <property name="app.version.micro" value="1"/>
     <property name="app.version" value="${app.version.major}.${app.version.minor}.${app.version.micro}"/>
     <!-- Version excluding the "micro" portion, thus reflecting only significant API/functionality changes. -->
     <property name="app.version.notmicro" value="${app.version.major}.${app.version.minor}"/>
 
+	<!-- Optimised JAR -->
     <property name="dist.jar" value="${app.name}-${app.version}.jar"/>
+	<!-- Optimised minified JAR for core statsHouse only -->
+    <property name="shdist.jar" value="${app.name}-${app.version}.min.jar"/>
+
 
     <!-- Target/minimum JDK/JSE version for build and run. -->
     <property name="JDKVER" value="18"/>
@@ -204,14 +208,14 @@ Licensed under the Apache License, Version 2.0 (the "License");
     </target>
 
     <!-- Super-optimised and shrunk org.hd.d.statsHouse.Main JAR -->
-    <target name="core.jar.edhMainsuperopt"
+    <target name="core.jar.shMainsuperopt"
         depends="core.jar.opt"
         description="builds the shrunk optimised/release org.hd.d.statsHouse.Main JAR">
     	<proguard
     		verbose="true">
 		    <!-- -printconfiguration -->
 		    -injars      ${build.dir.opt}/${dist.jar}
-		    -outjars     ${build.dir.opt}/${app.name}Main.${dist.jar}
+		    -outjars     ${build.dir.opt}/${shdist.jar}
 		    -libraryjars ${java.home}/jmods/java.base.jmod(!**.jar;!module-info.class)
 		    -libraryjars ${java.home}/jmods/java.desktop.jmod(!**.jar;!module-info.class)
     		<!--
@@ -232,13 +236,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
     		-dontobfuscate <!-- leave all class/method names etc for easiest debugging -->
             -keepattributes SourceFile,LineNumberTable <!-- Keep minimum for exception debugging. -->
     	</proguard>
-        <echo message="Release org.hd.d.statsHouse.Main JAR now at ${build.dir.opt}/statsHouseMain.${dist.jar} ..." />   
+        <echo message="Release org.hd.d.statsHouse.Main JAR now at ${build.dir.opt}/${shdist.jar} ..." />   
     </target>
 
-
-	
-	
-	
 	
 	
     <!-- =================================================================== -->
@@ -337,12 +337,12 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <!-- Builds debug and optimised code from scratch, and tests it.         -->
     <!-- =================================================================== -->
     <target name="all"
-    	depends="clean,core.test.opt,core.jar.opt,core.jar.edhMainsuperopt"
+    	depends="clean,core.test.opt,core.jar.opt,core.jar.shMainsuperopt"
         description="cleans, then does optimised/release build and test">
         <echo message="Builds and tests complete."/>
     </target>
     <!-- depends="clean,core.jar.opt,src.snapshot" -->
-    <!-- depends="clean,core.jar.opt,core.jar.edhMainsuperopt,src.snapshot" -->
+    <!-- depends="clean,core.jar.opt,core.jar.shMainsuperopt,src.snapshot" -->
 
     <!-- =================================================================== -->
     <!-- Cleans up generated intermediate stuff                              -->

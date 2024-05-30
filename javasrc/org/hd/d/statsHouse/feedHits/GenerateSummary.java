@@ -99,7 +99,7 @@ public final class GenerateSummary
 			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
 			MIDIConstant.DEFAULT_VOLUME,
 			(MIDIConstant.DEFAULT_PAN),
-			"hits and bytes per hour");
+			"bytes&hits by hour");
 		// Bytes-per-hour track.
 		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
 
@@ -130,7 +130,7 @@ public final class GenerateSummary
 						MIDIGen.DEFAULT_CLKSPQTR/2-1));
 				// Off beat: hits
 				final float intH = normalisedHitsPerHour[h+b] / normalisedHitsPerHourMax;
-System.out.println(intH);
+//System.out.println(intH);
 				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
 						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
