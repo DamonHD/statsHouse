@@ -17,19 +17,23 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package org.hd.d.statsHouse.feedHits;
 
 import java.util.List;
+import java.util.Objects;
 
 /**Generate sonification from summary information across 1 or more data blocks.
  */
 public final class GenerateSummary
     {
 	/**Generate sonification from summary information across 1 or more data blocks.
-	 * If no directory names are supplied then a built-in data set may be used.
 	 * @param summaryType  type of summary to generate (small +ve int)
 	 * @param dirnames  names of directories to extract data from
 	 */
 	public static void summary(final int summaryType, final List<String> dirnames)
 		{
-			// TODO Auto-generated method stub
+		Objects.requireNonNull(dirnames);
+		if(dirnames.isEmpty()) { throw new IllegalArgumentException(); }
+
+
+
 
 		}
 

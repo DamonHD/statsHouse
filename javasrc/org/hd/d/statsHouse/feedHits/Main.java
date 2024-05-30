@@ -156,7 +156,7 @@ public final class Main
 			    	{
 			    	case "-summary":
 			    		{
-						if(argCount < 2) { throw new IllegalArgumentException("too few arguments to -summary"); }
+						if(argCount < 3) { throw new IllegalArgumentException("too few arguments to -summary"); }
 						GenerateSummary.summary(Integer.parseInt(cmdline.get(1), 10), cmdline.subList(2, cmdline.size()));
 						break;
 			    		}
