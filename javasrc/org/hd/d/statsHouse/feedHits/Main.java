@@ -130,18 +130,6 @@ public final class Main
         System.exit(1);
         }
 
-//    /**Convert input filename to tune name; never null.
-//     * Discard any path and and trailing ".csv" parts.
-//     */
-//    public static String filenameToTuneName(final String filename)
-//	    {
-//	    Objects.requireNonNull(filename);
-//	    final String basename = (new File(filename)).getName();
-//	    if(basename.endsWith(".csv"))
-//	    	{ return(basename.substring(0, basename.length()-4)); }
-//	    return(basename);
-//	    }
-
     /**Run zero or more command lines, aborting with an exception in case of error.
      * Any caught exception is rethrown as a RuntimeException, wrapped in some extra context.
      *
