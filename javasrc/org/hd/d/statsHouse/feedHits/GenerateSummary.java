@@ -64,19 +64,25 @@ public final class GenerateSummary
 		final int nDataBars = nTotalHours / nHoursPerBar;
 
 		// Compute hits and bytes per hour, normalising by the days in each block.
+		// Capture maximum normalised value of each also.
 		final float[] normalisedHitsPerHour = new float[nTotalHours];
 		final float[] normalisedBytesPerHour = new float[nTotalHours];
+		float normalisedHitsPerHourMax = 0;
+		float normalisedBytesPerHourMax = 0;
 		int hourIndex = 0;
 		for(final FeedStatusBlock fsb : fsbs.blocks())
 			{
 			final int nDays = fsb.nDays();
 			final float nDaysF = nDays;
-
 			// For the 24h in each block.
 			for(int h = 0; h < 24; ++h)
 				{
-				normalisedHitsPerHour[hourIndex] = fsb.records().get(h).hits() / nDaysF;
-				normalisedBytesPerHour[hourIndex] = fsb.records().get(h).bytes() / nDaysF;
+				final float nh = fsb.records().get(h).hits() / nDaysF;
+				final float nb = fsb.records().get(h).bytes() / nDaysF;
+				normalisedHitsPerHour[hourIndex] = nh;
+				normalisedBytesPerHour[hourIndex] = nb;
+				if(nh > normalisedHitsPerHourMax) { normalisedHitsPerHourMax = nh; }
+				if(nb > normalisedBytesPerHourMax) { normalisedBytesPerHourMax = nb; }
 				++hourIndex;
 				}
 			}
