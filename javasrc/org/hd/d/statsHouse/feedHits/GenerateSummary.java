@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.hd.d.statsHouse.feedHits.data.FeedStatusBlock;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
 import org.hd.d.statsHouse.generic.TuneSectionPlan;
 import org.hd.d.statsHouse.midi.MIDIConstant;
@@ -61,6 +62,25 @@ public final class GenerateSummary
 		final int nHoursPerBar = 4;
 		// Total number of data bars to generate.
 		final int nDataBars = nTotalHours / nHoursPerBar;
+
+		// Compute hits and bytes per hour, normalising by the days in each block.
+		final float[] normalisedHitsPerHour = new float[nTotalHours];
+		final float[] normalisedBytesPerHour = new float[nTotalHours];
+		int hourIndex = 0;
+		for(final FeedStatusBlock fsb : fsbs.blocks())
+			{
+			final int nDays = fsb.nDays();
+			final float nDaysF = nDays;
+
+			// For the 24h in each block.
+			for(int h = 0; h < 24; ++h)
+				{
+				normalisedHitsPerHour[hourIndex] = fsb.records().get(h).hits() / nDaysF;
+				normalisedBytesPerHour[hourIndex] = fsb.records().get(h).bytes() / nDaysF;
+				++hourIndex;
+				}
+			}
+
 
 		// Setup for the bytes-per-hour track.
 		final MIDITrackSetup trSetupBytes = new MIDITrackSetup(
