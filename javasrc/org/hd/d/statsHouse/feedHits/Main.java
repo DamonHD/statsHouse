@@ -147,15 +147,23 @@ public final class Main
 
 		    final File outputFileName = DEFAULT_OUT_MIDI;
 
+		    System.out.println("INFO: command: " +
+			        (++cmdCount) + "/" + (cmdlines.size()) + ": " +
+			        Arrays.toString(cmdline.toArray()));
+
 		    try {
-		    	for(final List<String> cmd : cmdlines)
+		    	switch(cmdline.get(0))
 			    	{
-					System.out.println("INFO: command: " +
-					        (++cmdCount) + "/" + (cmdlines.size()) + ": " +
-					        Arrays.toString(cmdline.toArray()));
+			    	case "-summary":
+			    		{
+						if(argCount < 2) { throw new IllegalArgumentException("too few arguments to -summary"); }
+						GenerateSummary.summary(Integer.parseInt(cmdline.get(1), 10), cmdline.subList(2, cmdline.size()));
+						break;
+			    		}
+
+		    		default:
+		    			throw new IllegalArgumentException("Command/switch not recognised: " + cmdline.get(0));
 			    	}
-
-
 				}
 		    catch(final Exception e)
 		        {
