@@ -123,12 +123,14 @@ public final class GenerateSummary
 				final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
 				// On beat: bytes
 				final float intB = normalisedBytesPerHour[h+b] / normalisedBytesPerHourMax;
+//System.out.println(intB);
 				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 						beatStart,
 						new NoteAndVelocity(DRUMB, (byte) Math.round(vDRUM * intB)),
 						MIDIGen.DEFAULT_CLKSPQTR/2-1));
 				// Off beat: hits
 				final float intH = normalisedHitsPerHour[h+b] / normalisedHitsPerHourMax;
+System.out.println(intH);
 				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
 						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
