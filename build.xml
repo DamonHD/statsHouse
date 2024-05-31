@@ -34,7 +34,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
     <property name="app.name" value="statsHouse"/>
     <property name="app.version.major" value="5"/>
     <property name="app.version.minor" value="3"/>
-    <property name="app.version.micro" value="1"/>
+    <property name="app.version.micro" value="2"/>
     <property name="app.version" value="${app.version.major}.${app.version.minor}.${app.version.micro}"/>
     <!-- Version excluding the "micro" portion, thus reflecting only significant API/functionality changes. -->
     <property name="app.version.notmicro" value="${app.version.major}.${app.version.minor}"/>

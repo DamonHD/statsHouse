@@ -13,7 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20240531: -feedHitsSummary type 1 now uses lower tom in skipHours.
     
 
 
@@ -23,6 +22,12 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
 RELEASES
 ========
+
+20240531:
+    freezepoint name: V5.3.2 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    DHD20240531: -feedHitsSummary type 1 now uses lower tom in skipHours.
+
 
 20240530:
     freezepoint name: V5.3.1 (main)
