@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.hd.d.statsHouse.feedHits.data.FeedStatus;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlock;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
@@ -75,6 +76,9 @@ public final class GenerateSummary
 		final float[] normalisedBytesPerHour = new float[nTotalHours];
 		float normalisedHitsPerHourMax = 0;
 		float normalisedBytesPerHourMax = 0;
+		// Capture skipHours.
+		final boolean[] isSkipHour = new boolean[nTotalHours];
+
 		int hourIndex = 0;
 		for(final FeedStatusBlock fsb : fsbs.blocks())
 			{
@@ -83,12 +87,24 @@ public final class GenerateSummary
 			// For the 24h in each block.
 			for(int h = 0; h < 24; ++h)
 				{
-				final float nh = fsb.records().get(h).hits() / nDaysF;
-				final float nb = fsb.records().get(h).bytes() / nDaysF;
+				final FeedStatus feedStatus = fsb.records().get(h);
+				final float nh = feedStatus.hits() / nDaysF;
+				final float nb = feedStatus.bytes() / nDaysF;
 				normalisedHitsPerHour[hourIndex] = nh;
 				normalisedBytesPerHour[hourIndex] = nb;
 				if(nh > normalisedHitsPerHourMax) { normalisedHitsPerHourMax = nh; }
 				if(nb > normalisedBytesPerHourMax) { normalisedBytesPerHourMax = nb; }
+
+				// Is a skipHour if non-zero "SH" hits
+				// OR "SH" key absent and time >=22:00 and < 08:00.
+                final Integer hitsHS = feedStatus.getColsMap().get("SH");
+                if(null != hitsHS) { if(hitsHS > 0) { isSkipHour[hourIndex] = true; } }
+                else
+                	{
+                	final int hourOfDay = hourIndex % 24;
+                	if((hourOfDay < 8) || (hourOfDay >= 22)) { isSkipHour[hourIndex] = true; }
+                	}
+
 				++hourIndex;
 				}
 			}
@@ -114,22 +130,28 @@ public final class GenerateSummary
 			final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
 
 			final byte DRUMB = MIDIPercusssionInstrument.HI_MID_TOM.instrument0;
-			final byte DRUMH = MIDIPercusssionInstrument.LOW_MID_TOM.instrument0;
-//			final byte DRUMH = MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0;
 			final byte vDRUM = MIDIGen.DEFAULT_MAX_MELODY_VELOCITY;
 
 			for(int b = 0; b < nHoursPerBar; ++b)
 				{
+				final int hour = h+b;
+
+				// Push hits tone even lower in skip hours.
+				final byte DRUMH = (isSkipHour[h+b] ?
+						MIDIPercusssionInstrument.LOW_TOM :
+						MIDIPercusssionInstrument.LOW_MID_TOM)
+						.instrument0;
+
 				final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
 				// On beat: bytes
-				final float intB = normalisedBytesPerHour[h+b] / normalisedBytesPerHourMax;
+				final float intB = normalisedBytesPerHour[hour] / normalisedBytesPerHourMax;
 //System.out.println(intB);
 				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 						beatStart,
 						new NoteAndVelocity(DRUMB, (byte) Math.round(vDRUM * intB)),
 						MIDIGen.DEFAULT_CLKSPQTR/2-1));
 				// Off beat: hits
-				final float intH = normalisedHitsPerHour[h+b] / normalisedHitsPerHourMax;
+				final float intH = normalisedHitsPerHour[hour] / normalisedHitsPerHourMax;
 //System.out.println(intH);
 				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
 						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,

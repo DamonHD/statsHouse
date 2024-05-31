@@ -13,6 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
+    DHD20240531: -feedHitsSummary type 1 uses lower tom in skipHours.
     
 
 

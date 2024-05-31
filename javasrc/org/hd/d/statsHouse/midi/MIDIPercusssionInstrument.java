@@ -37,8 +37,12 @@ public enum MIDIPercusssionInstrument
 
 	OPEN_HI_HAT(46),
 
+	LOW_FLOOR_TOM(41),
+	HIGH_FLOOR_TOM(43),
+	LOW_TOM(45),
 	LOW_MID_TOM(47),
-	HI_MID_TOM(48);
+	HI_MID_TOM(48),
+	HI_TOM(50);
 
 	/**Raw zero-based instrument number. */
 	public final byte instrument0;
