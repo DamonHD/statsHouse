@@ -71,6 +71,10 @@ public final class GenerateSummary
 		// Total number of data bars to generate.
 		final int nDataBars = nTotalHours / nHoursPerBar;
 
+
+		// Data for the data visualisation.
+        final List<List<Float>> dataRendered = new ArrayList<>(nDataBars);
+
 		// Compute hits and bytes per hour, normalising by the days in each block.
 		// Capture maximum normalised value of each also.
 		final float[] normalisedHitsPerHour = new float[nTotalHours];
@@ -158,6 +162,13 @@ public final class GenerateSummary
 						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
 						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
 						MIDIGen.DEFAULT_CLKSPQTR/2-1));
+
+				// Capture for visualisation.
+				final List<Float> d = List.of(
+					normalisedBytesPerHour[hour],
+					normalisedHitsPerHour[hour]
+					);
+				dataRendered.add(d);
 				}
 
 			final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
@@ -166,8 +177,7 @@ public final class GenerateSummary
 
 		// Set up the data visualisation.
 		final List<String> dataLabels = List.of("bytes/h", "hits/h");
-        final List<List<Float>> dataRendered = Collections.emptyList();
-        final DataVizBeatPoint dv = new DataVizBeatPoint(0, 2, dataLabels, dataRendered);
+        final DataVizBeatPoint dv = new DataVizBeatPoint(nDataBars, dataLabels.size(), dataLabels, dataRendered);
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
