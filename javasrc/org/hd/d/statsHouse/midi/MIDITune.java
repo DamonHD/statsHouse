@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.hd.d.statsHouse.data.DataVizBeatPoint;
 import org.hd.d.statsHouse.generic.TuneSectionPlan;
 
 /**A representation of a full MIDI 'tune' created from data.
@@ -35,15 +36,13 @@ import org.hd.d.statsHouse.generic.TuneSectionPlan;
  *     may be null
  * @param dataLabels  column labels for dataRendered (not containing nulls or commas);
  *     may be null
- * @param dataRendered  the set of key data as rendered in the tune,
- *     with the outer List usually one item per bar beat,
- *     and the inner list an ordered list of the key items rendered in that beat maybe normalised;
+ * @param dataRendered  the set of key data as rendered in the tune;
  *     may be null
  */
 public record MIDITune(List<MIDIDataMelodyTrack> dataMelody,
 		      List<MIDISupportTrack> supportTracks,
 		      TuneSectionPlan plan,
-		      List<String> dataLabels, List<List<Float>> dataRendered)
+		      DataVizBeatPoint dataRendered)
     {
     public MIDITune
 	    {
@@ -53,7 +52,6 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody,
 	    Objects.requireNonNull(supportTracks);
 	    if(supportTracks.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
 	    supportTracks = List.copyOf(supportTracks); // Defensive copy.
-	    if(null != dataLabels) { dataLabels = List.copyOf(dataLabels); } // Defensive copy.
 	    }
 
     /**Data melody and support track and plan, no rendered data. */
@@ -61,7 +59,7 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody,
 		final List<MIDIDataMelodyTrack> dataMelody,
 		final List<MIDISupportTrack> supportTracks,
 		final TuneSectionPlan plan)
-        { this(dataMelody, supportTracks, plan, null, null); }
+        { this(dataMelody, supportTracks, plan, null); }
 
     /**Data melody and support track, no plan nor rendered data. */
     public MIDITune(

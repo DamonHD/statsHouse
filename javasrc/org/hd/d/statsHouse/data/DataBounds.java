@@ -24,7 +24,7 @@ package org.hd.d.statsHouse.data;
  *     0 for no such main stream, 1+ for stream, possibly larger than streams
  * @param maxVal  maximum (non-zero) value in the data; non-negative.
  * @param firstDate  first data row date as raw String; can be null
- * @param lkastDate  last data row date as raw String; can be null
+ * @param lastDate  last data row date as raw String; can be null
  */
 public record DataBounds(int streams, int mainDataStream, float maxVal, String firstDate, String lastDate)
 	{
