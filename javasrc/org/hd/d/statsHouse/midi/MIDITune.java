@@ -33,8 +33,17 @@ import org.hd.d.statsHouse.generic.TuneSectionPlan;
  *     non-null, and no null entries but may be empty
  * @param plan  the section plan which should cover the whole melody at least if present;
  *     may be null
+ * @param dataLabels  column labels for dataRendered (not containing nulls or commas);
+ *     may be null
+ * @param dataRendered  the set of key data as rendered in the tune,
+ *     with the outer List usually one item per bar beat,
+ *     and the inner list an ordered list of the key items rendered in that beat maybe normalised;
+ *     may be null
  */
-public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTrack> supportTracks, TuneSectionPlan plan)
+public record MIDITune(List<MIDIDataMelodyTrack> dataMelody,
+		      List<MIDISupportTrack> supportTracks,
+		      TuneSectionPlan plan,
+		      List<String> dataLabels, List<List<Float>> dataRendered)
     {
     public MIDITune
 	    {
@@ -44,13 +53,26 @@ public record MIDITune(List<MIDIDataMelodyTrack> dataMelody, List<MIDISupportTra
 	    Objects.requireNonNull(supportTracks);
 	    if(supportTracks.stream().anyMatch(t -> t == null)) { throw new IllegalArgumentException(); }
 	    supportTracks = List.copyOf(supportTracks); // Defensive copy.
+	    if(null != dataLabels) { dataLabels = List.copyOf(dataLabels); } // Defensive copy.
 	    }
 
-    /**Data melody and support track, no plan. */
-    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody, final List<MIDISupportTrack> supportTracks) { this(dataMelody, supportTracks, null); }
+    /**Data melody and support track and plan, no rendered data. */
+    public MIDITune(
+		final List<MIDIDataMelodyTrack> dataMelody,
+		final List<MIDISupportTrack> supportTracks,
+		final TuneSectionPlan plan)
+        { this(dataMelody, supportTracks, plan, null, null); }
 
-    /**Bare data melody, no support nor plan. */
-    public MIDITune(final List<MIDIDataMelodyTrack> dataMelody) { this(dataMelody, Collections.emptyList()); }
+    /**Data melody and support track, no plan nor rendered data. */
+    public MIDITune(
+		final List<MIDIDataMelodyTrack> dataMelody,
+		final List<MIDISupportTrack> supportTracks)
+        { this(dataMelody, supportTracks, null); }
+
+    /**Bare data melody, no support nor plan nor rendered data. */
+    public MIDITune(
+		final List<MIDIDataMelodyTrack> dataMelody)
+        { this(dataMelody, Collections.emptyList()); }
 
     /**Empty tune. */
     public MIDITune() { this(Collections.emptyList()); }

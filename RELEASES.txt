@@ -13,7 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    
+    DHD20240604: added optional dataLabels and dataRendered to MIDITune.
 
 
 
