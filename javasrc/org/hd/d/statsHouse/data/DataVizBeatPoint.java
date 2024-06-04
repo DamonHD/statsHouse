@@ -74,9 +74,13 @@ public record DataVizBeatPoint(
 	    {
         Objects.requireNonNull(w);
 
+        final boolean hasBeatLabels = (null != beatLabels) && (!beatLabels.isEmpty());
+
         // Write data column labels, if any.
         if(null != dataLabels)
 	        {
+        	// Start with beatLabel 'label' if any.
+        	if(hasBeatLabels) { w.append("beat"); if(nColumns > 0) { w.write(commaSep ? ',' : ' '); } }
 	        // Write column headings.
         	// Convert any commas and spaces to underscores to avoid ambiguity.
         	// A null label becomes a single non-empty place-holder value.
@@ -92,8 +96,17 @@ public record DataVizBeatPoint(
 	        }
 
         // Write beat vector data rows.
+        int row = 0;
         for(final List<Float> b : dataRendered)
         	{
+        	// Start with beatLabel 'label' if any.
+        	if(hasBeatLabels)
+        	    {
+        		final String bl = beatLabels.get(row);
+        		w.append((null == bl)? PlaceholderValue : bl);
+        		if(nColumns > 0) { w.write(commaSep ? ',' : ' '); }
+        		}
+
         	if(null != b)
 	        	{
 		    	for(int c = 0; c < nColumns; ++c)
@@ -104,6 +117,7 @@ public record DataVizBeatPoint(
 			    	}
 	        	}
         	w.write('\n');
+        	row++;
 		    }
 
         w.flush();
