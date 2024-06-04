@@ -16,11 +16,13 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**Data Visualisation for a data point per simple (typically 4/4) beat.
  *
- * @param dataLabels  column labels for dataRendered (not containing nulls or commas);
+ * @param dataLabels  column labels for dataRendered (may contain nulls);
  *     may be null
  * @param dataRendered  the set of key data as rendered in the tune,
  *     with the outer List usually one item per bar beat,
@@ -28,12 +30,17 @@ import java.util.List;
  *     may be null
  */
 public record DataVizBeatPoint(
+		int nPoints,
+		int nColumns,
         List<String> dataLabels,
         List<List<Float>> dataRendered
 		)
 	{
     public DataVizBeatPoint
 	    {
-	    if(null != dataLabels) { dataLabels = List.copyOf(dataLabels); } // Defensive copy.
+    	if(nPoints < 0) { throw new IllegalArgumentException(); }
+    	if(nColumns < 0) { throw new IllegalArgumentException(); }
+    	if((null != dataLabels) && (nColumns != dataLabels.size())) { throw new IllegalArgumentException(); }
+	    if(null != dataLabels) { dataLabels = Collections.unmodifiableList(new ArrayList<>(dataLabels)); } // Defensive copy.
 	    }
 	}
