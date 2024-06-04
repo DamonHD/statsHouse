@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**Data Visualisation for a data point per simple (typically 4/4) beat.
+/**Data Visualisation for a data point vector per simple (typically 4/4) beat.
  *
  * @param dataLabels  column labels for dataRendered (may contain nulls);
  *     may be null
@@ -30,7 +30,7 @@ import java.util.List;
  *     may be null
  */
 public record DataVizBeatPoint(
-		int nPoints,
+		int nBeats,
 		int nColumns,
         List<String> dataLabels,
         List<List<Float>> dataRendered
@@ -38,7 +38,7 @@ public record DataVizBeatPoint(
 	{
     public DataVizBeatPoint
 	    {
-    	if(nPoints < 0) { throw new IllegalArgumentException(); }
+    	if(nBeats < 0) { throw new IllegalArgumentException(); }
     	if(nColumns < 0) { throw new IllegalArgumentException(); }
     	if((null != dataLabels) && (nColumns != dataLabels.size())) { throw new IllegalArgumentException(); }
 	    if(null != dataLabels) { dataLabels = Collections.unmodifiableList(new ArrayList<>(dataLabels)); } // Defensive copy.
