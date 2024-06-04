@@ -62,10 +62,14 @@ public record DataVizBeatPoint(
      * The first line may optionally be labels if dataLabels is not null.
      * <p>
      * Values in a record may be separated by spaces or commas.
+     * <p>
+     * Finishes with a flush() to avoid surprises!
      */
     public void write(final Writer w, final boolean commaSep) throws IOException
 	    {
         Objects.requireNonNull(w);
+
+        // Write data column labels, if any.
         if(null != dataLabels)
 	        {
 	        // Write column headings.
@@ -78,8 +82,8 @@ public record DataVizBeatPoint(
 	        	else { label = label.replace(',', PlaceholderChar).replace(' ', PlaceholderChar); }
                 if(c > 0) { w.write(commaSep ? ',' : ' '); }
 	        	w.append(label);
-	        	w.write('\n');
 	        	}
+        	w.write('\n');
 	        }
 
         // Write beat vector data rows.
@@ -96,5 +100,7 @@ public record DataVizBeatPoint(
 	        	}
         	w.write('\n');
 		    }
+
+        w.flush();
 	    }
 	}

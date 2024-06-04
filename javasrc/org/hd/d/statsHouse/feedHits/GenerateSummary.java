@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.hd.d.statsHouse.data.DataVizBeatPoint;
 import org.hd.d.statsHouse.feedHits.data.FeedStatus;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlock;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
@@ -163,8 +164,13 @@ public final class GenerateSummary
 			pbBytes.add(bar);
 			}
 
+		// Set up the data visualisation.
+		final List<String> dataLabels = List.of("bytes/h", "hits/h");
+        final List<List<Float>> dataRendered = Collections.emptyList();
+        final DataVizBeatPoint dv = new DataVizBeatPoint(0, 2, dataLabels, dataRendered);
+
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
-		return(new MIDITune(dataMelody, supportTracks, tsp));
+		return(new MIDITune(dataMelody, supportTracks, tsp, dv));
 		}
     }

@@ -92,7 +92,7 @@ public final class FileUtils
         {
         if((name == null) || (name.length() == 0))
             { throw new IOException("inappropriate file name"); }
-        if((data == null) || (data.length == 0))
+        if((data == null) /* || (data.length == 0) */ )
             { throw new IOException("inappropriate file content"); }
 
         final File extant = new File(name);

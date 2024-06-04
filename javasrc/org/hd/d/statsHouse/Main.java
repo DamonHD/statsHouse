@@ -45,6 +45,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import org.hd.d.statsHouse.data.DataBounds;
+import org.hd.d.statsHouse.data.DataVizBeatPoint;
 import org.hd.d.statsHouse.data.EOUDataCSV;
 import org.hd.d.statsHouse.data.FileUtils;
 import org.hd.d.statsHouse.feedHits.GenerateSummary;
@@ -69,7 +70,7 @@ public final class Main
         System.err.println("    Read independent command lines from specified file or stdin if '-'");
         System.err.println("    Do not process further command-line arguments.");
         System.err.println("  infilename.csv (-play|<outfilename>.(csv|mid|wav)))");
-        System.err.println("  -feedHitsSummary -play|<outfilename>.mid <typeN> {feedHitsDataDir}*");
+        System.err.println("  -feedHitsSummary -play|<outbasename> <typeN> {feedHitsDataDir}*");
         GenerationParameters.printOptions();
     	System.err.println();
         System.err.println("    This syntax may be used, one per line, in the command file.");
@@ -192,7 +193,23 @@ public final class Main
 					if("-play".equals(outputFileName))
 					    { playIt(s); }
 					else
-						{ saveIt(s, outputFileName); }
+						{
+						saveIt(s, outputFileName + ".mid");
+						// Save the data for visualisation if any, else remove any such file.
+						final DataVizBeatPoint dv = mt.dataRendered();
+						final String dvName = outputFileName + ".dat";
+						if(null == dv)
+							{ (new File(dvName)).delete(); }
+						else
+							{
+							try(ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+								final OutputStreamWriter w = new OutputStreamWriter(baos))
+					        	{
+					        	dv.write(w, false);
+					    		FileUtils.replacePublishedFile(dvName, baos.toByteArray(), true);
+					        	}
+							}
+						}
 
 	            	continue;
 		            }
