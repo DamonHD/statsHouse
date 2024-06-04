@@ -13,7 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20240604: added optional DataVizBeatPoint dataRendered to MIDITune.
 
 
 
@@ -22,6 +21,12 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
 RELEASES
 ========
+
+20240604:
+    freezepoint name: V5.3.3 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    DHD20240604: added optional DataVizBeatPoint dataRendered to MIDITune.
+
 
 20240531:
     freezepoint name: V5.3.2 (main)
