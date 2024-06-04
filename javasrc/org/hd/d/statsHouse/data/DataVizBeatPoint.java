@@ -33,12 +33,15 @@ import java.util.Objects;
  *     with the outer List usually one item per bar beat,
  *     and the inner list an ordered list of the key items rendered in that beat, possibly normalised;
  *     never null but may be empty
+ * @param beatLabels  label for beats / time axis;
+ *     may be empty, contain nulls, may be null (but if not null size must == nBeats)
  */
 public record DataVizBeatPoint(
 		int nBeats,
 		int nColumns,
         List<String> dataLabels,
-        List<List<Float>> dataRendered
+        List<List<Float>> dataRendered,
+        List<String> beatLabels
 		)
 	{
     public DataVizBeatPoint
@@ -48,6 +51,8 @@ public record DataVizBeatPoint(
     	Objects.requireNonNull(dataRendered);
     	if((null != dataLabels) && (nColumns != dataLabels.size())) { throw new IllegalArgumentException(); }
 	    if(null != dataLabels) { dataLabels = Collections.unmodifiableList(new ArrayList<>(dataLabels)); } // Defensive copy.
+    	if((null != beatLabels) && (nBeats != beatLabels.size())) { throw new IllegalArgumentException(); }
+	    if(null != beatLabels) { beatLabels = Collections.unmodifiableList(new ArrayList<>(beatLabels)); } // Defensive copy.
 	    }
 
     /**Output placeholder in place of empty label or value for write(). */

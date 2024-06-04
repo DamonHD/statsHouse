@@ -71,9 +71,9 @@ public final class GenerateSummary
 		// Total number of data bars to generate.
 		final int nDataBars = nTotalHours / nHoursPerBar;
 
-
 		// Data for the data visualisation.
-        final List<List<Float>> dataRendered = new ArrayList<>(nDataBars);
+        final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
+        final List<String> beatLabels = new ArrayList<>(nTotalHours);
 
 		// Compute hits and bytes per hour, normalising by the days in each block.
 		// Capture maximum normalised value of each also.
@@ -169,6 +169,11 @@ public final class GenerateSummary
 					normalisedHitsPerHour[hour]
 					);
 				dataRendered.add(d);
+
+				// Add hour-of-day label.
+				String hh = Integer.toString(hour % 24);
+				if(hh.length() < 2) { hh = "0" + hh; }
+				beatLabels.add(hh);
 				}
 
 			final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
@@ -177,7 +182,7 @@ public final class GenerateSummary
 
 		// Set up the data visualisation.
 		final List<String> dataLabels = List.of("bytes/h", "hits/h");
-        final DataVizBeatPoint dv = new DataVizBeatPoint(nDataBars, dataLabels.size(), dataLabels, dataRendered);
+        final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
