@@ -24,13 +24,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**Data Visualisation for a data point vector per simple (typically 4/4) beat.
+ * TODO: will be immutable by defensive copying.
+ * <p>
  *
  * @param dataLabels  column labels for dataRendered;
- *     may contain nulls, may be null
+ *     may be empty, contain nulls, may be null (but if not null size must == nColumns)
  * @param dataRendered  the set of key data as rendered in the tune,
  *     with the outer List usually one item per bar beat,
- *     and the inner list an ordered list of the key items rendered in that beat maybe normalised;
- *     may be null
+ *     and the inner list an ordered list of the key items rendered in that beat, possibly normalised;
+ *     never null but may be empty
  */
 public record DataVizBeatPoint(
 		int nBeats,
@@ -43,15 +45,19 @@ public record DataVizBeatPoint(
 	    {
     	if(nBeats < 0) { throw new IllegalArgumentException(); }
     	if(nColumns < 0) { throw new IllegalArgumentException(); }
+    	Objects.requireNonNull(dataRendered);
     	if((null != dataLabels) && (nColumns != dataLabels.size())) { throw new IllegalArgumentException(); }
 	    if(null != dataLabels) { dataLabels = Collections.unmodifiableList(new ArrayList<>(dataLabels)); } // Defensive copy.
 	    }
 
-    /**Output placeholder character in place of empty label or potential separator for write(). */
+    /**Output placeholder in place of empty label or value for write(). */
+    public static final String PlaceholderValue = "?";
+
+    /**Output placeholder character in place of potential separator for write(). */
     public static final char PlaceholderChar = '_';
 
     /**Write dataset to stream for other tools such as gnuplot to visualise/render.
-     * Each beat vector of points is written to a record in a single line.
+     * Each beat's vector of points is written to a record in a single line.
      * <p>
      * The first line may optionally be labels if dataLabels is not null.
      * <p>
@@ -68,11 +74,27 @@ public record DataVizBeatPoint(
         	for(int c = 0; c < nColumns; ++c)
 	        	{
 	        	String label = dataLabels.get(c);
-	        	if(null == label) { label = "" + PlaceholderChar; }
+	        	if(null == label) { label = PlaceholderValue; }
 	        	else { label = label.replace(',', PlaceholderChar).replace(' ', PlaceholderChar); }
-                if(c > 0) { w.append(commaSep ? ',' : ' '); }
+                if(c > 0) { w.write(commaSep ? ',' : ' '); }
 	        	w.append(label);
+	        	w.write('\n');
 	        	}
 	        }
+
+        // Write beat vector data rows.
+        for(final List<Float> b : dataRendered)
+        	{
+        	if(null != b)
+	        	{
+		    	for(int c = 0; c < nColumns; ++c)
+			    	{
+		    		final Float rawValue = b.get(c);
+	                if(c > 0) { w.write(commaSep ? ',' : ' '); }
+		    		w.append((null == rawValue)? PlaceholderValue : rawValue.toString());
+			    	}
+	        	}
+        	w.write('\n');
+		    }
 	    }
 	}
