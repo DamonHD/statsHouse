@@ -55,11 +55,12 @@ public final class GenerateSummary
 
         return switch (summaryType) {
 		case 1 -> (summary1(dirnames));
+		case 2 -> (summary2(dirnames));
 		default -> throw new IllegalArgumentException("unknown summary type " + summaryType);
 		};
 		}
 
-	/**Summary type 1; by-hour data blocks. */
+	/**Summary type 1; by-hour data blocks percussion. */
 	public static MIDITune summary1(final List<String> dirnames) throws IOException
 		{
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
@@ -187,5 +188,19 @@ public final class GenerateSummary
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, supportTracks, tsp, dv));
+		}
+
+
+	/**Summary type 2; by-hour data blocks percussion and some trend melody. */
+	public static MIDITune summary2(final List<String> dirnames) throws IOException
+		{
+//		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+
+		// Take type 1 and add some melody to it...
+		final MIDITune percussion = summary1(dirnames);
+
+		// TODO: melody!
+
+		return(percussion);
 		}
     }
