@@ -45,7 +45,7 @@ public final class GenerateSummary
     {
 	/**Generate sonification from summary information across 1 or more data blocks.
 	 * @param summaryType  type of summary to generate (small +ve int)
-	 * @param dirnames  names of directories to extract data from
+	 * @param dirnames  in-order names of directories to extract data from
 	 */
 	public static MIDITune summary(final int summaryType, final List<String> dirnames)
 	    throws IOException
@@ -60,7 +60,11 @@ public final class GenerateSummary
 		};
 		}
 
-	/**Summary type 1; by-hour data blocks percussion. */
+	/**Summary type 1; by-hour data blocks percussion.
+	 * @param dirnames  in-order names of directories to extract data from; never null
+	 * @return  a complete MIDI 'tune'; never null
+	 * @throws IOException
+	 */
 	public static MIDITune summary1(final List<String> dirnames) throws IOException
 		{
 		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
@@ -191,7 +195,16 @@ public final class GenerateSummary
 		}
 
 
-	/**Summary type 2; by-hour data blocks percussion and some trend melody. */
+	/**Summary type 2; by-hour data blocks percussion and some trend melody.
+	 * Uses the same (drums) percussion as summary type 1.
+	 * <p>
+	 * Uses one melody track for 'good' responses, and another for errors,
+	 * playing a separate (chord) note for each response type.
+	 *
+	 * @param dirnames  in-order names of directories to extract data from; never null
+	 * @return  a complete MIDI 'tune'; never null
+	 * @throws IOException
+	 */
 	public static MIDITune summary2(final List<String> dirnames) throws IOException
 		{
 //		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
