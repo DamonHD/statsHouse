@@ -60,29 +60,48 @@ public final class GenerateSummary
 		};
 		}
 
+	/**Generate the beat labels for summary type 1 (and 2); never null.
+	 * @param fsbs  in-order blocks of feed status data; never null
+	 * @return immutable set of labels 00, 01, ... 23, 00, ... 23 to match the status blocks; never null
+	 */
+	private static List<String> generateBeatLabelsType1(final FeedStatusBlocks fsbs)
+		{
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+
+		final List<String> beatLabels = new ArrayList<>(nTotalHours);
+
+		// Create bars from the normalised data.
+		// Further normalise strength to maximum encountered.
+		for(int h = 0; h < nTotalHours; ++h)
+			{
+			// Add hour-of-day label.
+			String hh = Integer.toString(h % 24);
+			if(hh.length() < 2) { hh = "0" + hh; }
+			beatLabels.add(hh);
+			}
+
+		return(Collections.unmodifiableList(beatLabels));
+		}
+
 	/**Generate the percussion track for summary type 1 (and 2); never null.
-	 * Also generates the beat labels, which must be empty.
 	 *
 	 * @param fsbs  in-order blocks of feed status data; never null
 	 * @param dataRendered  rendered data to append to; never null
-	 * @param beatLabels  beat labels to append to; never null
 	 * @return
 	 */
 	private static MIDISupportTrack generatePercussionType1(final FeedStatusBlocks fsbs,
-			final List<List<Float>> dataRendered,
-			final List<String> dataLabels,
-			final List<String> beatLabels)
+		final List<List<Float>> dataRendered,
+		final List<String> dataLabels)
 		{
 		Objects.requireNonNull(fsbs);
 		Objects.requireNonNull(dataRendered);
 		Objects.requireNonNull(dataLabels);
-		Objects.requireNonNull(beatLabels);
 
 		// For now assume that the render info is EMPTY.
 		// May have to append sideways to it in future.
 		if(!dataRendered.isEmpty()) { throw new RuntimeException("unexpected state"); }
 		if(!dataLabels.isEmpty()) { throw new RuntimeException("unexpected state"); }
-		if(!beatLabels.isEmpty()) { throw new RuntimeException("unexpected state"); }
 
 		// Add in the columns that this routine will insert data for.
 		dataLabels.addAll(List.of("bytes/h", "hits/h"));
@@ -186,11 +205,6 @@ public final class GenerateSummary
 					normalisedHitsPerHour[hour]
 					);
 				dataRendered.add(d);
-
-				// Add hour-of-day label.
-				String hh = Integer.toString(hour % 24);
-				if(hh.length() < 2) { hh = "0" + hh; }
-				beatLabels.add(hh);
 				}
 
 			final MIDIPlayableBar bar = new MIDIPlayableBar(Collections.unmodifiableSortedSet(notes));
@@ -211,27 +225,22 @@ public final class GenerateSummary
 
         // Total number of distinct hours to sonify; 24 summary hours for each block.
 		final int nTotalHours = fsbs.blocks().size() * 24;
-//		// Hours' data for each bar (must be a factor of 24).
-//		final int nHoursPerBar = 4;
-//		// Total number of data bars to generate.
-//		final int nDataBars = nTotalHours / nHoursPerBar;
 
 		// Data for the data visualisation.
         final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
         final List<String> dataLabels = new ArrayList<>();
-        final List<String> beatLabels = new ArrayList<>(nTotalHours);
 
         final MIDISupportTrack percussion =
-    		generatePercussionType1(fsbs, dataRendered, dataLabels, beatLabels);
+    		generatePercussionType1(fsbs, dataRendered, dataLabels);
 
 		// Set up the data visualisation.
+        final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
-
 
 	/**Summary type 2; by-hour data blocks percussion and some trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
@@ -267,12 +276,12 @@ public final class GenerateSummary
 		// Data for the data visualisation.
         final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
         final List<String> dataLabels = new ArrayList<>();
-        final List<String> beatLabels = new ArrayList<>(nTotalHours);
 
         final MIDISupportTrack percussion =
-    		generatePercussionType1(fsbs, dataRendered, dataLabels, beatLabels);
+    		generatePercussionType1(fsbs, dataRendered, dataLabels);
 
 		// Set up the data visualisation.
+        final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
