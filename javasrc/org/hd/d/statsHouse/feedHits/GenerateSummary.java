@@ -203,7 +203,12 @@ public final class GenerateSummary
 	 * Intensity of each note proportional to hits per hour?
 	 * May play quiet drone note panned hard off to the side
 	 * to indicate mean level across entire piece to give
-	 * insight on now vs mean at all times.
+	 * insight on now relative to the mean at all times.
+	 * <p>
+	 * 200s can be the chord root, 304 above it.
+	 * <p>
+	 * Worse things can be lower, eg from bad to worse:
+	 * SH, 406, 429, 503?
 	 *
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
