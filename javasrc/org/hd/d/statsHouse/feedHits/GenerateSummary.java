@@ -255,13 +255,28 @@ public final class GenerateSummary
 	 */
 	public static MIDITune summary2(final List<String> dirnames) throws IOException
 		{
-//		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
 
-		// Take type 1 and add some melody to it...
-		final MIDITune percussion = summary1(dirnames);
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+//		// Hours' data for each bar (must be a factor of 24).
+//		final int nHoursPerBar = 4;
+//		// Total number of data bars to generate.
+//		final int nDataBars = nTotalHours / nHoursPerBar;
 
-		// TODO: melody!
+		// Data for the data visualisation.
+        final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
+        final List<String> dataLabels = new ArrayList<>();
+        final List<String> beatLabels = new ArrayList<>(nTotalHours);
 
-		return(percussion);
+        final MIDISupportTrack percussion =
+    		generatePercussionType1(fsbs, dataRendered, dataLabels, beatLabels);
+
+		// Set up the data visualisation.
+        final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
+
+		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
+		final TuneSectionPlan tsp = null;
+		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
     }
