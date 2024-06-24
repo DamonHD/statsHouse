@@ -280,6 +280,16 @@ public final class GenerateSummary
         final MIDISupportTrack percussion =
     		generatePercussionType1(fsbs, dataRendered, dataLabels);
 
+
+
+
+
+        // TODO
+
+
+
+
+
 		// Set up the data visualisation.
         final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
