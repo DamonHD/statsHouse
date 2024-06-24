@@ -60,6 +60,35 @@ public final class GenerateSummary
 		};
 		}
 
+	/**Generate the percussion track for summary type 1 (and 2); never null. */
+	private static MIDISupportTrack generatePercussionType1(final FeedStatusBlocks fsbs)
+		{
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+		// Hours' data for each bar (must be a factor of 24).
+		final int nHoursPerBar = 4;
+		// Total number of data bars to generate.
+		final int nDataBars = nTotalHours / nHoursPerBar;
+
+		// Setup for the hits and bytes per-hour track.
+		final MIDITrackSetup trSetupBytes = new MIDITrackSetup(
+			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
+			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
+			MIDIConstant.DEFAULT_VOLUME,
+			(MIDIConstant.DEFAULT_PAN),
+			"bytes&hits by hour");
+		// Bytes and hits per-hour percussion track.
+		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
+        final MIDISupportTrack result = new MIDISupportTrack(trSetupBytes, pbBytes);
+
+
+        // TODO
+
+
+
+        return(result);
+		}
+
 	/**Summary type 1; by-hour data blocks percussion.
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
@@ -126,12 +155,9 @@ public final class GenerateSummary
 			MIDIConstant.DEFAULT_VOLUME,
 			(MIDIConstant.DEFAULT_PAN),
 			"bytes&hits by hour");
-		// Bytes-per-hour track.
+		// Bytes and hits per-hour track.
 		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
-
-		final List<MIDISupportTrack> supportTracks = List.of(
-				new MIDISupportTrack(trSetupBytes, pbBytes)
-				);
+        final MIDISupportTrack percussion = new MIDISupportTrack(trSetupBytes, pbBytes);
 
 		// Create bars from the normalised data.
 		// Further normalise strength to maximum encountered.
@@ -191,18 +217,19 @@ public final class GenerateSummary
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
 		final TuneSectionPlan tsp = null;
-		return(new MIDITune(dataMelody, supportTracks, tsp, dv));
+		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
 
 	/**Summary type 2; by-hour data blocks percussion and some trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
 	 * <p>
-	 * Uses one melody track for 'good' responses, and another for errors,
+	 * Use one melody track for 'good' responses, and another for errors,
 	 * playing a separate (chord) note for each response type.
-	 * Intensity of each note proportional to hits per hour?
-	 * May play quiet drone note panned hard off to the side
-	 * to indicate mean level across entire piece to give
+	 * Maybe pan good and bad to different sides?
+	 * Velocity of each note proportional to hits per hour?
+	 * May play quiet drone note (triplet?) panned hard off to the side
+	 * to indicate current level relative to mean level across entire piece to give
 	 * insight on now relative to the mean at all times.
 	 * <p>
 	 * 200s can be the chord root, 304 above it.
