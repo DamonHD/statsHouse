@@ -60,9 +60,33 @@ public final class GenerateSummary
 		};
 		}
 
-	/**Generate the percussion track for summary type 1 (and 2); never null. */
-	private static MIDISupportTrack generatePercussionType1(final FeedStatusBlocks fsbs)
+	/**Generate the percussion track for summary type 1 (and 2); never null.
+	 * Also generates the beat labels, which must be empty.
+	 *
+	 * @param fsbs  in-order blocks of feed status data; never null
+	 * @param dataRendered  rendered data to append to; never null
+	 * @param beatLabels  beat labels to append to; never null
+	 * @return
+	 */
+	private static MIDISupportTrack generatePercussionType1(final FeedStatusBlocks fsbs,
+			final List<List<Float>> dataRendered,
+			final List<String> dataLabels,
+			final List<String> beatLabels)
 		{
+		Objects.requireNonNull(fsbs);
+		Objects.requireNonNull(dataRendered);
+		Objects.requireNonNull(dataLabels);
+		Objects.requireNonNull(beatLabels);
+
+		// For now assume that the render info is EMPTY.
+		// May have to append sideways to it in future.
+		if(!dataRendered.isEmpty()) { throw new RuntimeException("unexpected state"); }
+		if(!dataLabels.isEmpty()) { throw new RuntimeException("unexpected state"); }
+		if(!beatLabels.isEmpty()) { throw new RuntimeException("unexpected state"); }
+
+		// Add in the columns that this routine will insert data for.
+		dataLabels.addAll(List.of("bytes/h", "hits/h"));
+
         // Total number of distinct hours to sonify; 24 summary hours for each block.
 		final int nTotalHours = fsbs.blocks().size() * 24;
 		// Hours' data for each bar (must be a factor of 24).
@@ -81,33 +105,6 @@ public final class GenerateSummary
 		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
         final MIDISupportTrack result = new MIDISupportTrack(trSetupBytes, pbBytes);
 
-
-        // TODO
-
-
-
-        return(result);
-		}
-
-	/**Summary type 1; by-hour data blocks percussion.
-	 * @param dirnames  in-order names of directories to extract data from; never null
-	 * @return  a complete MIDI 'tune'; never null
-	 * @throws IOException
-	 */
-	public static MIDITune summary1(final List<String> dirnames) throws IOException
-		{
-		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
-
-        // Total number of distinct hours to sonify; 24 summary hours for each block.
-		final int nTotalHours = fsbs.blocks().size() * 24;
-		// Hours' data for each bar (must be a factor of 24).
-		final int nHoursPerBar = 4;
-		// Total number of data bars to generate.
-		final int nDataBars = nTotalHours / nHoursPerBar;
-
-		// Data for the data visualisation.
-        final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
-        final List<String> beatLabels = new ArrayList<>(nTotalHours);
 
 		// Compute hits and bytes per hour, normalising by the days in each block.
 		// Capture maximum normalised value of each also.
@@ -147,17 +144,6 @@ public final class GenerateSummary
 				++hourIndex;
 				}
 			}
-
-		// Setup for the hits and bytes per-hour track.
-		final MIDITrackSetup trSetupBytes = new MIDITrackSetup(
-			MIDIConstant.GM1_PERCUSSION_CHANNEL0,
-			(byte) 0, // MIDIPercusssionInstrument.ACOUSTIC_BASE_DRUM.instrument0,
-			MIDIConstant.DEFAULT_VOLUME,
-			(MIDIConstant.DEFAULT_PAN),
-			"bytes&hits by hour");
-		// Bytes and hits per-hour track.
-		final List<MIDIPlayableBar> pbBytes = new ArrayList<>(nDataBars);
-        final MIDISupportTrack percussion = new MIDISupportTrack(trSetupBytes, pbBytes);
 
 		// Create bars from the normalised data.
 		// Further normalise strength to maximum encountered.
@@ -211,8 +197,34 @@ public final class GenerateSummary
 			pbBytes.add(bar);
 			}
 
+        return(result);
+		}
+
+	/**Summary type 1; by-hour data blocks percussion.
+	 * @param dirnames  in-order names of directories to extract data from; never null
+	 * @return  a complete MIDI 'tune'; never null
+	 * @throws IOException
+	 */
+	public static MIDITune summary1(final List<String> dirnames) throws IOException
+		{
+		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+//		// Hours' data for each bar (must be a factor of 24).
+//		final int nHoursPerBar = 4;
+//		// Total number of data bars to generate.
+//		final int nDataBars = nTotalHours / nHoursPerBar;
+
+		// Data for the data visualisation.
+        final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
+        final List<String> dataLabels = new ArrayList<>();
+        final List<String> beatLabels = new ArrayList<>(nTotalHours);
+
+        final MIDISupportTrack percussion =
+    		generatePercussionType1(fsbs, dataRendered, dataLabels, beatLabels);
+
 		// Set up the data visualisation.
-		final List<String> dataLabels = List.of("bytes/h", "hits/h");
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
 		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
