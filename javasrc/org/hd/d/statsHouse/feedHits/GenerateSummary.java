@@ -200,6 +200,10 @@ public final class GenerateSummary
 	 * <p>
 	 * Uses one melody track for 'good' responses, and another for errors,
 	 * playing a separate (chord) note for each response type.
+	 * Intensity of each note proportional to hits per hour?
+	 * May play quiet drone note panned hard off to the side
+	 * to indicate mean level across entire piece to give
+	 * insight on now vs mean at all times.
 	 *
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
