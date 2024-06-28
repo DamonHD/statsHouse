@@ -311,7 +311,7 @@ public final class GenerateSummary
 		// Capture maximum normalised value of each also.
 		final float[] normalisedHitsPerHour = new float[nTotalHours];
 		float normalisedHitsPerHourMax = 0;
-		// Also capture the normalisation value (days in block) for eacho hour.
+		// Also capture the normalisation value (days in block) for each hour.
 		final int daysInThisBlock[] = new int[nTotalHours];
 
 		int hourIndex = 0;
@@ -327,12 +327,54 @@ public final class GenerateSummary
 				final float nh = feedStatus.hits() / nDaysF;
 				normalisedHitsPerHour[hourIndex] = nh;
 				if(nh > normalisedHitsPerHourMax) { normalisedHitsPerHourMax = nh; }
-
 				++hourIndex;
 				}
 			}
 
 
+
+
+
+
+
+
+		// Create bars from the normalised data.
+		// Further normalise strength to maximum encountered.
+		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
+			{
+//			final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
+
+			for(int b = 0; b < nHoursPerBar; ++b)
+				{
+				final int hour = h+b;
+
+				final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
+//				// On beat: bytes
+//				final float intB = normalisedBytesPerHour[hour] / normalisedBytesPerHourMax;
+////System.out.println(intB);
+//				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+//						beatStart,
+//						new NoteAndVelocity(DRUMB, (byte) Math.round(vDRUM * intB)),
+//						MIDIGen.DEFAULT_CLKSPQTR/2-1));
+//				// Off beat: hits
+//				final float intH = normalisedHitsPerHour[hour] / normalisedHitsPerHourMax;
+////System.out.println(intH);
+//				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
+//						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
+//						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
+//						MIDIGen.DEFAULT_CLKSPQTR/2-1));
+
+//				// Capture for visualisation.
+//				final List<Float> d = List.of(
+//					normalisedBytesPerHour[hour],
+//					normalisedHitsPerHour[hour]
+//					);
+//				dataRendered.add(d);
+				}
+
+			final MIDIPlayableMonophonicDataBar bar = MIDIPlayableMonophonicDataBar.EMPTY_1_NOTE_BAR;
+			db.add(bar);
+			}
 
 
 
@@ -354,7 +396,7 @@ public final class GenerateSummary
         final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
-		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList(); //  List.of(statusMelody);
+		final List<MIDIDataMelodyTrack> dataMelody = List.of(statusMelody);
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
