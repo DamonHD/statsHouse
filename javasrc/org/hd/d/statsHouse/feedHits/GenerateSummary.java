@@ -19,10 +19,12 @@ package org.hd.d.statsHouse.feedHits;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.hd.d.statsHouse.data.DataVizBeatPoint;
@@ -246,14 +248,14 @@ public final class GenerateSummary
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
-	/**Map from bytes/hits status code to tone offset in scale. */
-	private static Map<String, Byte> type2CodeMap = Collections.unmodifiableMap(Map.of(
-			"503", (byte)-4,
-			"429", (byte)-3,
-			"406", (byte)-2,
+	/**Map from bytes/hits status code to tone offset in scale, sorted, non-null. */
+	private static Map<String, Byte> type2CodeMap = Collections.unmodifiableSortedMap(new TreeMap<>(Map.of(
+			"503", (byte)-7,
+			"429", (byte)-5,
+			"406", (byte)-3,
 			"SH",  (byte)-1,
 			"200", (byte)0,
-			"304", (byte)1));
+			"304", (byte)3)));
 
 	/**Summary type 2; by-hour data blocks percussion and some trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
@@ -296,16 +298,23 @@ public final class GenerateSummary
         final byte rootNote = MIDIGen.DEFAULT_ROOT_NOTE;
         final Scale scale = Scale.DORIAN;
 
-		// Setup for the melody track.
-		final MIDITrackSetup trSetupStatus304Melody = new MIDITrackSetup(
-			(byte) 0, // Channel 0.
-			MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0,
-			MIDIConstant.DEFAULT_VOLUME,
-			(byte)32, // Off to the left.
-			"status melody");
-		final List<MIDIPlayableMonophonicDataBar> db = new ArrayList<>(nDataBars);
-        final MIDIDataMelodyTrack status304Melody = new MIDIDataMelodyTrack(trSetupStatus304Melody, db);
-
+        final Map<String, List<MIDIPlayableMonophonicDataBar>> db = new HashMap<>();
+        final Map<String, MIDIDataMelodyTrack> statusMelody = new HashMap<>();
+        int channel = 0;
+        for(final String k : type2CodeMap.keySet())
+	        {
+    		// Setup for the melody tracks.
+    		final MIDITrackSetup trSetupStatus304Melody = new MIDITrackSetup(
+    			(byte) channel++,
+    			MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0,
+    			MIDIConstant.DEFAULT_VOLUME,
+    			(byte)(32 + type2CodeMap.get(k)), // Off to the left.
+    			"status: " + k);
+    		final List<MIDIPlayableMonophonicDataBar> dbS = new ArrayList<>(nDataBars);
+    		db.put(k, dbS);
+            final MIDIDataMelodyTrack statusMelodyS = new MIDIDataMelodyTrack(trSetupStatus304Melody, dbS);
+            statusMelody.put(k, statusMelodyS);
+	        }
 
 		// Compute hits total and by status per hour, normalising by the days in each block.
 		// Capture maximum normalised value of each also.
@@ -331,85 +340,54 @@ public final class GenerateSummary
 				}
 			}
 
-
-
-
-
-
-
-
 		// Create bars from the normalised data.
-		// Further normalise strength to maximum encountered.
 		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
 			{
-			final List<NoteAndVelocity> notes304 = new ArrayList<>(nHoursPerBar);
+			// For each status code create its bar.
+	        for(final String k : type2CodeMap.keySet())
+	        	{
+	        	final byte semitones = type2CodeMap.get(k);
+				final List<NoteAndVelocity> notes = new ArrayList<>(nHoursPerBar);
 
-			for(int b = 0; b < nHoursPerBar; ++b)
-				{
-				final int hour = h+b;
+				for(int b = 0; b < nHoursPerBar; ++b)
+					{
+					final int hour = h+b;
 
-				final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
+					final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
 
-				final FeedStatusBlock fsb = fsbs.blocks().get(hour / 24);
-				final FeedStatus fs = fsb.records().get(h % 24);
-				final Map<String,Integer> hitsByType = fs.getColsMap();
+					final FeedStatusBlock fsb = fsbs.blocks().get(hour / 24);
+					final FeedStatus fs = fsb.records().get(h % 24);
+					final Map<String,Integer> hitsByType = fs.getColsMap();
 
-				final int allHits = fs.hits();
-				final float allHitsF = allHits;
+					final int allHits = fs.hits();
+					final float allHitsF = allHits;
 
-				final float vel304 = hitsByType.getOrDefault("304", 1) / allHitsF;
-				final byte vel304b = (byte) Math.round(vel304 * MIDIConstant.DEFAULT_VOLUME);
-				final NoteAndVelocity nv304 = new NoteAndVelocity(rootNote, vel304b);
+					final float vel = hitsByType.getOrDefault(k, 0) / allHitsF;
+					final byte velb = (byte) Math.round(vel * MIDIConstant.DEFAULT_VOLUME);
+					final byte note = (byte) (rootNote + scale.noteOffset(semitones));
+					final NoteAndVelocity nv = new NoteAndVelocity(note, velb);
 
+					notes.add(nv);
 
+	//				// Capture for visualisation.
+	//				final List<Float> d = List.of(
+	//					normalisedBytesPerHour[hour],
+	//					normalisedHitsPerHour[hour]
+	//					);
+	//				dataRendered.add(d);
+					}
 
-
-//				// On beat: bytes
-//				final float intB = normalisedBytesPerHour[hour] / normalisedBytesPerHourMax;
-////System.out.println(intB);
-//				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-//						beatStart,
-//						new NoteAndVelocity(DRUMB, (byte) Math.round(vDRUM * intB)),
-//						MIDIGen.DEFAULT_CLKSPQTR/2-1));
-//				// Off beat: hits
-//				final float intH = normalisedHitsPerHour[hour] / normalisedHitsPerHourMax;
-////System.out.println(intH);
-//				notes.add(new MIDIPlayableBar.StartNoteVelocityDuration(
-//						beatStart + MIDIGen.DEFAULT_CLKSPQTR/2,
-//						new NoteAndVelocity(DRUMH, (byte) Math.round(vDRUM * intH)),
-//						MIDIGen.DEFAULT_CLKSPQTR/2-1));
-
-				notes304.add(nv304);
-
-//				// Capture for visualisation.
-//				final List<Float> d = List.of(
-//					normalisedBytesPerHour[hour],
-//					normalisedHitsPerHour[hour]
-//					);
-//				dataRendered.add(d);
+				final MIDIPlayableMonophonicDataBar bar = new MIDIPlayableMonophonicDataBar(notes);
+				db.get(k).add(bar);
 				}
-
-			final MIDIPlayableMonophonicDataBar bar304 = new MIDIPlayableMonophonicDataBar(notes304);
-			db.add(bar304);
 			}
-
-
-
-
-
-        // TODO
-
-
-
-
-
 
 
 		// Set up the data visualisation.
         final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
-		final List<MIDIDataMelodyTrack> dataMelody = List.of(status304Melody);
+		final List<MIDIDataMelodyTrack> dataMelody = new ArrayList<>(statusMelody.values());
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}

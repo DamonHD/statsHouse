@@ -64,4 +64,18 @@ public final class Scale
 		if(12 != copied.stream().mapToInt(Integer::intValue).sum()) { throw new IllegalArgumentException("intervals do not add to octave"); }
 		this.semitones = copied;
 		}
+
+	/**Given Scale and offset (+ve or -ve), compute MIDI note offset. */
+	public byte noteOffset(final byte scaleNoteOffset)
+		{
+		final int s = semitones.size();
+		// Whole octaves offset.
+		final int octaves = (scaleNoteOffset >= 0) ?
+			(scaleNoteOffset / s) :
+			((scaleNoteOffset - s + 1) / semitones.size());
+        final int residue = semitones.subList(0, (((scaleNoteOffset % s) + s) % s)).stream().mapToInt(Integer::intValue).sum();
+        final int result = 12*octaves + residue;
+        if((result < Byte.MIN_VALUE) || (result > Byte.MAX_VALUE)) { throw new IllegalArgumentException(); }
+        return((byte) result);
+		}
 	}
