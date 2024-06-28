@@ -363,10 +363,14 @@ public final class GenerateSummary
 					final FeedStatus fs = fsb.records().get(h % 24);
 					final Map<String,Integer> hitsByType = fs.getColsMap();
 
-					final int allHits = fs.hits();
-					final float allHitsF = allHits;
+//					final int allHits = fs.hits();
+//					final float allHitsF = allHits;
+//					final float vel = hitsByType.getOrDefault(k, 0) / allHitsF;
 
-					final float vel = hitsByType.getOrDefault(k, 0) / allHitsF;
+					final float nDays = fsb.nDays();
+					final float vel = (hitsByType.getOrDefault(k, 0) / nDays) / normalisedHitsPerHourMax;
+
+
 					final byte velb = (byte) Math.round(vel * MIDIConstant.DEFAULT_VOLUME);
 					final byte note = (byte) (rootNote + scale.noteOffset(semitones));
 					final NoteAndVelocity nv = new NoteAndVelocity(note, velb);
