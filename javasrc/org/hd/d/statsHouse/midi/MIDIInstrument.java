@@ -28,6 +28,8 @@ package org.hd.d.statsHouse.midi;
  */
 public enum MIDIInstrument
 	{
+	MARIMBA(13),
+
 	// Bass
 	ACOUSTIC_BASE(32),
 	ELECTRIC_BASE_FINGER(33),

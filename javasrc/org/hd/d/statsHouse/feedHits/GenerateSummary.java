@@ -311,8 +311,8 @@ public final class GenerateSummary
     		final MIDITrackSetup trSetupStatus304Melody = new MIDITrackSetup(
     			(byte) channel++,
     			isBad ?
-    			    MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0 :
-    			    MIDIInstrument.SYNTH_BRASS_1.instrument0,
+    			    MIDIInstrument.ACOUSTIC_BASE.instrument0 :
+    			    MIDIInstrument.MARIMBA.instrument0,
     			MIDIConstant.DEFAULT_VOLUME,
     			(byte)((isBad ? 32 : 96) + offset), // Off to the left for bad, right is good.
     			"status: " + k);
