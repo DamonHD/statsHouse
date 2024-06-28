@@ -342,7 +342,7 @@ public final class GenerateSummary
 		// Further normalise strength to maximum encountered.
 		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
 			{
-//			final SortedSet<MIDIPlayableBar.StartNoteVelocityDuration> notes = new TreeSet<>();
+			final List<NoteAndVelocity> notes = new ArrayList<>(nHoursPerBar);
 
 			for(int b = 0; b < nHoursPerBar; ++b)
 				{

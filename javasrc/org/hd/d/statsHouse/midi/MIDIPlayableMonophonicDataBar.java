@@ -98,6 +98,30 @@ public record MIDIPlayableMonophonicDataBar(int dataNotesPerBar, DataProtoBar dp
     public MIDIPlayableMonophonicDataBar(final int dataNotesPerBar, final DataProtoBar dpr, final int stream, final List<NoteAndVelocity> notes)
     	{ this(dataNotesPerBar, dpr, stream, notes, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
 
+    /**One bar, playable as MIDI, eg by conversion to MIDICSV or adding to a Track within a Sequence.
+     * Represents data melody from one data stream for one playable bar.
+     * <p>
+     * Covers one voice/track: cannot be polyphonic.
+     * <p>
+     * Individual note slots can be null to be empty,
+     * but the list must have the correct number of notes / slots.
+     * <p>
+     * This does not contain an absolute time nor bar number
+     * to allow it to be used more than once in the same track,
+     * for example in a chorus or loop.
+     * <p>
+     * This may be the output of a chain of transformations.
+     * <p>
+     * This object is immutable if the List is.
+     * <p>
+     * Default expression level throughout.
+     *
+     * @param notes  notes from the above stream in neutral MIDI-like form; null slots are empty/silent;
+     *     never null
+     */
+    public MIDIPlayableMonophonicDataBar(final List<NoteAndVelocity> notes)
+    	{ this(notes.size(), null, 0, notes, MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION); }
+
     /**Empty/rest (null note) immutable 1-note bar. */
     public static final MIDIPlayableMonophonicDataBar EMPTY_1_NOTE_BAR =
 		new MIDIPlayableMonophonicDataBar(1, null, 0, Collections.singletonList(null), MIDIConstant.DEFAULT_EXPRESSION, MIDIConstant.DEFAULT_EXPRESSION);
