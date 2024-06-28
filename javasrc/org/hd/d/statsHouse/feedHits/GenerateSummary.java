@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,6 +30,7 @@ import org.hd.d.statsHouse.feedHits.data.FeedStatus;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlock;
 import org.hd.d.statsHouse.feedHits.data.FeedStatusBlocks;
 import org.hd.d.statsHouse.generic.NoteAndVelocity;
+import org.hd.d.statsHouse.generic.Scale;
 import org.hd.d.statsHouse.generic.TuneSectionPlan;
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIDataMelodyTrack;
@@ -242,6 +244,15 @@ public final class GenerateSummary
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
+	/**Map from bytes/hits status code to tone offset in scale. */
+	private static Map<String, Byte> type2CodeMap = Collections.unmodifiableMap(Map.of(
+			"503", (byte)-4,
+			"429", (byte)-3,
+			"406", (byte)-2,
+			"SH",  (byte)-1,
+			"200", (byte)0,
+			"304", (byte)1));
+
 	/**Summary type 2; by-hour data blocks percussion and some trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
 	 * <p>
@@ -280,11 +291,18 @@ public final class GenerateSummary
         final MIDISupportTrack percussion =
     		generatePercussionType1(fsbs, dataRendered, dataLabels);
 
-
+        final byte rootNote = MIDIGen.DEFAULT_ROOT_NOTE;
+        final Scale scale = Scale.DORIAN;
 
 
 
         // TODO
+
+
+//        final NoteAndVelocity nv MidiGen.datumToNoteAndVelocity(
+//    			final Datum d,
+//    			final boolean isNotSecondaryDataStream,
+//    			final Scale scale, final int octaves, final float maxVal)
 
 
 
