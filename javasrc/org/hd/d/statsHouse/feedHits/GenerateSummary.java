@@ -248,7 +248,9 @@ public final class GenerateSummary
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
-	/**Map from bytes/hits status code to tone offset in scale, sorted, non-null. */
+	/**Map from bytes/hits status code to tone offset in scale, sorted, non-null.
+	 * Bad statuses are negative.
+	 */
 	private static Map<String, Byte> type2CodeMap = Collections.unmodifiableSortedMap(new TreeMap<>(Map.of(
 			"503", (byte)-7,
 			"429", (byte)-5,
@@ -303,12 +305,16 @@ public final class GenerateSummary
         int channel = 0;
         for(final String k : type2CodeMap.keySet())
 	        {
+        	final byte offset = type2CodeMap.get(k);
+        	final boolean isBad = (offset < 0);
     		// Setup for the melody tracks.
     		final MIDITrackSetup trSetupStatus304Melody = new MIDITrackSetup(
     			(byte) channel++,
-    			MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0,
+    			isBad ?
+    			    MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0 :
+    			    MIDIInstrument.SYNTH_BRASS_1.instrument0,
     			MIDIConstant.DEFAULT_VOLUME,
-    			(byte)(32 + type2CodeMap.get(k)), // Off to the left.
+    			(byte)((isBad ? 32 : 96) + offset), // Off to the left for bad, right is good.
     			"status: " + k);
     		final List<MIDIPlayableMonophonicDataBar> dbS = new ArrayList<>(nDataBars);
     		db.put(k, dbS);
@@ -320,8 +326,6 @@ public final class GenerateSummary
 		// Capture maximum normalised value of each also.
 		final float[] normalisedHitsPerHour = new float[nTotalHours];
 		float normalisedHitsPerHourMax = 0;
-//		// Also capture the normalisation value (days in block) for each hour.
-//		final int daysInThisBlock[] = new int[nTotalHours];
 
 		int hourIndex = 0;
 		for(final FeedStatusBlock fsb : fsbs.blocks())
