@@ -35,8 +35,10 @@ import org.hd.d.statsHouse.generic.TuneSectionPlan;
 import org.hd.d.statsHouse.midi.MIDIConstant;
 import org.hd.d.statsHouse.midi.MIDIDataMelodyTrack;
 import org.hd.d.statsHouse.midi.MIDIGen;
+import org.hd.d.statsHouse.midi.MIDIInstrument;
 import org.hd.d.statsHouse.midi.MIDIPercusssionInstrument;
 import org.hd.d.statsHouse.midi.MIDIPlayableBar;
+import org.hd.d.statsHouse.midi.MIDIPlayableMonophonicDataBar;
 import org.hd.d.statsHouse.midi.MIDISupportTrack;
 import org.hd.d.statsHouse.midi.MIDITrackSetup;
 import org.hd.d.statsHouse.midi.MIDITune;
@@ -279,10 +281,10 @@ public final class GenerateSummary
 
         // Total number of distinct hours to sonify; 24 summary hours for each block.
 		final int nTotalHours = fsbs.blocks().size() * 24;
-//		// Hours' data for each bar (must be a factor of 24).
-//		final int nHoursPerBar = 4;
-//		// Total number of data bars to generate.
-//		final int nDataBars = nTotalHours / nHoursPerBar;
+		// Hours' data for each bar (must be a factor of 24).
+		final int nHoursPerBar = 4;
+		// Total number of data bars to generate.
+		final int nDataBars = nTotalHours / nHoursPerBar;
 
 		// Data for the data visualisation.
         final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
@@ -294,6 +296,16 @@ public final class GenerateSummary
         final byte rootNote = MIDIGen.DEFAULT_ROOT_NOTE;
         final Scale scale = Scale.DORIAN;
 
+
+		// Setup for the melody track.
+		final MIDITrackSetup trSetupStatusMelody = new MIDITrackSetup(
+			(byte) 0, // Channel 0.
+			MIDIInstrument.LEAD_2_SAWTOOTH_WAVE.instrument0,
+			MIDIConstant.DEFAULT_VOLUME,
+			(byte)32, // Off to the left.
+			"status melody");
+		final List<MIDIPlayableMonophonicDataBar> db = new ArrayList<>(nDataBars);
+        final MIDIDataMelodyTrack statusMelody = new MIDIDataMelodyTrack(trSetupStatusMelody, db);
 
 
         // TODO
@@ -312,7 +324,7 @@ public final class GenerateSummary
         final List<String> beatLabels = generateBeatLabelsType1(fsbs);
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
-		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList();
+		final List<MIDIDataMelodyTrack> dataMelody = Collections.emptyList(); //  List.of(statusMelody);
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
