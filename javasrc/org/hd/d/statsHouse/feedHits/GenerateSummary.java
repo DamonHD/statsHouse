@@ -296,7 +296,6 @@ public final class GenerateSummary
         final byte rootNote = MIDIGen.DEFAULT_ROOT_NOTE;
         final Scale scale = Scale.DORIAN;
 
-
 		// Setup for the melody track.
 		final MIDITrackSetup trSetupStatusMelody = new MIDITrackSetup(
 			(byte) 0, // Channel 0.
@@ -306,6 +305,37 @@ public final class GenerateSummary
 			"status melody");
 		final List<MIDIPlayableMonophonicDataBar> db = new ArrayList<>(nDataBars);
         final MIDIDataMelodyTrack statusMelody = new MIDIDataMelodyTrack(trSetupStatusMelody, db);
+
+
+		// Compute hits total and by status per hour, normalising by the days in each block.
+		// Capture maximum normalised value of each also.
+		final float[] normalisedHitsPerHour = new float[nTotalHours];
+		float normalisedHitsPerHourMax = 0;
+		// Also capture the normalisation value (days in block) for eacho hour.
+		final int daysInThisBlock[] = new int[nTotalHours];
+
+		int hourIndex = 0;
+		for(final FeedStatusBlock fsb : fsbs.blocks())
+			{
+			final int nDays = fsb.nDays();
+			final float nDaysF = nDays;
+			// For the 24h in each block.
+			for(int h = 0; h < 24; ++h)
+				{
+				daysInThisBlock[hourIndex] = nDays;
+				final FeedStatus feedStatus = fsb.records().get(h);
+				final float nh = feedStatus.hits() / nDaysF;
+				normalisedHitsPerHour[hourIndex] = nh;
+				if(nh > normalisedHitsPerHourMax) { normalisedHitsPerHourMax = nh; }
+
+				++hourIndex;
+				}
+			}
+
+
+
+
+
 
 
         // TODO
