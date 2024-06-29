@@ -248,7 +248,7 @@ public final class GenerateSummary
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
-	/**Map from bytes/hits status code to tone offset in scale, sorted, non-null.
+	/**Map from bytes/hits status code to tone offset in scale, sorted, non-empty, non-null.
 	 * Bad statuses are negative.
 	 */
 	private static Map<String, Byte> type2CodeMap = Collections.unmodifiableSortedMap(new TreeMap<>(Map.of(
@@ -344,7 +344,7 @@ public final class GenerateSummary
 				}
 			}
 
-		// Create bars from the normalised data.
+		// Create bars from the data.
 		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
 			{
 			// For each status code create its bar.
@@ -368,8 +368,8 @@ public final class GenerateSummary
 //					final float vel = hitsByType.getOrDefault(k, 0) / allHitsF;
 
 					final float nDays = fsb.nDays();
-					final float vel = (hitsByType.getOrDefault(k, 0) / nDays) / normalisedHitsPerHourMax;
-
+					final float hourlyHits = hitsByType.getOrDefault(k, 0) / nDays;
+					final float vel = hourlyHits / normalisedHitsPerHourMax;
 
 					final byte velb = (byte) Math.round(vel * MIDIConstant.DEFAULT_VOLUME);
 					final byte note = (byte) (rootNote + scale.noteOffset(semitones));
@@ -377,12 +377,17 @@ public final class GenerateSummary
 
 					notes.add(nv);
 
-	//				// Capture for visualisation.
-	//				final List<Float> d = List.of(
-	//					normalisedBytesPerHour[hour],
-	//					normalisedHitsPerHour[hour]
-	//					);
-	//				dataRendered.add(d);
+					// Visualise what is being played.
+					List<Float> dataPoints = dataRendered.get(hour);
+					if(!(dataPoints instanceof ArrayList))
+					    {
+						// Allow first append of melody data.
+						final List<Float> d = new ArrayList<>(dataPoints.size() + type2CodeMap.size());
+						d.addAll(dataPoints);
+						dataPoints = d;
+						dataRendered.set(hour, d);
+						}
+					dataPoints.add(hourlyHits);
 					}
 
 				final MIDIPlayableMonophonicDataBar bar = new MIDIPlayableMonophonicDataBar(notes);
@@ -390,9 +395,12 @@ public final class GenerateSummary
 				}
 			}
 
-
 		// Set up the data visualisation.
         final List<String> beatLabels = generateBeatLabelsType1(fsbs);
+        // Melody data columns appear after the percussion data columns.
+        dataLabels.addAll(type2CodeMap.keySet());
+//System.out.println(Arrays.toString(dataLabels.toArray()));
+//System.out.println(Arrays.toString(dataRendered.toArray()));
         final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
 
 		final List<MIDIDataMelodyTrack> dataMelody = new ArrayList<>(statusMelody.values());
