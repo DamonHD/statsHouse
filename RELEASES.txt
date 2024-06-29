@@ -13,7 +13,7 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-
+    DHD20240628: initial version of feedHitsSummary type 2.
 
 
 
