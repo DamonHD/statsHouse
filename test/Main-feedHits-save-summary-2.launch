@@ -19,4 +19,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="statsHouse"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-feedHitsSummary fh2 2 ../RSS-data/20240519 ../RSS-data/20240527"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="statsHouse"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
 </launchConfiguration>

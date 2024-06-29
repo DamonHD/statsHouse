@@ -345,9 +345,9 @@ public final class GenerateSummary
 			}
 
 		// Create bars from the data.
-		for(int h = 0; h < nTotalHours; h += nHoursPerBar)
+		for(int bh = 0; bh < nTotalHours; bh += nHoursPerBar)
 			{
-			// For each status code create its bar.
+			// For each status code create its next full bar.
 	        for(final String k : type2CodeMap.keySet())
 	        	{
 	        	final byte semitones = type2CodeMap.get(k);
@@ -355,12 +355,11 @@ public final class GenerateSummary
 
 				for(int b = 0; b < nHoursPerBar; ++b)
 					{
-					final int hour = h+b;
-
-					final int beatStart = b * MIDIGen.DEFAULT_CLKSPQTR;
+					final int hour = bh+b;
 
 					final FeedStatusBlock fsb = fsbs.blocks().get(hour / 24);
-					final FeedStatus fs = fsb.records().get(h % 24);
+					final FeedStatus fs = fsb.records().get(hour % 24);
+//assert(Integer.parseInt(fs.index(), 10) == (hour % 24));
 					final Map<String,Integer> hitsByType = fs.getColsMap();
 
 //					final int allHits = fs.hits();
