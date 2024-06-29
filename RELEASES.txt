@@ -13,8 +13,6 @@ or release/freeze points.
 SIGNIFICANT CHANGES SINCE LAST RELEASE
 ======================================
 
-    DHD20240628: initial version of feedHitsSummary type 2.
-    DHD20240629: initial visualisation data for feedHitsSummary type 2.
 
 
 
@@ -22,6 +20,13 @@ SIGNIFICANT CHANGES SINCE LAST RELEASE
 
 RELEASES
 ========
+
+20240629:
+    freezepoint name: V5.3.4 (main)
+    Changes since last freezepoint (developer/mgr initials and brief description):
+    DHD20240628: initial version of feedHitsSummary type 2.
+    DHD20240629: initial visualisation data for feedHitsSummary type 2.
+
 
 20240604:
     freezepoint name: V5.3.3 (main)
