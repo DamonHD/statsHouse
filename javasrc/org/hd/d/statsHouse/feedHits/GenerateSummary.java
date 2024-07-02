@@ -434,7 +434,12 @@ public final class GenerateSummary
 	private static final String UAOther = "OTHER";
 
 	/**Summary type 3; by-US trend melody.
-	 * Uses the same note offsets and instruments as summary type 2.
+	 * Overall picks the heaviest User-Agents by hits and assigns each an instrument.
+	 * <p>
+	 * For each data block (week) creates a bar with the 4 (or 8?) heaviest hitting UAs that block,
+	 * and from heaviest downwards play a successive chord for each of status notes.
+	 * <p>
+	 * Uses the same note offsets as summary type 2.
 	 *
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
