@@ -442,7 +442,9 @@ public final class GenerateSummary
 	 */
 	public static MIDITune summary3(final List<String> dirnames) throws IOException
 		{
-		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByUAFromDirs(dirnames);
+
+if(true) { throw new RuntimeException("COMPUTER SEZ NO"); }
 
         // Total number of distinct hours to sonify; 24 summary hours for each block.
 		final int nTotalHours = fsbs.blocks().size() * 24;

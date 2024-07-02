@@ -39,8 +39,10 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
 	public static final String INTERVAL_DAYS_FILENAME = "intervalDays.txt";
 	/**File containing summary by-hour status data for the data block directory.. */
 	public static final String STATUS_BY_HOUR_FILENAME = "feedStatusByHour.log";
+	/**File containing summary by-UA status data for the data block directory.. */
+	public static final String STATUS_BY_UA_FILENAME = "feedStatusByUA.log";
 
-	/**Construct FeedStatusBlocks from an ordered list of directory names.
+	/**Construct by-hour FeedStatusBlocks from an ordered list of directory names.
 	 * @throws IOException
 	 */
 	public static FeedStatusBlocks loadStatusByHourFromDirs(final List<String> dirnames) throws IOException
@@ -62,11 +64,45 @@ public record FeedStatusBlocks(List<FeedStatusBlock> blocks)
             final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(nDays,
             		new FileReader(sbh, FeedStatus.CHARSET));
 
-            // Do a little bit of validation of by-hour records.
+            // Some validation of by-hour records.
             if(fsb.records().size() < 24)
                 { throw new IOException("too few records in "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
             if(!"00".equals(fsb.records().get(0).index()) || !"23".equals(fsb.records().get(23).index()))
             	{ throw new IOException("unexpected records in "+STATUS_BY_HOUR_FILENAME+" file in directory: " + dn); }
+
+            blocks.add(fsb);
+	        }
+
+        return(new FeedStatusBlocks(blocks));
+		}
+
+	/**Construct by-UA FeedStatusBlocks from an ordered list of directory names.
+	 * @throws IOException
+	 */
+	public static FeedStatusBlocks loadStatusByUAFromDirs(final List<String> dirnames) throws IOException
+		{
+		Objects.requireNonNull(dirnames);
+		final List <FeedStatusBlock> blocks = new ArrayList<>(dirnames.size());
+
+        for(final String dn : dirnames)
+	        {
+	        final File d = new File(dn);
+	        if(!d.isDirectory()) { throw new IOException("not a directory: " + dn); }
+
+	        final File id = new File(d, INTERVAL_DAYS_FILENAME);
+	        if(!id.isFile()) { throw new IOException("no "+INTERVAL_DAYS_FILENAME+" file in directory: " + dn); }
+	        final File sbh = new File(d, STATUS_BY_UA_FILENAME);
+	        if(!sbh.isFile()) { throw new IOException("no "+STATUS_BY_UA_FILENAME+" file in directory: " + dn); }
+
+	        final int nDays = Integer.parseInt(Files.readString(id.toPath(), FeedStatus.CHARSET).trim(), 10);
+            final FeedStatusBlock fsb = FeedStatusBlock.parseRecords(nDays,
+            		new FileReader(sbh, FeedStatus.CHARSET));
+
+            // Some validation of by-UA records.
+            if(fsb.records().size() < 1)
+                { throw new IOException("too few records in "+STATUS_BY_UA_FILENAME+" file in directory: " + dn); }
+            if(!"ALL".equals(fsb.records().get(0).index()))
+            	{ throw new IOException("unexpected records in "+STATUS_BY_UA_FILENAME+" file in directory: " + dn); }
 
             blocks.add(fsb);
 	        }
