@@ -62,6 +62,7 @@ public final class GenerateSummary
         return switch (summaryType) {
 		case 1 -> (summary1(dirnames));
 		case 2 -> (summary2(dirnames));
+		case 3 -> (summary3(dirnames));
 		default -> throw new IllegalArgumentException("unknown summary type " + summaryType);
 		};
 		}
@@ -406,4 +407,52 @@ public final class GenerateSummary
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
+
+
+	/**Summary type 2; by-hour data blocks percussion and some trend melody.
+	 * Uses the same (drums) percussion as summary type 1.
+	 *
+	 * @param dirnames  in-order names of directories to extract data from; never null
+	 * @return  a complete MIDI 'tune'; never null
+	 * @throws IOException
+	 */
+	public static MIDITune summary3(final List<String> dirnames) throws IOException
+		{
+		final FeedStatusBlocks fsbs = FeedStatusBlocks.loadStatusByHourFromDirs(dirnames);
+
+        // Total number of distinct hours to sonify; 24 summary hours for each block.
+		final int nTotalHours = fsbs.blocks().size() * 24;
+		// Hours' data for each bar (must be a factor of 24).
+		final int nHoursPerBar = 4;
+		// Total number of data bars to generate.
+		final int nDataBars = nTotalHours / nHoursPerBar;
+
+		// Data for the data visualisation.
+        final List<List<Float>> dataRendered = new ArrayList<>(nTotalHours);
+        final List<String> dataLabels = new ArrayList<>();
+
+        final MIDISupportTrack percussion =
+    		generatePercussionType1(fsbs, dataRendered, dataLabels);
+
+
+
+
+        // TODO
+
+
+
+
+		// Set up the data visualisation.
+        final List<String> beatLabels = generateBeatLabelsType1(fsbs);
+        // Melody data columns appear after the percussion data columns.
+        dataLabels.addAll(type2CodeMap.keySet());
+//System.out.println(Arrays.toString(dataLabels.toArray()));
+//System.out.println(Arrays.toString(dataRendered.toArray()));
+        final DataVizBeatPoint dv = new DataVizBeatPoint(nTotalHours, dataLabels.size(), dataLabels, dataRendered, beatLabels);
+
+		final List<MIDIDataMelodyTrack> dataMelody = List.of(); //  ArrayList<>(statusMelody.values());
+		final TuneSectionPlan tsp = null;
+		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
+		}
+
     }
