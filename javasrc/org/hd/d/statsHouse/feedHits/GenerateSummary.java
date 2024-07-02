@@ -433,8 +433,8 @@ public final class GenerateSummary
 	/**A token not present in {@link UAtoToken}; non-empty, non-null. */
 	private static final String UAOther = "OTHER";
 
-	/**Summary type 3; by-hour data blocks percussion and  User-Agent trend melody.
-	 * Uses the same (drums) percussion as summary type 1.
+	/**Summary type 3; by-US trend melody.
+	 * Uses the same note offsets and instruments as summary type 2.
 	 *
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
