@@ -416,7 +416,7 @@ public final class GenerateSummary
 	/**Static mapping from some key User-Agent values to shorter friendly tokens; non-empty, non-null.
 	 * Note that "-" means no User-Agent.
 	 * <p>
-	 * The tokens are short, contain no spaces, nor HTML/shell metacharacters.
+	 * The tokens are short, contain no spaces, nor HTML/shell/CSV/gnuplot metacharacters.
 	 * <p>
 	 * None of the tokens is the same as {@link #UAOther}.
 	 */
