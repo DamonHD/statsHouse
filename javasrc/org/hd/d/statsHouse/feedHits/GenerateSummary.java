@@ -436,8 +436,11 @@ public final class GenerateSummary
 	/**Summary type 3; by-US trend melody.
 	 * Overall picks the heaviest User-Agents by hits and assigns each an instrument.
 	 * <p>
-	 * For each data block (week) creates a bar with the 4 (or 8?) heaviest hitting UAs that block,
-	 * and from heaviest downwards play a successive chord for each of status notes.
+	 * For each data block (week) creates a bar with the 4 (or 8?) heaviest hitting UAs of that block,
+	 * and from heaviest downwards plays a chord
+	 * with each note in the chord being the weighted status result values.
+	 * <p>
+	 * The root notes used could be a chord progression.
 	 * <p>
 	 * Uses the same note offsets as summary type 2.
 	 *
