@@ -223,6 +223,7 @@ public final class GenerateSummary
         return(result);
 		}
 
+
 	/**Summary type 1; by-hour data blocks percussion.
 	 * @param dirnames  in-order names of directories to extract data from; never null
 	 * @return  a complete MIDI 'tune'; never null
@@ -250,6 +251,7 @@ public final class GenerateSummary
 		final TuneSectionPlan tsp = null;
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
+
 
 	/**Map from bytes/hits status code to tone offset in scale, sorted, non-empty, non-null.
 	 * Bad statuses are negative.
@@ -425,7 +427,8 @@ public final class GenerateSummary
 			entry("Spotify/1.0)", "Spotify"),
 			entry("Gofeed/1.0", "Gofeed"),
 			entry("Amazon Music Podcast", "Amazon"),
-			entry("-", "NONE")
+			entry("-", "NONE"),
+			entry("Mozilla/5.0 (Linux;) AppleWebKit/ Chrome/ Safari - iHeartRadio", "iHeartRadio")
 			);
 	/**A token not present in {@link UAtoToken}; non-empty, non-null. */
 	private static final String UAOther = "OTHER";
