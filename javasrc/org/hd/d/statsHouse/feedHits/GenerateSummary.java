@@ -409,7 +409,7 @@ public final class GenerateSummary
 		}
 
 
-	/**Summary type 2; by-hour data blocks percussion and some trend melody.
+	/**Summary type 3; by-hour data blocks percussion and  User-Agent trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
 	 *
 	 * @param dirnames  in-order names of directories to extract data from; never null
