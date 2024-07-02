@@ -16,6 +16,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 package org.hd.d.statsHouse.feedHits;
 
+import static java.util.Map.entry;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -408,6 +410,25 @@ public final class GenerateSummary
 		return(new MIDITune(dataMelody, List.of(percussion), tsp, dv));
 		}
 
+
+	/**Static mapping from some key User-Agent values to shorter friendly tokens; non-empty, non-null.
+	 * Note that "-" means no User-Agent.
+	 * <p>
+	 * The tokens are short, contain no spaces, nor HTML/shell metacharacters.
+	 * <p>
+	 * None of the tokens is the same as {@link #UAOther}.
+	 */
+	private static final Map<String,String> UAtoToken = Map.ofEntries(
+			entry("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)", "Googlebot"),
+			entry("iTMS", "iTunes"),
+			entry("Podbean/FeedUpdate 2.1)", "Podbean"),
+			entry("Spotify/1.0)", "Spotify"),
+			entry("Gofeed/1.0", "Gofeed"),
+			entry("Amazon Music Podcast", "Amazon"),
+			entry("-", "NONE")
+			);
+	/**A token not present in {@link UAtoToken}; non-empty, non-null. */
+	private static final String UAOther = "OTHER";
 
 	/**Summary type 3; by-hour data blocks percussion and  User-Agent trend melody.
 	 * Uses the same (drums) percussion as summary type 1.
